@@ -1,0 +1,18 @@
+import React from 'react';
+import COLORS from '../constants/color';
+import CustomBackButton from './CustomBackButton';
+
+const navigationOptions = ({ navigation }) => ({
+    headerLeft: () => <CustomBackButton navigation={navigation} />,
+    headerStyle: {
+      backgroundColor: COLORS.offWhite,
+      elevation: 0,
+      shadowOpacity: 0,
+    },
+    headerTitleStyle: {
+      display: 'none',
+    },
+    headerShown: true,
+});
+
+export default navigationOptions;
