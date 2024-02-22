@@ -14,6 +14,12 @@ export const globalStyles = StyleSheet.create({
         lineHeight: 20,
         color: COLORS.offBlack,
     },
+    bodyTextSmall: {
+        fontFamily: 'Quicksand_400Regular',
+        fontSize: 14,
+        lineHeight: 20,
+        color: COLORS.offBlack,
+    },
     bodyTextMedium: {
         fontFamily: 'Quicksand_500Medium',
         fontSize: 18,
@@ -28,6 +34,11 @@ export const globalStyles = StyleSheet.create({
     headerTextSmall: {
         fontFamily: 'Baloo2_600SemiBold',
         fontSize: 20,
+        color: COLORS.offBlack,
+    },
+    headerTextSmaller: {
+        fontFamily: 'Baloo2_600SemiBold',
+        fontSize: 16,
         color: COLORS.offBlack,
     },
     tabBarLabel: {

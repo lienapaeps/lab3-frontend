@@ -5,8 +5,8 @@ const CustomBackButton = ({ navigation }) => (
   <TouchableOpacity
     onPress={() => navigation.goBack()}
     style={{
-      marginLeft: 10, // Aanpassen zoals nodig
-      marginTop: 10, // Aanpassen zoals nodig
+      marginLeft: 10,
+      marginTop: 10,
     }}
   >
     <Image

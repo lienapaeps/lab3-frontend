@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StatusBar, Image, View } from 'react-native';
+import { StatusBar, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as SplashScreen from 'expo-splash-screen';

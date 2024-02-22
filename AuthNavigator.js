@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Welcome from './screens/Welcome';
 import LoginScreen from './screens/Login';
 import RegisterScreen from './screens/Register';
-import RegisterUserScreen from './screens/RegisterUser';
+import RegisterUserScreen from './screens/userRegisterForm/RegisterUser';
 import RegisterFarmerScreen from './screens/RegisterFarmer';
 
 import NavigationOptions from './components/NavigationOptions';
