@@ -7,7 +7,10 @@ import { globalStyles } from '../styles/global';
 
 import FarmCard from '../components/FarmCard';
 
-const FarmUser = () => {
+const FarmUser = ({ navigation }) => {
+    const goToDetails = () => {
+        navigation.navigate('AppStack', { screen: 'FarmUserDetails' });
+    };
     return (
         <SafeAreaView style={globalStyles.container}>
             <View>
@@ -21,7 +24,8 @@ const FarmUser = () => {
                     rating="4.5"
                     kilometer="5 km"
                     status="Open"
-                />
+                    link={goToDetails}
+                />                
             </View>
         </SafeAreaView>
     );

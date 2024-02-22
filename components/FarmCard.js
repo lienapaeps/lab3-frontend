@@ -6,7 +6,7 @@ import { globalStyles } from '../styles/global';
 
 const FarmCard = (props) => {
     return (
-        <TouchableOpacity style={styles.card}>
+        <TouchableOpacity onPress={props.link} style={styles.card}>
             <View>
                 <Image style={styles.cardImage} source={{uri: props.image }} />
             </View>
