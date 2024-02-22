@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StatusBar, View } from 'react-native';
+import { StatusBar, View, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as SplashScreen from 'expo-splash-screen';
@@ -46,18 +46,20 @@ export default function App() {
     return (
       <>
         <StatusBar color="black" />
-        <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-          <NavigationContainer onLayout={onLayoutRootView}>
-            <Stack.Navigator>
-              {/* AuthNavigator voor inloggen en registreren */}
-              <Stack.Screen name="Auth" component={AuthNavigator} options={{ headerShown: false }} />
-              {/* AppTabNavigator voor de hoofdinhoud van de app */}
-              <Stack.Screen name="App" component={AppTabNavigator} options={{ headerShown: false }} />
-              {/* Voeg de AppStackNavigator toe als een scherm binnen de Stack.Navigator */}
-              <Stack.Screen name="AppStack" component={AppStackNavigator} options={{ headerShown: false }} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </View>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+            <NavigationContainer onLayout={onLayoutRootView}>
+              <Stack.Navigator>
+                {/* AuthNavigator voor inloggen en registreren */}
+                <Stack.Screen name="Auth" component={AuthNavigator} options={{ headerShown: false }} />
+                {/* AppTabNavigator voor de hoofdinhoud van de app */}
+                <Stack.Screen name="App" component={AppTabNavigator} options={{ headerShown: false }} />
+                {/* Voeg de AppStackNavigator toe als een scherm binnen de Stack.Navigator */}
+                <Stack.Screen name="AppStack" component={AppStackNavigator} options={{ headerShown: false }} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </View>
+        </TouchableWithoutFeedback>
       </>
     );
   }
