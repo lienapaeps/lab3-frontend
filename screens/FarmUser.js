@@ -1,11 +1,13 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
 
 import FarmCard from '../components/FarmCard';
+import Search from '../components/Search';
+import Filter from '../components/Filter';
 
 const FarmUser = ({ navigation }) => {
     const goToDetails = () => {
@@ -13,8 +15,9 @@ const FarmUser = ({ navigation }) => {
     };
     return (
         <SafeAreaView style={globalStyles.container}>
-            <View>
-                <Text style={globalStyles.headerText}>Boerderij pagina Gebruiker</Text>
+            <View style={styles.buttons}>
+                <Search/>
+                <Filter/>
             </View>
             <View>
                 <FarmCard 
@@ -30,5 +33,16 @@ const FarmUser = ({ navigation }) => {
         </SafeAreaView>
     );
 }
+
+const styles = StyleSheet.create({
+    buttons: {
+        marginBottom: 30,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: 10,
+    },
+});
 
 export default FarmUser;
