@@ -7,11 +7,17 @@ const CustomBackButton = ({ navigation }) => (
     style={{
       marginLeft: 10,
       marginTop: 10,
+      
     }}
   >
     <Image
       source={require('../assets/Back-arrow.png')}
-      style={{ width: 30, height: 32 }}
+      style={{
+        top: 20,
+        left: 20,
+        width: 30,
+        height: 30,
+      }}
     />
   </TouchableOpacity>
 );
