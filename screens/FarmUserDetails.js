@@ -1,12 +1,18 @@
-import { View, Text, Image, StyleSheet, ImageBackground } from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../styles/global';
 import React from 'react'
+import COLORS from '../constants/color';
 
-export default function FarmUserDetails() {
+export default function FarmUserDetails( { navigation } ) {
   return (
     <SafeAreaView>
-      <View>
+      <View style={styles.btn}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image style={styles.backButton} source={require('../assets/Back-arrow.png')} />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.bgImg}>
         <Image style={styles.cardImage} source={require('../assets/vlinderveld-cover.png')} />
       </View>
       <View style={styles.container}>
@@ -19,6 +25,20 @@ export default function FarmUserDetails() {
 }
 
 const styles = StyleSheet.create({
+  btn: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      zIndex: 1,
+      backgroundColor: COLORS.white,
+      borderRadius: 50,
+      padding: 10,
+      margin: 20,
+  },
+  backButton: {
+      width: 30,
+      height: 30,
+  },
   cardImage: {
       width: '100%',
       height: 240,
