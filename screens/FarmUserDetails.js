@@ -4,7 +4,10 @@ import { globalStyles } from '../styles/global';
 import React from 'react'
 import COLORS from '../constants/color';
 
-export default function FarmUserDetails( { navigation } ) {
+export default function FarmUserDetails( { navigation, route } ) {
+
+  const farmData = route.params.farmData;
+
   return (
     <SafeAreaView>
       <View style={styles.btn}>
@@ -13,11 +16,11 @@ export default function FarmUserDetails( { navigation } ) {
         </TouchableOpacity>
       </View>
       <View style={styles.bgImg}>
-        <Image style={styles.cardImage} source={require('../assets/vlinderveld-cover.png')} />
+        <Image style={styles.cardImage} source={{ uri: farmData.image }} />
       </View>
       <View style={styles.container}>
         <Text style={globalStyles.headerText}>Boerderij details</Text>
-        <Text style={globalStyles.bodyText}>Grote Molenweg, 1980 Zemst</Text>
+        <Text style={globalStyles.bodyText}>{farmData.adres}</Text>
         <Text style={[globalStyles.headerTextSmaller, styles.text]}>Een zelfoogstboerderij voor groenten en kleinfruit op een dikke anderhalve kilometer van Zemst dorp. </Text>
       </View>
     </SafeAreaView>

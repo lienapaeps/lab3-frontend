@@ -10,8 +10,8 @@ import Search from '../components/Search';
 import Filter from '../components/Filter';
 
 const FarmUser = ({ navigation }) => {
-    const goToDetails = () => {
-        navigation.navigate('AppStack', { screen: 'FarmUserDetails' });
+    const goToDetails = (farmData) => {
+        navigation.navigate('AppStack', { screen: 'FarmUserDetails' , params: { farmData }});
     };
     return (
         <SafeAreaView style={globalStyles.container}>
@@ -21,13 +21,15 @@ const FarmUser = ({ navigation }) => {
             </View>
             <View>
                 <FarmCard 
-                    image="https://via.placeholder.com/100"
-                    title="Boerderij 1"
-                    adres="Adres 1"
-                    rating="4.5"
-                    kilometer="5 km"
-                    status="Open"
-                    link={goToDetails}
+                    farmData = {{
+                        image: "https://lh3.googleusercontent.com/p/AF1QipNzZYFue1aA2L0m0PlzqV02CXjen_n9ICNjSsAl=s1360-w1360-h1020",
+                        title: "Vlinderveld",
+                        adres: "Grote Molenweg, 1980 Zemst",
+                        rating: "4.9",
+                        kilometer: "3.2km",
+                        status: "Open",
+                    }}
+                    onPress = {goToDetails}
                 />                
             </View>
         </SafeAreaView>

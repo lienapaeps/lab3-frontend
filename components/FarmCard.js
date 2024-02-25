@@ -5,28 +5,31 @@ import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
 
 const FarmCard = (props) => {
+    const handlePress = () => {
+        props.onPress(props.farmData);
+    }
     return (
-        <TouchableOpacity onPress={props.link} style={styles.card}>
+        <TouchableOpacity onPress={handlePress} style={styles.card}>
             <View>
-                <Image style={styles.cardImage} source={{uri: props.image }} />
+                <Image style={styles.cardImage} source={{uri: props.farmData.image }} />
             </View>
             <View>
                 <View style={styles.header}>
-                    <Text style={globalStyles.headerTextSmaller}>{props.title}</Text>
-                    <Text style={globalStyles.bodyText}>{props.adres}</Text>
+                    <Text style={globalStyles.headerTextSmaller}>{props.farmData.title}</Text>
+                    <Text style={globalStyles.bodyText}>{props.farmData.adres}</Text>
                 </View>
                 <View style={styles.info}>
                     <View style={styles.infoItem}>
                         <Image source={require('../assets/icons/star.png')} />
-                        <Text style={{...globalStyles.bodyText, ...styles.label}}>{props.rating}</Text>
+                        <Text style={{...globalStyles.bodyText, ...styles.label}}>{props.farmData.rating}</Text>
                     </View>
                     <View style={styles.infoItem}>
                         <Image source={require('../assets/icons/locatie.png')} />
-                        <Text style={{...globalStyles.bodyText, ...styles.label, ... {color:COLORS.orange}}}>{props.kilometer}</Text>
+                        <Text style={{...globalStyles.bodyText, ...styles.label, ... {color:COLORS.orange}}}>{props.farmData.kilometer}</Text>
                     </View>
                     <View style={styles.infoItem}>
                         <Image source={require('../assets/icons/clock.png')} />
-                        <Text style={{...globalStyles.bodyText, ...styles.label, ... {color:COLORS.green}}}>{props.status}</Text>
+                        <Text style={{...globalStyles.bodyText, ...styles.label, ... {color:COLORS.green}}}>{props.farmData.status}</Text>
                     </View>
                 </View>
             </View>
