@@ -4,15 +4,14 @@ import CustomBackButton from './CustomBackButton';
 
 const navigationOptions = ({ navigation }) => ({
     headerLeft: () => <CustomBackButton navigation={navigation} />,
-    headerStyle: {
-      backgroundColor: COLORS.offWhite,
-      elevation: 0,
-      shadowOpacity: 0,
-    },
-    headerTitleStyle: {
-      display: 'none',
-    },
-    headerShown: true,
+      headerStyle: {
+          elevation: 0,
+          shadowOpacity: 0,
+        },
+        headerTitleStyle: {
+          display: 'none',
+        },
+        headerShown: true,
 });
 
 export default navigationOptions;
