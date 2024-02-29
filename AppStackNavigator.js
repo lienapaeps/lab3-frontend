@@ -6,6 +6,7 @@ import Calendar from './screens/CalendarPage';
 import FarmUserDetails from './screens/FarmUserDetails';
 import CustomBackButton from './components/CustomBackButton';
 
+
 import NavigationOptions from './components/NavigationOptions';
 
 const Stack = createStackNavigator();
@@ -15,10 +16,12 @@ const AppStackNavigator = () => {
     <Stack.Navigator>
       <Stack.Screen name="Calendar" component={Calendar} options={NavigationOptions}/>
       <Stack.Screen name="FarmUserDetails" component={FarmUserDetails}
+
         options={() => ({
           headerShown: false,
         })}
       />
+     
     </Stack.Navigator>
   );
 };

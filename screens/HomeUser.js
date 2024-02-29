@@ -6,12 +6,14 @@ import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
 
 
+
 const HomeUser = ({ navigation }) => {
     const goToCalendar = () => {
         navigation.navigate('AppStack', { screen: 'Calendar' });
     };
     const goToFarm = () => {
-        navigation.navigate('AppStack', { screen: 'Farm' });
+       //nagiate to subscription page
+        navigation.navigate('Sub', { screen: 'Subscription' });
     };
 
     return (
@@ -25,8 +27,8 @@ const HomeUser = ({ navigation }) => {
             <View style={globalStyles.Header}>
                 <Image style={styles.iconImage}
                     source={require('../assets/icon.png')} />
-                <Text style={styles.subText}>Je hebt nog geen paketten.</Text>
-                <Pressable style={styles.button} onPress={goToCalendar}>
+                <Text style={styles.subText}>Je hebt bhsjhdehe nog geen paketten.</Text>
+                <Pressable style={styles.button} onPress={goToFarm}>
                     <Text style={styles.text}>Zoek Boerderij</Text>
                 </Pressable>
             </View>

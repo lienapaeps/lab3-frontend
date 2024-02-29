@@ -1,0 +1,66 @@
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+
+import COLORS from '../../constants/color';
+import { globalStyles } from '../../styles/global';
+import Button from '../../components/Button';
+import OptionButton from '../../components/OptionButton';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+const Step1 = () => {
+
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const handlePress = (option) => {
+    if (selectedOption === option) {
+      setSelectedOption(null);
+    } else {
+      setSelectedOption(option);
+    }
+  }
+
+  return (
+    <SafeAreaView style={globalStyles.container}>
+      {/* header */}
+      <View>
+        <Text style={globalStyles.headerText}>Kies een pakket dat bij je past</Text>
+      </View>
+      {/* keuze maken tussen de drie Abonnementen*/}
+      <View style={styles.card}>
+        <Text style={globalStyles.headerTextSmaller}>Groentepakket</Text>
+        <Text style={[globalStyles.bodyTextMedium, styles.text]}>Weinig tijd maar toch wekelijks genieten van verse lokale biologische groenten</Text>
+      </View>
+      <View style={styles.card}>
+        <Text style={globalStyles.headerTextSmaller}>Zelfoogstpakket</Text>
+        <Text style={[globalStyles.headerTextMedium, styles.text]}>Oogst het hele jaar door verse seizoensgroenten met respect voor de natuur</Text>
+      </View>
+      <View style={styles.card}>
+        <Text style={globalStyles.headerTextSmaller}>Meewerpakket</Text>
+        <Text style={[globalStyles.bodyTextMedium, styles.text]}>Help op het veld, oogst je eigen planten, en draag actief bij aan lokale voedselproductie</Text>
+      </View>
+    </SafeAreaView>
+  );
+
+
+};
+
+const styles = StyleSheet.create({
+  card: {
+    backgroundColor: COLORS.white,
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    height: 150,
+    shadowColor: 'rgba(0,0,0, .4)',
+    shadowOffset: { height: 1, width: 1 },
+    shadowOpacity: 1,
+    shadowRadius: 1,
+    elevation: 2,
+    justifyContent: 'space-around',
+    gap: 15,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+
+})
+
+export default Step1;
