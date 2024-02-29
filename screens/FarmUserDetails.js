@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity, Button, Pressable } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../styles/global';
 import React from 'react'
@@ -21,7 +21,17 @@ export default function FarmUserDetails( { navigation, route } ) {
       <View style={styles.container}>
         <Text style={globalStyles.headerText}>Boerderij details</Text>
         <Text style={globalStyles.bodyText}>{farmData.adres}</Text>
-        <Text style={[globalStyles.headerTextSmaller, styles.text]}>Een zelfoogstboerderij voor groenten en kleinfruit op een dikke anderhalve kilometer van Zemst dorp. </Text>
+        <Text style={[globalStyles.bodyText, styles.text]}>Een zelfoogstboerderij voor groenten en kleinfruit op een dikke anderhalve kilometer van Zemst dorp. </Text>
+      </View>
+      <View style={styles.container}>
+        <View style={styles.div}>
+        <Pressable style={styles.followButton}>
+          <Text style={globalStyles.bodyTextBold}>Volgen</Text>
+        </Pressable>
+        <Pressable style={styles.messageButton} onPress={() => navigation.navigate('ChatUser')}>
+          <Text style={globalStyles.bodyTextBold}>Bericht</Text>
+        </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   )
@@ -43,6 +53,7 @@ const styles = StyleSheet.create({
       height: 30,
   },
   cardImage: {
+      padding: 0,
       width: '100%',
       height: 240,
   },
@@ -53,5 +64,36 @@ const styles = StyleSheet.create({
   },
   text:{
       marginTop: 20,
+      fontWeight: 'bold',
+  },
+
+  followButton: {
+      backgroundColor: COLORS.lightGreen,
+      color: COLORS.offBlack,  
+      paddingLeft: 50,
+      paddingRight: 50,
+      paddingTop: 15,
+      paddingBottom: 15,
+      borderRadius: 10,
+      textAlign: 'center',
+  },
+
+  messageButton: {
+      backgroundColor: COLORS.veryLightOffBlack,
+      color: COLORS.white,
+      paddingLeft: 50,
+      paddingRight: 50,
+      paddingTop: 15,
+      paddingBottom: 15,
+      borderRadius: 10,
+      textAlign: 'center',
+  },
+
+  div: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      gap: 20,
+
   }
 })
