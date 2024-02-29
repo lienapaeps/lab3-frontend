@@ -15,7 +15,8 @@ const FarmUser = ({ navigation }) => {
     };
 
     const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState('All'); // ['open', 'gesloten', 'All']
+    const [statusFilter, setStatusFilter] = useState('All');
+    const [ratingFilter, setRatingFilter] = useState(0);
 
     // Dummy data
     const farmData = [
@@ -39,7 +40,7 @@ const FarmUser = ({ navigation }) => {
             streetnumber: "18",
             postalcode: "1860",
             city: "Meise",
-            rating: "4.9",
+            rating: "4.5",
             kilometer: "8.5km",
             status: "Gesloten",
         },
@@ -51,7 +52,7 @@ const FarmUser = ({ navigation }) => {
             streetnumber: "",
             postalcode: "1910",
             city: "Kampenhout",
-            rating: "4.9",
+            rating: "2.3",
             kilometer: "3.2km",
             status: "Open",
         },
@@ -63,7 +64,7 @@ const FarmUser = ({ navigation }) => {
             streetnumber: "",
             postalcode: "1980",
             city: "Zemst",
-            rating: "4.9",
+            rating: "2.6",
             kilometer: "3.2km",
             status: "Open",
         },
@@ -75,7 +76,7 @@ const FarmUser = ({ navigation }) => {
             streetnumber: "18",
             postalcode: "1860",
             city: "Meise",
-            rating: "4.9",
+            rating: "1.5",
             kilometer: "8.5km",
             status: "Gesloten",
         },
@@ -87,17 +88,18 @@ const FarmUser = ({ navigation }) => {
             streetnumber: "",
             postalcode: "1910",
             city: "Kampenhout",
-            rating: "4.9",
+            rating: "1.9",
             kilometer: "3.2km",
             status: "Open",
         },
     ]
 
-    // Filter de boerderijen op basis van de zoekterm en het statusfilter
+    // Filter de boerderijen op basis van de zoekterm, status en rating
     const filteredFarmData = farmData.filter(farm => {
         const titleMatches = farm.title.toLowerCase().includes(searchTerm.toLowerCase());
         const statusMatches = statusFilter === 'All' || farm.status === statusFilter;
-        return titleMatches && statusMatches;
+        const ratingMatches = farm.rating >= ratingFilter; // Filter op rating gelijk aan of hoger dan de geselecteerde waarde
+        return titleMatches && statusMatches && ratingMatches;
     });
 
     // Bijwerken van de zoekterm
@@ -110,11 +112,16 @@ const FarmUser = ({ navigation }) => {
         setStatusFilter(status);
     };
 
+    // Bijwerken van het ratingfilter
+    const handleRatingFilterChange = (rating) => {
+        setRatingFilter(rating);
+    };
+
     return (
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.buttons}>
                 <Search searchTerm={searchTerm} onSearchTermChange={handleSearch} />
-                <Filter onFilterChange={handleFilterChange} />
+                <Filter onFilterChange={handleFilterChange} onRatingFilterChange={handleRatingFilterChange}/>
             </View>
             <View style={{flex: 1}}>
                 <FlatList

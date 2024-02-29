@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         borderRadius: 10,
         paddingHorizontal: 20,
-        height: 140,
+        height: 150,
         shadowColor: 'rgba(0,0,0, .4)',
         shadowOffset: { height: 1, width: 1 }, 
         shadowOpacity: 1,
@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
         elevation: 2, 
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-around',
         gap: 20,
         alignItems: 'center',
         marginBottom: 20,
@@ -69,7 +68,6 @@ const styles = StyleSheet.create({
         height: 100,
     },
     header: {
-        marginLeft: 15,
         gap: 2
     },
     label: {
@@ -79,9 +77,7 @@ const styles = StyleSheet.create({
     info: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'flex-start',
-        gap: 15,
-        marginLeft: 15,
+        gap: 10,
         marginTop: 10,
     },
     infoItem: {

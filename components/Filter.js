@@ -4,9 +4,11 @@ import { TouchableOpacity, Text, Image, StyleSheet, View, Modal, TouchableWithou
 import { globalStyles } from '../styles/global';
 import COLORS from '../constants/color';
 
-const Filter = ({ onFilterChange }) => {
+const Filter = ({ onFilterChange, onRatingFilterChange }) => {
     const [showModal, setShowModal] = useState(false);
     const [selectedOption, setSelectedOption] = useState('All');
+    const [selectedRating, setSelectedRating] = useState(0);
+    const [selectedStatus, setSelectedStatus] = useState('All');
 
     const handleFilterPress = () => {
         setShowModal(true);
@@ -14,12 +16,31 @@ const Filter = ({ onFilterChange }) => {
 
     const handleOptionPress = (status) => {
         setSelectedOption(status);
-        onFilterChange(status);
+        setSelectedStatus(status);
+        // setShowModal(false);
+    };
+
+    const handleClearFilter = () => {
+        setSelectedOption('All');
+        setSelectedRating(0);
+        setSelectedStatus('All');
+        onFilterChange('All');
+        onRatingFilterChange(0);
+        setShowModal(false);
+    };
+
+    const handleApplyFilter = () => {
+        onFilterChange(selectedStatus);
         setShowModal(false);
     };
 
     const handleModalClose = () => {
         setShowModal(false);
+    };
+
+    const handleRatingPress = (rating) => {
+        setSelectedRating(rating);
+        onRatingFilterChange(rating);
     };
 
     return (
@@ -41,16 +62,36 @@ const Filter = ({ onFilterChange }) => {
                     <Text style={[globalStyles.headerTextSmall, styles.modalSectionHeader]}>Sorteren op</Text>
                     <View style={styles.modalSectionContent}>
                       <TouchableOpacity 
-                        style={[styles.modalOption, selectedOption === 'All' && styles.selectedOption]} 
-                        onPress={() => handleOptionPress('All')}>
-                          <Text style={[globalStyles.bodyText, selectedOption === 'All' && styles.selectedOptionText]}>Toon alles</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity 
                         style={[styles.modalOption, selectedOption === 'Open' && styles.selectedOption]}  
                         onPress={() => handleOptionPress('Open')}>
-                          <Text style={[globalStyles.bodyText, selectedOption === 'Open' && styles.selectedOptionText]}>Nu geopend</Text>
+                          <Text style={[styles.modelOptionText, selectedOption === 'Open' && styles.selectedOptionText]}>Nu geopend</Text>
                       </TouchableOpacity>
                     </View>
+                  </View>
+                  <View style={styles.modalSection}>
+                    <Text style={[globalStyles.headerTextSmall, styles.modalSectionHeader]}>Beoordeling</Text>
+                    <View style={styles.modalSectionContent}>
+                      {[1, 2, 3, 4, 5].map((rating) => (
+                        <TouchableOpacity
+                          key={rating}
+                          style={[
+                            styles.modalOption,
+                            selectedRating === rating && styles.selectedOption
+                          ]}
+                          onPress={() => handleRatingPress(rating)}
+                        >
+                          <Text style={[styles.modelOptionText, selectedRating === rating && styles.selectedOptionText]}>
+                            {rating}+
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </View>
+                  <View style={styles.modalFooter}>
+                    <Text style={styles.clearFilterText} onPress={handleClearFilter}>Alles wissen</Text>
+                    <TouchableOpacity style={styles.modalButton} onPress={handleApplyFilter}>
+                      <Text style={styles.modalButtonText}>Toon resultaten</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
             </Modal>
@@ -110,6 +151,11 @@ const styles = StyleSheet.create({
       borderRadius: 10,
       marginBottom: 10,
     },
+    modelOptionText: {
+      color: COLORS.offBlack,
+      fontFamily: 'Baloo2_600SemiBold',
+      fontSize: 18,
+    },
     modalSectionContent: {
       display: 'flex',
       flexWrap: 'wrap',
@@ -122,7 +168,36 @@ const styles = StyleSheet.create({
     },
     selectedOptionText: {
       color: COLORS.white,
-      fontFamily: 'Quicksand_600SemiBold',
+      fontFamily: 'Baloo2_600SemiBold',
+      fontSize: 18,
+    },
+    modalFooter: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    modalButton: {
+      backgroundColor: COLORS.green,
+      padding: 15,
+      borderRadius: 10,
+      marginBottom: 10,
+      flex: 1,
+      marginRight: 10,
+    },
+    modalButtonText: {
+      color: COLORS.white,
+      textAlign: 'center',
+      fontFamily: 'Baloo2_600SemiBold',
+      fontSize: 18,
+    },
+    clearFilterText: {
+      color: COLORS.offBlack,
+      padding: 15,
+      borderRadius: 10,
+      marginBottom: 10,
+      flex: 1,
+      fontFamily: 'Baloo2_600SemiBold',
+      fontSize: 18,
     }
 });
 

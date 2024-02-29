@@ -47,13 +47,13 @@ export const globalStyles = StyleSheet.create({
         marginTop: 5,
         fontSize: 16,
         fontFamily: 'Quicksand_500Medium',
-      },
-      tabBarLabelFocused: {
+    },
+    tabBarLabelFocused: {
         color: COLORS.green,
         fontWeight: '700',
-      },
-      tabBarLabelNormal: {
+    },
+    tabBarLabelNormal: {
         color: COLORS.offBlack,
         fontWeight: '500',
-      },
+    },
 });
