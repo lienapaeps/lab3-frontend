@@ -17,7 +17,14 @@ const FarmCard = (props) => {
             <View>
                 <View style={styles.header}>
                     <Text style={globalStyles.headerTextSmaller}>{props.farmData.title}</Text>
-                    <Text style={globalStyles.bodyText}>{props.farmData.adres}</Text>
+                    <View style={styles.adress}>
+                        <Text style={globalStyles.bodyText}>{props.farmData.street}</Text>
+                        <Text style={globalStyles.bodyText}>{props.farmData.streetnumber}</Text>
+                    </View>
+                    <View style={styles.adress}>
+                        <Text style={globalStyles.bodyText}>{props.farmData.city}</Text>
+                        <Text style={globalStyles.bodyText}>{props.farmData.postalcode}</Text>
+                    </View>
                 </View>
                 <View style={styles.info}>
                     <View style={styles.infoItem}>
@@ -63,6 +70,7 @@ const styles = StyleSheet.create({
     },
     header: {
         marginLeft: 15,
+        gap: 2
     },
     label: {
         fontSize: 16,
@@ -79,6 +87,13 @@ const styles = StyleSheet.create({
     infoItem: {
         display: 'flex',
         flexDirection: 'row',
+        alignItems: 'center',
+        gap: 5,
+    },
+    adress: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         gap: 5,
     }

@@ -3,7 +3,7 @@ import { TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
 
 import { globalStyles } from '../styles/global';
 
-const Filter = ({ navigation }) => (
+const Filter = () => (
   <TouchableOpacity style={styles.filter}>
     <Image source={require('../assets/icons/filters.png')} />
   </TouchableOpacity>

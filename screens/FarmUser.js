@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { globalStyles } from '../styles/global';
@@ -14,31 +14,43 @@ const FarmUser = ({ navigation }) => {
         navigation.navigate('AppStack', { screen: 'FarmUserDetails' , params: { farmData }});
     };
 
+    const [searchTerm, setSearchTerm] = useState('');
+    const [statusFilter, setStatusFilter] = useState('All'); // ['open', 'gesloten']
+
     // Dummy data
     const farmData = [
         {
             id: '1',
             image: "https://lh3.googleusercontent.com/p/AF1QipNzZYFue1aA2L0m0PlzqV02CXjen_n9ICNjSsAl=s1360-w1360-h1020",
             title: "Vlinderveld",
-            adres: "Grote Molenweg, 1980 Zemst",
+            street: "Grote Molenweg",
+            streetnumber: "",
+            postalcode: "1980",
+            city: "Zemst",
             rating: "4.9",
             kilometer: "3.2km",
             status: "Open",
         },
         {
             id: '2',
-            image: "https://lh3.googleusercontent.com/p/AF1QipNzZYFue1aA2L0m0PlzqV02CXjen_n9ICNjSsAl=s1360-w1360-h1020",
-            title: "Vlinderveld",
-            adres: "Grote Molenweg, 1980 Zemst",
+            image: "https://lh3.googleusercontent.com/p/AF1QipNaQpWk-_YB5UO-SybmP86UcMqIsj16nQBkMaXW=s1360-w1360-h1020",
+            title: "Hof Ter dreef",
+            street: "Prinsendreef",
+            streetnumber: "18",
+            postalcode: "1860",
+            city: "Meise",
             rating: "4.9",
-            kilometer: "3.2km",
-            status: "Open",
+            kilometer: "8.5km",
+            status: "Gesloten",
         },
         {
             id: '3',
-            image: "https://lh3.googleusercontent.com/p/AF1QipNzZYFue1aA2L0m0PlzqV02CXjen_n9ICNjSsAl=s1360-w1360-h1020",
-            title: "Vlinderveld",
-            adres: "Grote Molenweg, 1980 Zemst",
+            image: "https://lh3.googleusercontent.com/p/AF1QipPGN4ilnsWuqk6XdOkMeG_N3myrPYycEBHlqqZh=s1360-w1360-h1020",
+            title: "de Plukheyde veld",
+            street: "Kampenhoutsebaan",
+            streetnumber: "",
+            postalcode: "1910",
+            city: "Kampenhout",
             rating: "4.9",
             kilometer: "3.2km",
             status: "Open",
@@ -47,31 +59,65 @@ const FarmUser = ({ navigation }) => {
             id: '4',
             image: "https://lh3.googleusercontent.com/p/AF1QipNzZYFue1aA2L0m0PlzqV02CXjen_n9ICNjSsAl=s1360-w1360-h1020",
             title: "Vlinderveld",
-            adres: "Grote Molenweg, 1980 Zemst",
+            street: "Grote Molenweg",
+            streetnumber: "",
+            postalcode: "1980",
+            city: "Zemst",
             rating: "4.9",
             kilometer: "3.2km",
             status: "Open",
         },
         {
             id: '5',
-            image: "https://lh3.googleusercontent.com/p/AF1QipNzZYFue1aA2L0m0PlzqV02CXjen_n9ICNjSsAl=s1360-w1360-h1020",
-            title: "Vlinderveld",
-            adres: "Grote Molenweg, 1980 Zemst",
+            image: "https://lh3.googleusercontent.com/p/AF1QipNaQpWk-_YB5UO-SybmP86UcMqIsj16nQBkMaXW=s1360-w1360-h1020",
+            title: "Hof Ter dreef",
+            street: "Prinsendreef",
+            streetnumber: "18",
+            postalcode: "1860",
+            city: "Meise",
+            rating: "4.9",
+            kilometer: "8.5km",
+            status: "Gesloten",
+        },
+        {
+            id: '6',
+            image: "https://lh3.googleusercontent.com/p/AF1QipPGN4ilnsWuqk6XdOkMeG_N3myrPYycEBHlqqZh=s1360-w1360-h1020",
+            title: "de Plukheyde veld",
+            street: "Kampenhoutsebaan",
+            streetnumber: "",
+            postalcode: "1910",
+            city: "Kampenhout",
             rating: "4.9",
             kilometer: "3.2km",
             status: "Open",
-        }
+        },
     ]
+
+    // Filter de boerderijen op basis van de zoekterm
+    const filteredFarmData = farmData.filter(farm => {
+        const titleMatches = farm.title.toLowerCase().includes(searchTerm.toLowerCase());
+        const statusMatches = statusFilter === 'All' || farm.status === statusFilter;
+        return titleMatches && statusMatches;
+    });
+
+    // Bijwerken van de zoekterm
+    const handleSearch = (text) => {
+        setSearchTerm(text);
+    };
+
+    // Bijwerken van het statusfilter
+    const handleFilterChange = (status) => {
+        setStatusFilter(status);
+    };
 
     return (
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.buttons}>
-                <Search/>
-                <Filter/>
+                <Search searchTerm={searchTerm} onSearchTermChange={handleSearch} />
             </View>
             <View style={{flex: 1}}>
                 <FlatList
-                    data={farmData}
+                    data={filteredFarmData}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => (
                         <FarmCard farmData={item} onPress={goToDetails} />
