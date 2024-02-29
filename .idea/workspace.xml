@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bf32a42d-3f51-4733-8b8e-5dff25ee5091" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/components/CustomBackButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/CustomBackButton.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/NavigationOptions.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/NavigationOptions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/screens/FarmUserDetails.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/FarmUserDetails.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AppStackNavigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/AppStackNavigator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AppTabNavigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/AppTabNavigator.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/FarmCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/FarmCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/screens/FarmUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/FarmUser.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

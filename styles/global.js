@@ -13,6 +13,7 @@ export const globalStyles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 20,
         color: COLORS.offBlack,
+        
     },
     bodyTextSmall: {
         fontFamily: 'Quicksand_400Regular',

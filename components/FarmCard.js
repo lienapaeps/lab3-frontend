@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native';
 
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
@@ -8,6 +8,7 @@ const FarmCard = (props) => {
     const handlePress = () => {
         props.onPress(props.farmData);
     }
+    
     return (
         <TouchableOpacity onPress={handlePress} style={styles.card}>
             <View>
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         borderRadius: 10,
         paddingHorizontal: 20,
-        height: 150,
+        height: 140,
         shadowColor: 'rgba(0,0,0, .4)',
         shadowOffset: { height: 1, width: 1 }, 
         shadowOpacity: 1,
@@ -51,8 +52,9 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-around',
-        gap: 15,
+        gap: 20,
         alignItems: 'center',
+        marginBottom: 20,
     },
     cardImage: {
         borderRadius: 8,
