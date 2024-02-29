@@ -15,7 +15,7 @@ const FarmUser = ({ navigation }) => {
     };
 
     const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState('All'); // ['open', 'gesloten']
+    const [statusFilter, setStatusFilter] = useState('All'); // ['open', 'gesloten', 'All']
 
     // Dummy data
     const farmData = [
@@ -93,7 +93,7 @@ const FarmUser = ({ navigation }) => {
         },
     ]
 
-    // Filter de boerderijen op basis van de zoekterm
+    // Filter de boerderijen op basis van de zoekterm en het statusfilter
     const filteredFarmData = farmData.filter(farm => {
         const titleMatches = farm.title.toLowerCase().includes(searchTerm.toLowerCase());
         const statusMatches = statusFilter === 'All' || farm.status === statusFilter;
@@ -114,6 +114,7 @@ const FarmUser = ({ navigation }) => {
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.buttons}>
                 <Search searchTerm={searchTerm} onSearchTermChange={handleSearch} />
+                <Filter onFilterChange={handleFilterChange} />
             </View>
             <View style={{flex: 1}}>
                 <FlatList
