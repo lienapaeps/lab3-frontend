@@ -9,7 +9,7 @@ const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }
     const [showModal, setShowModal] = useState(false);
     const [selectedOption, setSelectedOption] = useState('All');
     const [selectedRating, setSelectedRating] = useState(0);
-    const [distance, setDistance] = useState(0); // Changed to numeric value for slider
+    const [distance, setDistance] = useState(0);
 
     const handleFilterPress = () => {
         setShowModal(true);
@@ -18,7 +18,6 @@ const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }
     const handleOptionPress = (status) => {
         setSelectedOption(status);
         onFilterChange(status);
-        setShowModal(false);
     };
 
     const handleClearFilter = () => {
@@ -64,6 +63,7 @@ const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }
                   <View style={styles.modalHeader}>
                     <Text style={globalStyles.headerText}>Filters</Text>
                   </View>
+                  {/* sorten op nu geopend */}
                   <View style={styles.modalSection}>
                     <Text style={[globalStyles.headerTextSmall, styles.modalSectionHeader]}>Sorteren op</Text>
                     <View style={styles.modalSectionContent}>
@@ -74,6 +74,7 @@ const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }
                       </TouchableOpacity>
                     </View>
                   </View>
+                  {/* sorteren op beoordeling */}
                   <View style={styles.modalSection}>
                     <Text style={[globalStyles.headerTextSmall, styles.modalSectionHeader]}>Beoordeling</Text>
                     <View style={styles.modalSectionContent}>
@@ -93,6 +94,7 @@ const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }
                       ))}
                     </View>
                   </View>
+                  {/* sorteren op afstand in km */}
                   <View style={styles.modalSection}>
                     <Text style={[globalStyles.headerTextSmall, styles.modalSectionHeader]}>Afstand in km</Text>
                     <Slider
@@ -108,6 +110,7 @@ const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }
                     />
                     <Text>{distance}km</Text>
                   </View>
+                  {/* footer met buttons om filters te wissen of resultaten te tonen */}
                   <View style={styles.modalFooter}>
                     <Text style={styles.clearFilterText} onPress={handleClearFilter}>Alles wissen</Text>
                     <TouchableOpacity style={styles.modalButton} onPress={handleApplyFilter}>
