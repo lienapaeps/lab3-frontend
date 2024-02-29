@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { globalStyles } from '../styles/global';
 import Button from '../components/Button';
-import OptionButton from '../components/OptionButton';
+import SubscriptionCard from '../components/Subscription';
 
 const Subscription = ({ navigation }) => {
 
@@ -22,21 +22,34 @@ const Subscription = ({ navigation }) => {
         <SafeAreaView style={globalStyles.container}>
             {/* header */}
             <View>
-                <Text style={globalStyles.headerText}>Account maken</Text>
+                <Text style={globalStyles.headerText}>Kies een pakket dat bij je past</Text>
             </View>
             {/* keuze maken tussen drie opties */}
-            <View style={styles.card}>
-        <Text style={globalStyles.headerTextSmaller}>Groentepakket</Text>
-        <Text style={[globalStyles.bodyTextMedium, styles.text]}>Weinig tijd maar toch wekelijks genieten van verse lokale biologische groenten</Text>
-      </View>
-      <View style={styles.card}>
-        <Text style={globalStyles.headerTextSmaller}>Zelfoogstpakket</Text>
-        <Text style={[globalStyles.headerTextMedium, styles.text]}>Oogst het hele jaar door verse seizoensgroenten met respect voor de natuur</Text>
-      </View>
-      <View style={styles.card}>
-        <Text style={globalStyles.headerTextSmaller}>Meewerpakket</Text>
-        <Text style={[globalStyles.bodyTextMedium, styles.text]}>Help op het veld, oogst je eigen planten, en draag actief bij aan lokale voedselproductie</Text>
-      </View>
+            <View style={{ gap: 20, marginTop: 30 }}>
+                <SubscriptionCard
+                    onPress={() => handlePress('Groentenpakket')}
+                
+                    cardHeader="Groentenpakket"
+                    cardBody="Weinig tijd maar toch wekelijks genieten van verse lokale biologische groenten"
+                    isSelected={selectedOption === 'Groentenpakket'}
+                />
+
+                <SubscriptionCard
+                    onPress={() => handlePress('Zelfoogstpakket')}
+                 
+                    cardHeader="Zelfoogstpakket"
+                    cardBody="Oogst het hele jaar door verse seizoensgroenten met respect voor de natuur"
+                    isSelected={selectedOption === 'Zelfoogstpakket'}
+                />
+                 <SubscriptionCard
+                    onPress={() => handlePress('Meewerkpakket')}
+                
+                    cardHeader="Meewerkpakket"
+                    cardBody="Help op het veld, oogst je eigen planten, en draag actief bij aan lokale voedselproductie"
+                    isSelected={selectedOption === 'Meewerkpakket'}
+                />
+
+            </View>
 
             {/* volgende knop */}
             <View style={{marginTop: 30}}>
