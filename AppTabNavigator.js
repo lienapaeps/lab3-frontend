@@ -15,13 +15,14 @@ const Tab = createBottomTabNavigator();
 
 const screenOptions = {
   headerShown: false,
+  keyboardHidesTabBar: true,
+  tabBarHideOnKeyboard: true,
   tabBarStyle: {
     backgroundColor: COLORS.white,
-    position: 'absolute',
     right: 0,
     left: 0,
     bottom: 0,
-    height: 100,
+    height: 95,
     elevation: 0,
   },
 }

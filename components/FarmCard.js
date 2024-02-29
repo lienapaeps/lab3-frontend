@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native';
 
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
@@ -8,6 +8,7 @@ const FarmCard = (props) => {
     const handlePress = () => {
         props.onPress(props.farmData);
     }
+    
     return (
         <TouchableOpacity onPress={handlePress} style={styles.card}>
             <View>
@@ -16,7 +17,14 @@ const FarmCard = (props) => {
             <View>
                 <View style={styles.header}>
                     <Text style={globalStyles.headerTextSmaller}>{props.farmData.title}</Text>
-                    <Text style={globalStyles.bodyText}>{props.farmData.adres}</Text>
+                    <View style={styles.adress}>
+                        <Text style={globalStyles.bodyText}>{props.farmData.street}</Text>
+                        <Text style={globalStyles.bodyText}>{props.farmData.streetnumber}</Text>
+                    </View>
+                    <View style={styles.adress}>
+                        <Text style={globalStyles.bodyText}>{props.farmData.city}</Text>
+                        <Text style={globalStyles.bodyText}>{props.farmData.postalcode}</Text>
+                    </View>
                 </View>
                 <View style={styles.info}>
                     <View style={styles.infoItem}>
@@ -50,9 +58,9 @@ const styles = StyleSheet.create({
         elevation: 2, 
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-around',
-        gap: 15,
+        gap: 20,
         alignItems: 'center',
+        marginBottom: 20,
     },
     cardImage: {
         borderRadius: 8,
@@ -60,7 +68,7 @@ const styles = StyleSheet.create({
         height: 100,
     },
     header: {
-        marginLeft: 15,
+        gap: 2
     },
     label: {
         fontSize: 16,
@@ -69,14 +77,19 @@ const styles = StyleSheet.create({
     info: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'flex-start',
-        gap: 15,
-        marginLeft: 15,
+        gap: 10,
         marginTop: 10,
     },
     infoItem: {
         display: 'flex',
         flexDirection: 'row',
+        alignItems: 'center',
+        gap: 5,
+    },
+    adress: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         gap: 5,
     }
