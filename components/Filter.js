@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { TouchableOpacity, Text, Image, StyleSheet, View, Modal, TouchableWithoutFeedback } from 'react-native';
+import Slider from '@react-native-community/slider';
 
 import { globalStyles } from '../styles/global';
 import COLORS from '../constants/color';
 
-const Filter = ({ onFilterChange, onRatingFilterChange }) => {
+const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }) => {
     const [showModal, setShowModal] = useState(false);
     const [selectedOption, setSelectedOption] = useState('All');
     const [selectedRating, setSelectedRating] = useState(0);
-    const [selectedStatus, setSelectedStatus] = useState('All');
+    const [distance, setDistance] = useState(0); // Changed to numeric value for slider
 
     const handleFilterPress = () => {
         setShowModal(true);
@@ -16,21 +17,22 @@ const Filter = ({ onFilterChange, onRatingFilterChange }) => {
 
     const handleOptionPress = (status) => {
         setSelectedOption(status);
-        setSelectedStatus(status);
-        // setShowModal(false);
+        onFilterChange(status);
+        setShowModal(false);
     };
 
     const handleClearFilter = () => {
         setSelectedOption('All');
         setSelectedRating(0);
-        setSelectedStatus('All');
+        setDistance(0); // Reset distance to 0
         onFilterChange('All');
         onRatingFilterChange(0);
+        onDistanceFilterChange(0); // Reset distance to 0
         setShowModal(false);
     };
 
     const handleApplyFilter = () => {
-        onFilterChange(selectedStatus);
+        onDistanceFilterChange(distance);
         setShowModal(false);
     };
 
@@ -41,6 +43,10 @@ const Filter = ({ onFilterChange, onRatingFilterChange }) => {
     const handleRatingPress = (rating) => {
         setSelectedRating(rating);
         onRatingFilterChange(rating);
+    };
+
+    const handleDistanceChange = (value) => {
+        setDistance(value);
     };
 
     return (
@@ -86,6 +92,21 @@ const Filter = ({ onFilterChange, onRatingFilterChange }) => {
                         </TouchableOpacity>
                       ))}
                     </View>
+                  </View>
+                  <View style={styles.modalSection}>
+                    <Text style={[globalStyles.headerTextSmall, styles.modalSectionHeader]}>Afstand in km</Text>
+                    <Slider
+                      style={styles.slider}
+                      minimumTrackTintColor={COLORS.green}
+                      maximumTrackTintColor={COLORS.veryLightOffBlack}
+                      thumbTintColor={COLORS.green}
+                      minimumValue={0}
+                      maximumValue={10}
+                      step={1}
+                      value={distance}
+                      onValueChange={handleDistanceChange}
+                    />
+                    <Text>{distance}km</Text>
                   </View>
                   <View style={styles.modalFooter}>
                     <Text style={styles.clearFilterText} onPress={handleClearFilter}>Alles wissen</Text>
@@ -198,6 +219,11 @@ const styles = StyleSheet.create({
       flex: 1,
       fontFamily: 'Baloo2_600SemiBold',
       fontSize: 18,
+    },
+    slider: {
+      width: '100%',
+      height: 40,
+      color: COLORS.green,
     }
 });
 

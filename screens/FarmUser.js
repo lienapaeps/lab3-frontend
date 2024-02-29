@@ -17,6 +17,7 @@ const FarmUser = ({ navigation }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('All');
     const [ratingFilter, setRatingFilter] = useState(0);
+    const [distanceFilter, setDistanceFilter] = useState('');
 
     // Dummy data
     const farmData = [
@@ -99,7 +100,8 @@ const FarmUser = ({ navigation }) => {
         const titleMatches = farm.title.toLowerCase().includes(searchTerm.toLowerCase());
         const statusMatches = statusFilter === 'All' || farm.status === statusFilter;
         const ratingMatches = farm.rating >= ratingFilter; // Filter op rating gelijk aan of hoger dan de geselecteerde waarde
-        return titleMatches && statusMatches && ratingMatches;
+        const distanceMatches = !distanceFilter || parseFloat(farm.kilometer) <= parseFloat(distanceFilter); // Filter op afstand
+        return titleMatches && statusMatches && ratingMatches && distanceMatches;
     });
 
     // Bijwerken van de zoekterm
@@ -117,11 +119,20 @@ const FarmUser = ({ navigation }) => {
         setRatingFilter(rating);
     };
 
+    // Bijwerken van het afstandsfilter
+    const handleDistanceFilterChange = (distance) => {
+        setDistanceFilter(distance);
+    };
+
     return (
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.buttons}>
                 <Search searchTerm={searchTerm} onSearchTermChange={handleSearch} />
-                <Filter onFilterChange={handleFilterChange} onRatingFilterChange={handleRatingFilterChange}/>
+                <Filter
+                    onFilterChange={handleFilterChange}
+                    onRatingFilterChange={handleRatingFilterChange}
+                    onDistanceFilterChange={handleDistanceFilterChange}
+                />
             </View>
             <View style={{flex: 1}}>
                 <FlatList
