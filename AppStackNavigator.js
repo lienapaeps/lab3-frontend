@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeUser from './screens/HomeUser';
 import Calendar from './screens/CalendarPage';
 import FarmUserDetails from './screens/FarmUserDetails';
-import CustomBackButton from './components/CustomBackButton';
+import Map from './screens/Map';
 
 import NavigationOptions from './components/NavigationOptions';
 
@@ -17,6 +17,11 @@ const AppStackNavigator = () => {
       <Stack.Screen name="HomeUser" component={HomeUser} options={NavigationOptions}/>
       <Stack.Screen name="Calendar" component={Calendar} options={NavigationOptions}/>
       <Stack.Screen name="FarmUserDetails" component={FarmUserDetails}
+        options={() => ({
+          headerShown: false,
+        })}
+      />
+      <Stack.Screen name="Map" component={Map}
         options={() => ({
           headerShown: false,
         })}

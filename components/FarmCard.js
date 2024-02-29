@@ -8,7 +8,7 @@ const FarmCard = (props) => {
     const handlePress = () => {
         props.onPress(props.farmData);
     }
-    
+
     return (
         <TouchableOpacity onPress={handlePress} style={styles.card}>
             <View>

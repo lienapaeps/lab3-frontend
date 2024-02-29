@@ -48,6 +48,11 @@ export const globalStyles = StyleSheet.create({
         fontSize: 16,
         color: COLORS.offBlack,
     },
+    buttonText: {
+        fontFamily: 'Baloo2_600SemiBold',
+        fontSize: 18,
+        color: COLORS.white,
+    },
     tabBarLabel: {
         paddingBottom: 5,
         marginTop: 5,

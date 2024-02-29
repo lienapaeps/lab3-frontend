@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bf32a42d-3f51-4733-8b8e-5dff25ee5091" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/AppStackNavigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/AppStackNavigator.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AppTabNavigator.js" beforeDir="false" afterPath="$PROJECT_DIR$/AppTabNavigator.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/FarmCard.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/FarmCard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/screens/FarmUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/screens/FarmUser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles/global.js" beforeDir="false" afterPath="$PROJECT_DIR$/styles/global.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

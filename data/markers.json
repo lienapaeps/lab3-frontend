@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "coordinate": {
+            "latitude": 50.991804,
+            "longitude": 4.450329
+        },
+        "title": "Vlinderveld"
+    },
+    {
+        "id": 2,
+        "coordinate": {
+            "latitude": 50.970968,
+            "longitude": 4.344609
+        },
+        "title": "Hof ter Dreef"
+    },
+    {
+        "id": 3,
+        "coordinate": {
+            "latitude": 50.958376,
+            "longitude": 4.532670
+        },
+        "title": "de Plukheyde Veld"
+    }
+]

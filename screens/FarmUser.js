@@ -9,6 +9,7 @@ import farmData from '../data/farmData'; // dummy data
 import FarmCard from '../components/FarmCard';
 import Search from '../components/Search';
 import Filter from '../components/Filter';
+import MapButton from '../components/MapButton';
 
 const FarmUser = ({ navigation }) => {
     const goToDetails = (farmData) => {
@@ -61,6 +62,7 @@ const FarmUser = ({ navigation }) => {
                     renderItem={({ item }) => <FarmCard farmData={item} onPress={goToDetails} />}
                 />
             </View>
+            <MapButton onPress={() => navigation.navigate('Map')} />
         </SafeAreaView>
     );
 }
