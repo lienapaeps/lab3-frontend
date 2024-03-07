@@ -7,6 +7,7 @@ import Calendar from './screens/CalendarPage';
 import FarmUserDetails from './screens/FarmUserDetails';
 import Map from './screens/Map';
 
+
 import NavigationOptions from './components/NavigationOptions';
 
 const Stack = createStackNavigator();
@@ -17,6 +18,7 @@ const AppStackNavigator = () => {
       <Stack.Screen name="HomeUser" component={HomeUser} options={NavigationOptions}/>
       <Stack.Screen name="Calendar" component={Calendar} options={NavigationOptions}/>
       <Stack.Screen name="FarmUserDetails" component={FarmUserDetails}
+
         options={() => ({
           headerShown: false,
         })}

@@ -8,6 +8,14 @@ export const globalStyles = StyleSheet.create({
         paddingBottom: -30,
         backgroundColor: COLORS.offWhite,
     },
+    Header: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 100,
+        marginBottom: 60,
+        marginTop: 60,
+    },
     bodyText: {
         fontFamily: 'Quicksand_400Regular',
         fontSize: 16,
