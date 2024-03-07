@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, Button, Pressable, Image } from 'react-native';
 
 import COLORS from '../../constants/color';
 import { globalStyles } from '../../styles/global';
@@ -7,14 +7,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const CooperateSubscription = () => {
 
- 
     return (
         <SafeAreaView style={globalStyles.container}>
             {/* header */}
             <View>
                 <Text style={globalStyles.headerText}>Je koos voor het Samenwerkingspakket</Text>
             </View>
-            {/* keuze maken tussen de drie Abonnementen*/}
+            {/* abonnement informatie*/}
             <View style={styles.card}>
                 <Text style={[globalStyles.bodyTextMedium]}>Help mee, oogst samen en geniet van lokale voedselproductie!</Text>
                 <Text style={[globalStyles.bodyText]}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec odio vitae justo tincidunt fermentum sit amet eget elit.
@@ -24,7 +23,6 @@ const CooperateSubscription = () => {
             <View style={styles.card}>
                 <Text style={globalStyles.headerTextSmaller}>Kostprijs bedraagt 100 per maand</Text>
             </View>
-
             <View style={globalStyles.Header}>
                 <Pressable style={styles.button}>
                     <Text style={styles.text}>Betalen</Text>
@@ -50,7 +48,6 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         padding: 20,
     },
-
     button: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -69,7 +66,6 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10,
     },
-
 })
 
 export default CooperateSubscription;

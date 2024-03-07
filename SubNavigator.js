@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-// alle schermen ivm inloggen en registreren
+// alle schermen ivm abonneren en abonnementen
 import Subscription from './screens/Subscription';
 import CooperateSubscription from './screens/userSubscription/cooperateSubscription';
 import CollectiveSubscription from './screens/userSubscription/collectiveSubscription';
@@ -19,7 +19,6 @@ const SubNavigator = () => {
         <Stack.Screen name="CooperateSubscription" component={CooperateSubscription} options={NavigationOptions}/>
         <Stack.Screen name="CollectiveSubscription" component={CollectiveSubscription} options={NavigationOptions}/>
         <Stack.Screen name="TakeawaySubscription" component={TakeawaySubscription} options={NavigationOptions}/>
-
     </Stack.Navigator>
   );
 };
