@@ -1,5 +1,5 @@
 import React from  'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../styles/global';
 import COLORS from '../constants/color';
@@ -12,29 +12,24 @@ export default function FarmHeader ({ navigation, route }) {
 
     return (
         <SafeAreaView>
-                  <View style={styles.btn}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image style={styles.backButton} source={require('../assets/Back-arrow.png')} />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.bgImg}>
-        <Image style={styles.cardImage} source={{ uri: farmData.image }} />
-      </View>
-      <View style={styles.container}>
-        <Text style={globalStyles.headerText}>Boerderij details</Text>
-        <Text style={globalStyles.bodyText}>{farmData.street}</Text>
-        <Text style={[globalStyles.bodyText, styles.text]}>Een zelfoogstboerderij voor groenten en kleinfruit op een dikke anderhalve kilometer van Zemst dorp. </Text>
-      </View>
-      <View style={styles.container}>
-        <View style={styles.div}>
-        <Pressable style={styles.followButton}>
-          <Text style={globalStyles.bodyTextBold}>Volgen</Text>
-        </Pressable>
-        <Pressable style={styles.messageButton} onPress={() => navigation.navigate('ChatUser')}>
-          <Text style={globalStyles.bodyTextBold}>Bericht</Text>
-        </Pressable>
-        </View>
-      </View>
+          <View style={styles.bgImg}>
+            <Image style={styles.cardImage} source={{ uri: farmData.image }} />
+          </View>
+          <View style={styles.container}>
+            <Text style={globalStyles.headerText}>Boerderij details</Text>
+            <Text style={globalStyles.bodyText}>{farmData.street}</Text>
+            <Text style={[globalStyles.bodyText, styles.text]}>Een zelfoogstboerderij voor groenten en kleinfruit op een dikke anderhalve kilometer van Zemst dorp. </Text>
+          </View>
+          <View style={styles.container}>
+            <View style={styles.div}>
+            <Pressable style={styles.followButton}>
+              <Text style={globalStyles.bodyTextBold}>Volgen</Text>
+            </Pressable>
+            <Pressable style={styles.messageButton} onPress={() => navigation.navigate('ChatUser')}>
+              <Text style={globalStyles.bodyTextBold}>Bericht</Text>
+            </Pressable>
+            </View>
+          </View>
         </SafeAreaView>
     );
 }
