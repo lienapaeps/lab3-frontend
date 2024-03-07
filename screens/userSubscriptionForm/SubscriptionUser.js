@@ -5,8 +5,8 @@ import Step1 from './Step1.js';
 import Step2 from './Step2.js';
 
 
-import COLORS from '../../constants/color';
-import Button from '../../components/Button.js';
+import COLORS from '../../../constants/color.js';
+import Button from '../../../components/Button.js';
 
 const SubscriptionUser = () => {
     const [step, setStep] = useState(1);

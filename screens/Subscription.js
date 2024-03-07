@@ -27,26 +27,26 @@ const Subscription = ({ navigation }) => {
             {/* keuze maken tussen drie opties */}
             <View style={{ gap: 20, marginTop: 30 }}>
                 <SubscriptionCard
-                    onPress={() => handlePress('Groentenpakket')}
+                    onPress={() => handlePress('TakeawaySubscription')}
                 
                     cardHeader="Groentenpakket"
                     cardBody="Weinig tijd maar toch wekelijks genieten van verse lokale biologische groenten"
-                    isSelected={selectedOption === 'Groentenpakket'}
+                    isSelected={selectedOption === 'TakeawaySubscription'}
                 />
 
                 <SubscriptionCard
-                    onPress={() => handlePress('Zelfoogstpakket')}
+                    onPress={() => handlePress('CollectiveSubscription')}
                  
                     cardHeader="Zelfoogstpakket"
                     cardBody="Oogst het hele jaar door verse seizoensgroenten met respect voor de natuur"
-                    isSelected={selectedOption === 'Zelfoogstpakket'}
+                    isSelected={selectedOption === 'CollectiveSubscription'}
                 />
                  <SubscriptionCard
-                    onPress={() => handlePress('Meewerkpakket')}
+                    onPress={() => handlePress('CooperateSubscription')}
                 
                     cardHeader="Meewerkpakket"
                     cardBody="Help op het veld, oogst je eigen planten, en draag actief bij aan lokale voedselproductie"
-                    isSelected={selectedOption === 'Meewerkpakket'}
+                    isSelected={selectedOption === 'CooperateSubscription'}
                 />
 
             </View>
