@@ -6,7 +6,7 @@ import COLORS from '../constants/color';
 
 export default function FarmHeader ({ navigation, route }) {
 
-    console.log(route.params.farmData)
+    // console.log(route.params.farmData)
 
     const farmData = route.params.farmData;
 
