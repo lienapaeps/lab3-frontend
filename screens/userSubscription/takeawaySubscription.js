@@ -7,20 +7,29 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const TakeawaySubscription = () => {
 
+
     return (
         <SafeAreaView style={globalStyles.container}>
-        {/* header */}
-        <View>
-            <Text style={globalStyles.headerText}>Je koos voor het Samenwerkingspakket</Text>
-        </View>
-        {/* keuze maken tussen de drie Abonnementen*/}
-        <View style={styles.card}>
-            <Text style={globalStyles.headerTextSmaller}>Samenwerkingspakket</Text>
-            <Text style={[globalStyles.bodyTextMedium, styles.text]}>Help op het veld, oogst je eigen planten, en draag actief bij aan lokale voedselproductie</Text>
-            <Text style={[globalStyles.bodyTextMedium, styles.text]}>De Samenvatting: Je helpt op het veld in groep.Oogst je eigen planten, en draagt actief bij aan lokale voedselproductie</Text>
-            <Text style={[globalStyles.bodyTextMedium, styles.text]}>De prijs bedraagt 10 euro per maand.</Text>
-            
-        </View>
+            {/* header */}
+            <View>
+                <Text style={globalStyles.headerText}>Je koos voor het Groentenpakket</Text>
+            </View>
+            {/* keuze maken tussen de drie Abonnementen*/}
+            <View style={styles.card}>
+                <Text style={[globalStyles.bodyTextMedium]}>Help mee, oogst samen en geniet van lokale voedselproductie!</Text>
+                <Text style={[globalStyles.bodyText]}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec nec odio vitae justo tincidunt fermentum sit amet eget elit.
+                    Nulla facilisi. Donec nec odio vitae justo tincidunt fermentum sit amet eget elit. Nulla facilisi.
+                </Text>
+            </View>
+            <View style={styles.card}>
+                <Text style={globalStyles.headerTextSmaller}>Kostprijs bedraagt 100 per maand</Text>
+            </View>
+
+            <View style={globalStyles.Header}>
+                <Pressable style={styles.button}>
+                    <Text style={styles.text}>Betalen</Text>
+                </Pressable>
+            </View>
         </SafeAreaView>
     );
 }
@@ -30,7 +39,6 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         borderRadius: 10,
         paddingHorizontal: 20,
-        height: 150,
         shadowColor: 'rgba(0,0,0, .4)',
         shadowOffset: { height: 1, width: 1 },
         shadowOpacity: 1,
@@ -40,9 +48,28 @@ const styles = StyleSheet.create({
         gap: 15,
         alignItems: 'center',
         marginBottom: 20,
+        padding: 20,
+    },
+
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 10,
+        elevation: 3,
+        backgroundColor: COLORS.orange,
+    },
+    text: {
+        fontSize: 16,
+        lineHeight: 21,
+        fontFamily: 'Quicksand_400Regular',
+        letterSpacing: 0.25,
+        color: 'white',
+        paddingLeft: 10,
+        paddingRight: 10,
     },
 
 })
-
 export default TakeawaySubscription;
 
