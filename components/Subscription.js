@@ -7,20 +7,15 @@ const SubscriptionCard = ({ onPress, cardHeader, cardBody, isSelected }) => {
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[
-        styles.subscriptionCard,
-        {
-          borderColor: isSelected ? COLORS.green : COLORS.veryLightOffBlack,
-          borderWidth: isSelected ? 2 : 1,
-        },
+      style={[styles.subscriptionCard,
+      {
+        backgroundColor: isSelected ? COLORS.lightOrange : COLORS.white,
+      },
       ]}
     >
-
-
+      {isSelected && <Image source={require('../assets/icon.png')} style={{ position: 'absolute', bottom: 10, right: 10, width: 20, height: 20 }} />}
       <Text style={globalStyles.headerTextSmaller}>{cardHeader}</Text>
       <Text style={[globalStyles.bodyTextSmall]}>{cardBody}</Text>
-
-
     </TouchableOpacity>
   );
 };
@@ -34,7 +29,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
   },
-
 });
 
 export default SubscriptionCard;
