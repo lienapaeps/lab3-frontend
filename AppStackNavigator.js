@@ -6,6 +6,7 @@ import HomeUser from './screens/HomeUser';
 import Calendar from './screens/CalendarPage';
 import FarmUserDetails from './screens/FarmUserDetails';
 import Map from './screens/Map';
+import FarmHeader from './components/FarmHeader';
 
 
 import NavigationOptions from './components/NavigationOptions';

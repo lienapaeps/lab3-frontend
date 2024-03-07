@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native';
-
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
+
 
 const FarmCard = (props) => {
     const handlePress = () => {
