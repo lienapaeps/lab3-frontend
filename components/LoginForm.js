@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
@@ -29,7 +30,11 @@ const LoginForm = ({ navigation }) => {
             const json = await response.json();
 
             if (json.status === 'success') {
-                // Sla JWT op in app voor toekomstig gebruik (bijv. AsyncStorage)
+                // Sla JWT token op in local storage
+                await AsyncStorage.setItem('token', json.data.token);
+
+                console.log(json.data.token)
+
                 // Navigeer naar de volgende pagina (bijv. HomeUser)
                 navigation.navigate('App', { screen: 'HomeUser' });
             } else {
@@ -59,7 +64,7 @@ const LoginForm = ({ navigation }) => {
             </View>
 
             {/* button */}
-            <View style={{marginTop: 30}}>
+            <View style={{marginTop: 25}}>
                 <Button title="Log in" onPress={handleLogin} filled/>
             </View>
             {/* of met */}
@@ -111,7 +116,7 @@ const LoginForm = ({ navigation }) => {
 const styles = StyleSheet.create({
     errorMessageContainer: {
         backgroundColor: '#f8d7da',
-        padding: 10,
+        padding: 12,
         borderRadius: 5,
         marginTop: 10,
     },

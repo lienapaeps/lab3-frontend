@@ -1,10 +1,10 @@
-import React from 'react';
-import { StyleSheet, View, Text, Button, Pressable, Image } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, View, Text, Pressable, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
-
 
 
 const HomeUser = ({ navigation }) => {
@@ -15,6 +15,26 @@ const HomeUser = ({ navigation }) => {
        //nagiate to subscription page
         navigation.navigate('Sub', { screen: 'Subscription' });
     };
+
+
+    console.log(AsyncStorage.getItem('token')); //_j
+
+    useEffect(() => {
+        const checkAuthentication = async () => {
+            try {
+                const token = await AsyncStorage.getItem('token');
+                if (!token) {
+                    // Als er geen token is, stuur de gebruiker naar het inlogscherm
+                    navigation.navigate('Login');
+                }
+            } catch (error) {
+                console.error('Fout bij het ophalen van de token:', error);
+                // Toon een foutmelding als er een fout optreedt bij het ophalen van de token
+            }
+        };
+
+        checkAuthentication();
+    }, []);
 
     return (
         <SafeAreaView style={globalStyles.container}>
