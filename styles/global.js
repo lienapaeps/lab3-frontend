@@ -21,7 +21,6 @@ export const globalStyles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 20,
         color: COLORS.offBlack,
-        
     },
     bodyTextBold: {
         fontFamily: 'Quicksand_700Bold',
@@ -74,5 +73,11 @@ export const globalStyles = StyleSheet.create({
     tabBarLabelNormal: {
         color: COLORS.offBlack,
         fontWeight: '500',
+    },
+    errorText: {
+        fontFamily: 'Quicksand_400Regular',
+        fontSize: 16,
+        lineHeight: 20,
+        color: COLORS.alert,
     },
 });
