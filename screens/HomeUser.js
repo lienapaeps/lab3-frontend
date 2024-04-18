@@ -9,18 +9,31 @@ import { globalStyles } from '../styles/global';
 
 const HomeUser = ({ navigation }) => {
     const goToCalendar = () => {
+        //nagiate to calendar page
         navigation.navigate('AppStack', { screen: 'Calendar' });
     };
     const goToFarm = () => {
-       //nagiate to subscription page
+        //nagiate to subscription page
         navigation.navigate('Sub', { screen: 'Subscription' });
     };
+    const goToProfile = () => {
+        //nagiate to profile page
+         navigation.navigate('Sub', { screen: 'Subscription' });
+     };
 
     return (
         <SafeAreaView style={globalStyles.container}>
             <View>
                 <Text style={globalStyles.headerText}>Home pagina Gebruiker</Text>
             </View>
+            {/* title */}
+            <View style={globalStyles.Header}>
+                <Pressable style={styles.button} onPress={goToProfile}>
+                    <image source={require('../assets/icon.png')} />
+                </Pressable>
+                <Text style={styles.text}>Voornaam Naam</Text>
+            </View>
+            {/* Pakket */}
             <View>
                 <Text style={globalStyles.headerTextSmaller}>Huidig Pakket</Text>
             </View>
