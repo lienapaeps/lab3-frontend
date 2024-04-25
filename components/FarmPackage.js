@@ -5,10 +5,10 @@ import { globalStyles } from '../styles/global';
  
 const PackageScreen = () => {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={globalStyles.container}>
       <View>
-        <Text style={globalStyles.headerText}>Farm Package</Text>
-        </View>
+        <Text style={globalStyles.headerText}>Pakketten</Text>
+      </View>
     </SafeAreaView>
   )
 }

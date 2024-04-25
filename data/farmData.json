@@ -4,12 +4,13 @@
         "image": "https://lh3.googleusercontent.com/p/AF1QipNzZYFue1aA2L0m0PlzqV02CXjen_n9ICNjSsAl=s1360-w1360-h1020",
         "title": "Vlinderveld",
         "street": "Grote Molenweg",
-        "streetnumber": "",
+        "streetnumber": "19",
         "postalcode": "1980",
         "city": "Zemst",
         "rating": "4.9",
         "kilometer": "3.2km",
-        "status": "Open"
+        "status": "Open",
+        "phone": "+32 468 20 22 74"
     },
     {
         "id": "2",

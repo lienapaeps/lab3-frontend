@@ -1,8 +1,9 @@
 import React from  'react';
-import { View, Text, Image, StyleSheet, Pressable } from 'react-native';
+import { View, Text, Image, StyleSheet, Pressable} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../styles/global';
 import COLORS from '../constants/color';
+import Button from '../components/Button';
 
 export default function FarmHeader ({ navigation, route }) {
 
@@ -17,17 +18,12 @@ export default function FarmHeader ({ navigation, route }) {
           </View>
           <View style={styles.container}>
             <Text style={globalStyles.headerText}>Boerderij details</Text>
-            <Text style={globalStyles.bodyText}>{farmData.street}</Text>
+            <Text style={globalStyles.bodyText}>{farmData.street}, {farmData.postalcode} {farmData.city}</Text>
             <Text style={[globalStyles.bodyText, styles.text]}>Een zelfoogstboerderij voor groenten en kleinfruit op een dikke anderhalve kilometer van Zemst dorp. </Text>
           </View>
           <View style={styles.container}>
-            <View style={styles.div}>
-            <Pressable style={styles.followButton}>
-              <Text style={globalStyles.bodyTextBold}>Volgen</Text>
-            </Pressable>
-            <Pressable style={styles.messageButton} onPress={() => navigation.navigate('ChatUser')}>
-              <Text style={globalStyles.bodyTextBold}>Bericht</Text>
-            </Pressable>
+            <View style={[styles.div,styles.memberButton]}>
+            <Button title="Wordt Lid" filled/>
             </View>
           </View>
         </SafeAreaView>
@@ -61,36 +57,20 @@ const styles = StyleSheet.create({
     },
     text:{
         marginTop: 20,
-        fontWeight: 'bold',
     },
   
     followButton: {
-        backgroundColor: COLORS.lightGreen,
+        backgroundColor: COLORS.green,
         color: COLORS.offBlack,  
         paddingLeft: 50,
         paddingRight: 50,
-        paddingTop: 15,
-        paddingBottom: 15,
+        paddingTop: 10,
+        paddingBottom: 10,
         borderRadius: 10,
-        textAlign: 'center',
+        textAlign: 'center', 
+        width: '100%',
     },
-  
-    messageButton: {
-        backgroundColor: COLORS.veryLightOffBlack,
-        color: COLORS.white,
-        paddingLeft: 50,
-        paddingRight: 50,
-        paddingTop: 15,
-        paddingBottom: 15,
-        borderRadius: 10,
-        textAlign: 'center',
-    },
-  
-    div: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        gap: 20,
-  
+    memberButton: {
+      paddingBottom: 20,
     }
   })

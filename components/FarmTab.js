@@ -5,6 +5,7 @@ import COLORS from '../constants/color';
 
 import ChatUser from '../screens/ChatUser';
 import FarmPackage from '../components/FarmPackage';
+import { globalStyles } from '../styles/global';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -12,26 +13,36 @@ const screenOptions = {
     tabBarStyle: {
         backgroundColor: COLORS.white,
         elevation: 0,
+        padding: 0,
+        margin: 0,
         shadowOpacity: 0,
-        paddingTop: 20,
         backgroundColor: 'transparent',
     },
     tabBarLabelStyle: {
         color: COLORS.offBlack,
-        fontWeight: 'bold',
+        fontSize: 12,
+        padding: 0,
+        margin: 0,
+        textTransform: 'capitalize',
     },
     tabBarIndicatorStyle: {
-        backgroundColor: COLORS.orange,
+        backgroundColor: COLORS.offBlack,
+        margin: 0,
     },
-
-
+    tabBarItemStyle: {
+        padding: 0,
+        margin: 0,
+    }
 }
 
 const FarmTab = ()  => {
     return (
-    <Tab.Navigator>
-        <Tab.Screen name="Info" component={FarmPackage} options={screenOptions}/>
-        <Tab.Screen name="Chat" component={ChatUser} options={screenOptions}/>
+    <Tab.Navigator style={[globalStyles.container, styles.navigation]}>
+        <Tab.Screen name="Services" component={FarmPackage} options={screenOptions}/>
+        <Tab.Screen name="Agenda" component={ChatUser} options={screenOptions}/>
+        <Tab.Screen name="Leden" component={ChatUser} options={screenOptions}/>
+        <Tab.Screen name="Reviews" component={ChatUser} options={screenOptions}/>
+        <Tab.Screen name="Contact" component={ChatUser} options={screenOptions}/>
     </Tab.Navigator>
     );
 };
@@ -43,6 +54,10 @@ const styles = StyleSheet.create({
         elevation: 0,
         shadowOpacity: 0,
         paddingTop: 20,
+    },
+    navigation: {
+        borderBottomWidth: 20,
+        borderColor: COLORS.orange,
     },
 });
 
