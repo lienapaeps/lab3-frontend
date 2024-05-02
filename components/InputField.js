@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: COLORS.offBlack,
         marginBottom: 10,
-        marginTop: 20,
+        marginTop: 15,
     },
     input: {
         paddingVertical: 16,
