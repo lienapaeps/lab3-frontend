@@ -18,7 +18,7 @@ const LoginForm = ({ navigation }) => {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch("http://192.168.0.240:3000/users/login", {
+            const response = await fetch("https://lab3-backend-w1yl.onrender.com/users/login", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
