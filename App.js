@@ -8,6 +8,9 @@ import AuthNavigator from './AuthNavigator';
 import AppTabNavigator from './AppTabNavigator';
 import AppStackNavigator from './AppStackNavigator';
 
+import AppTabNavigatorFarmer from './AppTabNavigatorFarmer';
+import AppStackNavigatorFarmer from './AppStackNavigatorFarmer';
+
 // sub navigator
 import SubNavigator from './SubNavigator';
 
@@ -61,6 +64,9 @@ export default function App() {
                 <Stack.Screen name="AppStack" component={AppStackNavigator} options={{ headerShown: false }} />
                 {/* Voeg de SubNavigator toe als een scherm binnen de Stack.Navigator */}
                 <Stack.Screen name="Sub" component={SubNavigator} options={{ headerShown: false }} />
+                {/* Voeg de AppTabNavigatorFarmer toe als een scherm binnen de Stack.Navigator */}
+                <Stack.Screen name="AppFarmer" component={AppTabNavigatorFarmer} options={{ headerShown: false }} />
+                {/* Voeg de AppStackNavigatorFarmer toe als een scherm binnen de Stack.Navigator */}
               </Stack.Navigator>
             </NavigationContainer>
           </View>
