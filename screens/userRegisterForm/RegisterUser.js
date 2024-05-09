@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import ProgressBar from 'react-native-progress/Bar';
 import Step1 from './Step1.js';
 import Step2 from './Step2.js';
 import Step3 from './Step3.js';
+import Step4 from './Step4.js';
 
 import COLORS from '../../constants/color';
 import Button from '../../components/Button.js';
 
-const RegisterUser = () => {
+const RegisterUser = ({ navigation }) => {
   const [step, setStep] = useState(1);
-  const totalSteps = 3;
+  const totalSteps = 4;
 
   const handleNextStep = () => {
     if (step < totalSteps) {
@@ -21,11 +22,14 @@ const RegisterUser = () => {
   const handlePrevStep = () => {
     if (step > 1) {
       setStep(step - 1);
+    } else {
+      navigation.navigate('Register');
     }
   };
 
   return (
     <View style={styles.container}>
+      {step < totalSteps && (
       <ProgressBar
         progress={(step - 1) / (totalSteps - 1)}
         width={null}
@@ -33,9 +37,19 @@ const RegisterUser = () => {
         color={COLORS.green}
         height={20}
       />
+      )}
+      {step < totalSteps && (
+        <TouchableOpacity style={styles.backButton} onPress={handlePrevStep}>
+          <Image
+            source={require('../../assets/Back-arrow.png')}
+            style={styles.arrowImg}
+          />
+        </TouchableOpacity>
+        )}
       {step === 1 && <Step1 />}
       {step === 2 && <Step2 />}
       {step === 3 && <Step3 />}
+      {step === 4 && <Step4 navigation={navigation} />}
       <View style={styles.buttonContainer}>
         {/* {step > 1 && <Button title="Previous" onPress={handlePrevStep} filled />} */}
         {step < totalSteps && <Button title="Next" onPress={handleNextStep} filled/>}
@@ -58,6 +72,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,    
     marginBottom: 20,
   },
-});
+  arrowImg: {
+    width: 30,
+    height: 30,
+  },
+  backButton: {
+    marginLeft: 20,
+    marginTop: 10,
+  },
+})
 
 export default RegisterUser;
