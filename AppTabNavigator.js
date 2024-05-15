@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Text, View } from 'react-native';
+import { Image, Text, View, Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // alle schermen ivm de inhoud vd app
@@ -22,7 +22,7 @@ const screenOptions = {
     right: 0,
     left: 0,
     bottom: 0,
-    height: 95,
+    height: Platform.OS === 'ios' ? 100 : 90,
     elevation: 0,
   },
 }
@@ -47,7 +47,7 @@ const AppTabNavigator = () => {
           }
 
           return (
-            <View style={{paddingTop: 15}}>
+            <View style={{ marginTop: 10 }}>
               <Image source={iconSource} style={{ width: size, height: size }} />
             </View>
           );
@@ -67,7 +67,7 @@ const AppTabNavigator = () => {
           }
 
           return (
-            <View>
+            <View style={{ marginBottom: Platform.OS === 'ios' ? -5 : 10 }}>
               <Text style={[globalStyles.tabBarLabel, focused ? globalStyles.tabBarLabelFocused : globalStyles.tabBarLabelNormal]}>
                 {labelText}
               </Text>
