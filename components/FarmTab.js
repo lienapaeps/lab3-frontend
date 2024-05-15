@@ -6,6 +6,7 @@ import COLORS from '../constants/color';
 import ChatUser from '../screens/ChatUser';
 import FarmPackage from '../components/FarmPackage';
 import { globalStyles } from '../styles/global';
+import { processFontFamily } from 'expo-font';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -17,27 +18,36 @@ const screenOptions = {
         margin: 0,
         shadowOpacity: 0,
         backgroundColor: 'transparent',
+        borderBottomWidth: 1,
+        borderColor: COLORS.lightOffBlack,
     },
     tabBarLabelStyle: {
         color: COLORS.offBlack,
-        fontSize: 12,
+        fontSize: 14,
         padding: 0,
         margin: 0,
         textTransform: 'capitalize',
+        fontWeight: '600',
+        fontFamily: 'QuickSand-Regular',
     },
     tabBarIndicatorStyle: {
         backgroundColor: COLORS.offBlack,
         margin: 0,
+        padding: 0,
     },
     tabBarItemStyle: {
         padding: 0,
         margin: 0,
-    }
+    },
+    tabBarIndicatorStyle: {
+        backgroundColor: COLORS.offBlack,
+        height: 3,
+    },
 }
 
 const FarmTab = ()  => {
     return (
-    <Tab.Navigator style={[globalStyles.container, styles.navigation]}>
+    <Tab.Navigator style={styles.navigation}>
         <Tab.Screen name="Services" component={FarmPackage} options={screenOptions}/>
         <Tab.Screen name="Agenda" component={ChatUser} options={screenOptions}/>
         <Tab.Screen name="Leden" component={ChatUser} options={screenOptions}/>
@@ -53,11 +63,6 @@ const styles = StyleSheet.create({
         color: 'white',
         elevation: 0,
         shadowOpacity: 0,
-        paddingTop: 20,
-    },
-    navigation: {
-        borderBottomWidth: 20,
-        borderColor: COLORS.orange,
     },
 });
 
