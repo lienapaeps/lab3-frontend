@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, SafeAreaView, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, ScrollView } from 'react-native';
+import { View, SafeAreaView, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, Platform } from 'react-native';
 
 import { globalStyles } from '../../styles/global';
 import slides from './onboarding/slides.js'
@@ -63,7 +63,7 @@ const Step4 = ({ navigation }) => {
           decelerationRate="fast"
         />
         {renderPagination()}
-        <Button title={currentIndex === slides.length - 1 ? 'Start' : 'Next'} onPress={nextSlide} filled />
+        <Button style={styles.smaller} title={currentIndex === slides.length - 1 ? 'Start' : 'Next'} onPress={nextSlide} filled />
         <TouchableOpacity onPress={skipSlides}>
           <Text style={{ ...globalStyles.bodyText, textAlign: 'center', marginTop: 5}}>Skip</Text>
         </TouchableOpacity>
@@ -90,6 +90,16 @@ const styles = StyleSheet.create({
     },
     activeDot: {
       backgroundColor: COLORS.green,
+    },
+    smaller: {
+      ...Platform.select({
+        ios: {
+          marginLeft: 30,
+          marginRight: 30,
+          marginTop: 10,
+          marginBottom: 10,
+        },
+      }),
     },
 });
 

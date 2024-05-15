@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text} from 'react-native';
+import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { globalStyles } from '../styles/global';
@@ -15,7 +15,6 @@ const Login = ({ navigation }) => {
             </View>
             {/* form component */}
             <LoginForm navigation={navigation} />
-
         </SafeAreaView>
     );
 }

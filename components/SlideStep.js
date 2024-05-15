@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, Image, View, Dimensions } from 'react-native';
+import { Text, StyleSheet, Image, View, Dimensions, Platform } from 'react-native';
 import COLORS from '../constants/color';
 
 import { globalStyles } from '../styles/global';
@@ -23,6 +23,10 @@ const SlideStep = ({ title, description, image }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        ...Platform.select({
+            ios: {
+            },
+        }),
     },
     slide: {
         width: Dimensions.get('window').width,
@@ -31,13 +35,30 @@ const styles = StyleSheet.create({
     slideImage: {
         justifyContent: 'center',
         alignItems: 'center',
+        ...Platform.select({
+            ios: {
+                marginTop: 30,
+            },
+        }),
     },
     slideText: {
         justifyContent: 'center',
         marginTop: 20,
+        ...Platform.select({
+            ios: {
+                marginLeft: 30,
+                marginRight: 30,
+            },
+        }),
     },
     image: {
         width: "100%",
+        ...Platform.select({
+            ios: {
+                height: 350,
+                width: 333,
+            },
+        }),
     },
 })
 
