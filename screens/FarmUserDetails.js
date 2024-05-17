@@ -23,7 +23,7 @@ const FarmUserDetails = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   btn: {
     position: 'absolute',
-    top: 0,
+    top: 40,
     left: 0,
     zIndex: 1,
     backgroundColor: COLORS.white,
