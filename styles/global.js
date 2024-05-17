@@ -4,7 +4,9 @@ import COLORS from '../constants/color';
 export const globalStyles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 30,
+        // padding: 25,
+        marginLeft: 20,
+        marginRight: 20,
         paddingBottom: -30,
         backgroundColor: COLORS.offWhite,
     },

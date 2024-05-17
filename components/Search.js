@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: COLORS.white,
-        shadowColor: 'rgba(0,0,0, .4)',
+        shadowColor: 'rgba(0,0,0, .1)',
         shadowOffset: { height: 1, width: 1 }, 
         shadowOpacity: 1,
         shadowRadius: 1,

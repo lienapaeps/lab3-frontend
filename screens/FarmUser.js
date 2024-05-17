@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { globalStyles } from '../styles/global';
@@ -59,10 +59,15 @@ const FarmUser = ({ navigation }) => {
                 <FlatList
                     data={filteredFarmData}
                     keyExtractor={item => item.id}
+                    style={{ flex: 1 }}
+                    contentContainerStyle={{ paddingBottom: 90 }}
+                    showsVerticalScrollIndicator={false}
                     renderItem={({ item }) => <FarmCard farmData={item} onPress={goToDetails} />}
                 />
+                <View style={{ alignItems: 'center' }}>
+                    <MapButton onPress={() => navigation.navigate('Map')} />
+                </View>
             </View>
-            <MapButton onPress={() => navigation.navigate('Map')} />
         </SafeAreaView>
     );
 }
@@ -75,6 +80,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.offWhite,
     },
     buttons: {
+        marginTop: 15,
         marginBottom: 30,
         display: 'flex',
         flexDirection: 'row',
