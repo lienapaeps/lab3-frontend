@@ -75,10 +75,9 @@ const RegisterUser = ({ navigation }) => {
                 // Sla JWT token op in local storage
                 await AsyncStorage.setItem('token', json.data.token);
 
-                console.log(json.data.token);
+                // console.log(json.data.token);
 
-                // Navigeer naar de volgende pagina (bijv. HomeUser)
-                navigation.navigate('App', { screen: 'HomeUser' });
+                navigation.navigate('OnBoarding');
             } else {
                 // Toon een foutmelding als registratgegevens onjuist zijn
                 setErrorMessage(json.message);

@@ -7,6 +7,7 @@ import LoginScreen from './screens/Login';
 import RegisterScreen from './screens/Register';
 import RegisterUserScreen from './screens/userRegisterForm/RegisterUser';
 import RegisterFarmerScreen from './screens/farmerRegisterForm/RegisterFarmer';
+import OnBoarding from './screens/userRegisterForm/OnBoarding';
 
 import NavigationOptions from './components/NavigationOptions';
 
@@ -20,6 +21,7 @@ const AuthNavigator = () => {
         <Stack.Screen name="Register" component={RegisterScreen} options={NavigationOptions}/>
         <Stack.Screen name="registerUser" component={RegisterUserScreen} options={{headerShown:false}}/>
         <Stack.Screen name="registerFarmer" component={RegisterFarmerScreen} options={{headerShown:false}}/>
+        <Stack.Screen name="OnBoarding" component={OnBoarding} options={{headerShown:false}}/>
     </Stack.Navigator>
   );
 };

@@ -8,7 +8,6 @@ import Button from '../../components/Button.js';
 import COLORS from '../../constants/color.js';
 
 const OnBoarding = ({ navigation }) => {
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef();
 
@@ -43,64 +42,73 @@ const OnBoarding = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={globalStyles.container}>
-      <View style={styles.box}>
-        <FlatList
-          ref={flatListRef}
-          horizontal={true}
-          data={slides}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <SlideStep
-              title={item.title}
-              description={item.description}
-              image={item.image}
-            />
-          )}
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          snapToInterval={Dimensions.get('window').width}
-          decelerationRate="fast"
-        />
+    <SafeAreaView style={{flex: 1}}>
+      <View style={styles.container}>
+        <View>
+            <FlatList
+            ref={flatListRef}
+            horizontal={true}
+            data={slides}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <SlideStep
+                title={item.title}
+                description={item.description}
+                image={item.image}
+              />
+            )}
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            snapToInterval={Dimensions.get('window').width}
+            decelerationRate="fast"
+          />
+        </View>
         {renderPagination()}
-        <Button style={styles.smaller} title={currentIndex === slides.length - 1 ? 'Start' : 'Next'} onPress={nextSlide} filled />
-        <TouchableOpacity onPress={skipSlides}>
-          <Text style={{ ...globalStyles.bodyText, textAlign: 'center', marginTop: 5}}>Skip</Text>
-        </TouchableOpacity>
+        <View>
+          <Button style={styles.button} title={currentIndex === slides.length - 1 ? 'Start' : 'Next'} onPress={nextSlide} filled />
+          <TouchableOpacity onPress={skipSlides}>
+            <Text style={styles.skip}>Skip</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-    box: {
-      gap: 5,
-    },
-    pagination: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      marginBottom: 10,
-    },
-    dot: {
-      width: 12,
-      height: 12,
-      borderRadius: 10,
-      backgroundColor: COLORS.veryLightOffBlack,
-      marginHorizontal: 6,
-    },
-    activeDot: {
-      backgroundColor: COLORS.green,
-    },
-    smaller: {
-      ...Platform.select({
-        ios: {
-          marginLeft: 30,
-          marginRight: 30,
-          marginTop: 10,
-          marginBottom: 10,
-        },
-      }),
-    },
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+  },
+  pagination: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 20,
+    marginTop: 40,
+  },
+  dot: {
+    width: 12,
+    height: 12,
+    borderRadius: 10,
+    backgroundColor: COLORS.veryLightOffBlack,
+    marginHorizontal: 6,
+  },
+  activeDot: {
+    backgroundColor: COLORS.green,
+  },
+  button: {
+    ...Platform.select({
+      ios: {
+        marginHorizontal: 30,
+        marginVertical: 10,
+      },
+    }),
+  },
+  skip: {
+    ...globalStyles.bodyText,
+    textAlign: 'center',
+    marginTop: 5,
+  },
 });
 
 export default OnBoarding;

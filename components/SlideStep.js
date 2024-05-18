@@ -23,14 +23,9 @@ const SlideStep = ({ title, description, image }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        ...Platform.select({
-            ios: {
-            },
-        }),
     },
     slide: {
         width: Dimensions.get('window').width,
-        height: '80%',
     },
     slideImage: {
         justifyContent: 'center',
@@ -55,7 +50,7 @@ const styles = StyleSheet.create({
         width: "100%",
         ...Platform.select({
             ios: {
-                height: 350,
+                height: 400,
                 width: 333,
             },
         }),
