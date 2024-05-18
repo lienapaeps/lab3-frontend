@@ -1,93 +1,107 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, FlatList, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { globalStyles } from '../styles/global';
-import COLORS from '../constants/color';
-import farmData from '../data/farmData'; // dummy data
 
 import FarmCard from '../components/FarmCard';
-import Search from '../components/Search';
 import Filter from '../components/Filter';
+import Search from '../components/Search';
 import MapButton from '../components/MapButton';
 
 const FarmUser = ({ navigation }) => {
-    const goToDetails = (farmData) => {
-        navigation.navigate('AppStack', { screen: 'FarmUserDetails', params: { farmData }});
-    };
-
+    const [farmData, setFarmData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState('All');
-    const [ratingFilter, setRatingFilter] = useState(0);
-    const [distanceFilter, setDistanceFilter] = useState('');
 
-    const handleSearch = (text) => {
+    useEffect(() => {
+        const fetchFarmData = async () => {
+            try {
+                const response = await fetch('https://lab3-backend-w1yl.onrender.com/api/farms', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    mode: 'cors'
+                });
+                const data = await response.json();
+                // console.log(data.data.farms);
+                setFarmData(data.data.farms);
+            } catch (error) {
+                setError(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchFarmData();
+    }, []);
+
+    const handleSearchTermChange = (text) => {
         setSearchTerm(text);
-    };
+    }
 
-    const handleFilterChange = (status) => {
-        setStatusFilter(status);
-    };
+    const handleFarmCardPress = (id) => {
+        console.log(id);
+        navigation.navigate('AppStack', { screen: 'FarmUserDetails', params: { id }});
 
-    const handleRatingFilterChange = (rating) => {
-        setRatingFilter(rating);
-    };
+    }
 
-    const handleDistanceFilterChange = (distance) => {
-        setDistanceFilter(distance);
-    };
+    const filteredFarmData = farmData.filter((farm) => {
+        return farm.name.toLowerCase().includes(searchTerm.toLowerCase());
+    })
 
-    const filteredFarmData = farmData.filter(farm => {
-        const titleMatches = farm.title.toLowerCase().includes(searchTerm.toLowerCase());
-        const statusMatches = statusFilter === 'All' || farm.status === statusFilter;
-        const ratingMatches = farm.rating >= ratingFilter;
-        const distanceMatches = !distanceFilter || parseFloat(farm.kilometer) <= parseFloat(distanceFilter);
-        return titleMatches && statusMatches && ratingMatches && distanceMatches;
-    });
+    if (loading) {
+        return (
+            <SafeAreaView style={globalStyles.container}>
+                <Text style={globalStyles.bodyText}>Loading...</Text>
+            </SafeAreaView>
+        );
+    }
+
+    if (error) {
+        return (
+            <SafeAreaView style={globalStyles.container}>
+                <Text style={globalStyles.bodyText}>Error: {error.message}</Text>
+            </SafeAreaView>
+        );
+    }
 
     return (
         <SafeAreaView style={globalStyles.container}>
-            <View style={styles.buttons}>
-                <Search searchTerm={searchTerm} onSearchTermChange={handleSearch} />
-                <Filter
-                    onFilterChange={handleFilterChange}
-                    onRatingFilterChange={handleRatingFilterChange}
-                    onDistanceFilterChange={handleDistanceFilterChange}
-                />
+            <View style={styles.options}>
+                <Search searchTerm={searchTerm} onSearchTermChange={handleSearchTermChange} />
+                <Filter />
             </View>
             <View style={{ flex: 1 }}>
                 <FlatList
                     data={filteredFarmData}
-                    keyExtractor={item => item.id}
+                    keyExtractor={item => item._id}
                     style={{ flex: 1 }}
                     contentContainerStyle={{ paddingBottom: 90 }}
                     showsVerticalScrollIndicator={false}
-                    renderItem={({ item }) => <FarmCard farmData={item} onPress={goToDetails} />}
+                    renderItem={({ item }) => <FarmCard farmData={item} onPress={() => handleFarmCardPress(item._id)}/>}
                 />
-                <View style={{ alignItems: 'center' }}>
-                    <MapButton onPress={() => navigation.navigate('Map')} />
-                </View>
+            </View>
+            <View style={styles.map}>
+                <MapButton />
             </View>
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 30,
-        paddingBottom: -30,
-        backgroundColor: COLORS.offWhite,
-    },
-    buttons: {
-        marginTop: 15,
-        marginBottom: 30,
-        display: 'flex',
+    options: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        gap: 10,
+        marginBottom: 20,
+        paddingTop: 10,
     },
+    map: {
+        alignItems: 'center',
+    }
 });
 
 export default FarmUser;

@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     },
     searchBar: {
         flex: 1,
-        padding: 10,
+        // padding: 10,
     },
 })
 

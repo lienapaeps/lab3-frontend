@@ -19,7 +19,6 @@ const AppStackNavigator = () => {
       <Stack.Screen name="HomeUser" component={HomeUser} options={NavigationOptions}/>
       <Stack.Screen name="Calendar" component={Calendar} options={NavigationOptions}/>
       <Stack.Screen name="FarmUserDetails" component={FarmUserDetails}
-
         options={() => ({
           headerShown: false,
         })}

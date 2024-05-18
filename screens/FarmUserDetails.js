@@ -1,5 +1,6 @@
+import React, { useState, useEffect } from 'react'
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
-import React from 'react'
+
 import FarmHeader from '../components/FarmHeader';
 import FarmTab from '../components/FarmTab';
 
@@ -7,16 +8,14 @@ import COLORS from '../constants/color';
 
 const FarmUserDetails = ({ navigation, route }) => {
 
-  // const farmData = route.params.farmData;
-
   return <>
       <View style={styles.btn}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image style={styles.backButton} source={require('../assets/Back-arrow.png')} />
         </TouchableOpacity>
       </View>
-      <FarmHeader route={route}/>
-      <FarmTab/>
+      <FarmHeader route={route} />
+      <FarmTab />
   </>
 }
 

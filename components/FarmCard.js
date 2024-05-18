@@ -1,45 +1,108 @@
-import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image, Dimensions, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
+const FarmCard = ({ farmData, onPress }) => {
 
-const FarmCard = (props) => {
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 60000); // update elke minuut
+        return () => clearInterval(interval);
+    }, []);
+
     const handlePress = () => {
-        props.onPress(props.farmData);
+        onPress(farmData._id);
+        // console.log(farmData._id);
     }
+
+    const checkLocation = (location) => {
+        navigator.geolocation.getCurrentPosition((position) => {
+            const userLocation = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+            };
+            const farmLocation = {
+                latitude: farmData.coordinates.latitude,
+                longitude: farmData.coordinates.longitude,
+            };
+            const distance = getDistance(userLocation, farmLocation);
+            console.log(distance);
+        });
+    }
+
+    const checkStatus = (openingHours) => {
+        const dayNames = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'];
+        const currentDayIndex = currentTime.getDay(); // Hier de verklaring van currentDayIndex
+        const currentDay = dayNames[currentDayIndex];
+        // console.log(currentDay);
+
+        const todayOpeningHours = openingHours.find((hours) => hours.day === currentDay);
+
+        if (!todayOpeningHours || !todayOpeningHours.openinghour || !todayOpeningHours.closinghour) {
+            return "Gesloten";
+        }
+
+        const [openingHour, openingMinute] = todayOpeningHours.openinghour.split(':').map(Number);
+        const [closingHour, closingMinute] = todayOpeningHours.closinghour.split(':').map(Number);
+
+        if (isNaN(openingHour) || isNaN(openingMinute) || isNaN(closingHour) || isNaN(closingMinute)) {
+            return "Gesloten";
+        }
+
+        const openingTime = new Date(currentTime);
+        openingTime.setHours(openingHour, openingMinute, 0, 0);
+
+        const closingTime = new Date(currentTime);
+        closingTime.setHours(closingHour, closingMinute, 0, 0);
+
+        console.log(openingTime.toISOString(), closingTime.toISOString(), currentTime.toISOString());
+
+        if (currentTime >= openingTime && currentTime <= closingTime) {
+            return "Open";
+        } else {
+            return "Gesloten";
+        }
+    };
+
+    const status = checkStatus(farmData.openinghours);
+    const textColor = status === "Open" ? COLORS.green : COLORS.alert;
+    const imageSource = status === "Open" ? require('../assets/icons/clock.png') : require('../assets/icons/clock-inactive.png');
 
     return (
         <View style={{flex: 1}}>
             <TouchableOpacity onPress={handlePress} style={styles.card}>
                 <View>
-                    <Image style={styles.cardImage} source={{uri: props.farmData.image }} />
+                    <Image style={styles.cardImage} source={{uri: farmData.farmImage }} />
                 </View>
                 <View>
                     <View style={styles.header}>
-                        <Text style={globalStyles.headerTextSmaller}>{props.farmData.title}</Text>
+                        <Text style={globalStyles.headerTextSmaller}>{farmData.name}</Text>
                         <View style={styles.adress}>
-                            <Text style={globalStyles.bodyText}>{props.farmData.street}</Text>
-                            <Text style={globalStyles.bodyText}>{props.farmData.streetnumber}</Text>
+                            <Text style={globalStyles.bodyText}>{farmData.adress.street}</Text>
+                            <Text style={globalStyles.bodyText}>{farmData.adress.number}</Text>
                         </View>
                         <View style={styles.adress}>
-                            <Text style={globalStyles.bodyText}>{props.farmData.city}</Text>
-                            <Text style={globalStyles.bodyText}>{props.farmData.postalcode}</Text>
+                            <Text style={globalStyles.bodyText}>{farmData.adress.city}</Text>
+                            <Text style={globalStyles.bodyText}>{farmData.adress.zipcode}</Text>
                         </View>
                     </View>
                     <View style={styles.info}>
-                        <View style={styles.infoItem}>
+                        {/* <View style={styles.infoItem}>
                             <Image source={require('../assets/icons/star.png')} />
                             <Text style={{...globalStyles.bodyText, ...styles.label}}>{props.farmData.rating}</Text>
-                        </View>
-                        <View style={styles.infoItem}>
+                        </View> */}
+                        {/* <View style={styles.infoItem}>
                             <Image source={require('../assets/icons/locatie.png')} />
                             <Text style={{...globalStyles.bodyText, ...styles.label, ... {color:COLORS.orange}}}>{props.farmData.kilometer}</Text>
-                        </View>
+                        </View> */}
                         <View style={styles.infoItem}>
-                            <Image source={require('../assets/icons/clock.png')} />
-                            <Text style={{...globalStyles.bodyText, ...styles.label, ... {color:COLORS.green}}}>{props.farmData.status}</Text>
+                            <Image source={imageSource} />
+                            <Text style={{...globalStyles.bodyText, ...styles.label, ... {color: textColor}}}>{status}</Text>
                         </View>
                     </View>
                 </View>
