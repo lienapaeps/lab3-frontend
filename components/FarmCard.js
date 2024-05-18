@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import * as Location from 'expo-location';
 
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
@@ -7,6 +8,43 @@ import { globalStyles } from '../styles/global';
 const FarmCard = ({ farmData, onPress }) => {
 
     const [currentTime, setCurrentTime] = useState(new Date());
+    const [location, setLocation] = useState();
+    const [distance, setDistance] = useState(0);
+
+    useEffect(() => {
+        const getPermissions = async () => {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                console.error('Permission to access location was denied');
+                return;
+            }
+            let currentLocation = await Location.getCurrentPositionAsync({});
+            setLocation(currentLocation); // Instellen van de locatie
+    
+            // Bereken de afstand en stel deze in in de state
+            const calculatedDistance = calculateDistance(
+                currentLocation.coords.latitude,
+                currentLocation.coords.longitude,
+                farmData.coordinates.latitude,
+                farmData.coordinates.longitude
+            );
+            setDistance(calculatedDistance);
+            // console.log("currentLocation:", currentLocation); // Controleer de waarde van currentLocation
+        };
+        getPermissions();
+    }, []);
+
+    const calculateDistance = (lat1, lon1, lat2, lon2) => {
+        const R = 6371; // Straal van de aarde in kilometers
+        const dLat = (lat2 - lat1) * Math.PI / 180; // Omrekenen naar radialen
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c; // Afstand in kilometers
+        return distance;
+    };
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -18,21 +56,6 @@ const FarmCard = ({ farmData, onPress }) => {
     const handlePress = () => {
         onPress(farmData._id);
         // console.log(farmData._id);
-    }
-
-    const checkLocation = (location) => {
-        navigator.geolocation.getCurrentPosition((position) => {
-            const userLocation = {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-            };
-            const farmLocation = {
-                latitude: farmData.coordinates.latitude,
-                longitude: farmData.coordinates.longitude,
-            };
-            const distance = getDistance(userLocation, farmLocation);
-            console.log(distance);
-        });
     }
 
     const checkStatus = (openingHours) => {
@@ -60,7 +83,7 @@ const FarmCard = ({ farmData, onPress }) => {
         const closingTime = new Date(currentTime);
         closingTime.setHours(closingHour, closingMinute, 0, 0);
 
-        console.log(openingTime.toISOString(), closingTime.toISOString(), currentTime.toISOString());
+        // console.log(openingTime.toISOString(), closingTime.toISOString(), currentTime.toISOString());
 
         if (currentTime >= openingTime && currentTime <= closingTime) {
             return "Open";
@@ -96,10 +119,10 @@ const FarmCard = ({ farmData, onPress }) => {
                             <Image source={require('../assets/icons/star.png')} />
                             <Text style={{...globalStyles.bodyText, ...styles.label}}>{props.farmData.rating}</Text>
                         </View> */}
-                        {/* <View style={styles.infoItem}>
+                        <View style={styles.infoItem}>
                             <Image source={require('../assets/icons/locatie.png')} />
-                            <Text style={{...globalStyles.bodyText, ...styles.label, ... {color:COLORS.orange}}}>{props.farmData.kilometer}</Text>
-                        </View> */}
+                            <Text style={{...globalStyles.bodyText, ...styles.label, ... {color:COLORS.orange}}}>{distance.toFixed(1) + " km"}</Text>
+                        </View>
                         <View style={styles.infoItem}>
                             <Image source={imageSource} />
                             <Text style={{...globalStyles.bodyText, ...styles.label, ... {color: textColor}}}>{status}</Text>
