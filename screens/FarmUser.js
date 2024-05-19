@@ -43,9 +43,7 @@ const FarmUser = ({ navigation }) => {
     }
 
     const handleFarmCardPress = (id) => {
-        console.log(id);
         navigation.navigate('AppStack', { screen: 'FarmUserDetails', params: { id }});
-
     }
 
     const filteredFarmData = farmData.filter((farm) => {

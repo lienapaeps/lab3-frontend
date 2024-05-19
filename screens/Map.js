@@ -1,23 +1,78 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, View, TextInput, Image, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TextInput, Image, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import * as Location from 'expo-location';
 
-import markers from '../data/markers';
 import COLORS from '../constants/color';
 
 const Map = ({ navigation }) => {
     const [searchText, setSearchText] = useState('');
     const [searchResults, setSearchResults] = useState([]);
-    const [region, setRegion] = useState({
-        latitude: 51.004433,
-        longitude: 4.472707,
-        latitudeDelta: .05,
-        longitudeDelta: .05,
-    });
+    const [region, setRegion] = useState(null);
+    const [farmData, setFarmData] = useState([]);  
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [currentLocation, setCurrentLocation] = useState(null);
+
+    const handleFarmCardPress = (id) => {
+        navigation.navigate('AppStack', { screen: 'FarmUserDetails', params: { id }});
+    }
+
+    useEffect(() => {
+        const fetchFarmData = async () => {
+            try {
+                const response = await fetch('https://lab3-backend-w1yl.onrender.com/api/farms/', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    mode: 'cors',
+                });
+                const data = await response.json();
+                setFarmData(data.data.farms);
+            } catch (error) {
+                setError(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        const getCurrentLocation = async () => {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== 'granted') {
+                console.error('Permission to access location was denied');
+                return;
+            }
+            let currentLocation = await Location.getCurrentPositionAsync({});
+            setCurrentLocation(currentLocation);
+            setRegion({
+                latitude: currentLocation.coords.latitude,
+                longitude: currentLocation.coords.longitude,
+                latitudeDelta: 0.05,
+                longitudeDelta: 0.05,
+            });
+        };
+
+        fetchFarmData();
+        getCurrentLocation();
+    }, []);
+    
+    if (loading || !region) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color={COLORS.offBlack} />
+                <Text style={styles.loadingText}>Loading map...</Text>
+            </View>
+        );
+    }
+    
+      if (error) {
+        return <Text>Error: {error.message}</Text>;
+      }
 
     const handleSearch = (text) => {
         setSearchText(text);
-        const results = markers.filter(marker => marker.title.toLowerCase().includes(text.toLowerCase()));
+        const results = farmData.filter(farm => farm.name.toLowerCase().includes(text.toLowerCase()));
         setSearchResults(results);
 
         // Zoom in op de locatie van de eerste gevonden marker (als er resultaten zijn)
@@ -51,22 +106,40 @@ const Map = ({ navigation }) => {
                     onChangeText={handleSearch}
                 />
             </View>
-             <MapView
+            <MapView
                 style={styles.map}
                 region={region}
                 zoomControlEnabled={true}
                 loadingEnabled={true}
-                >
-                {markers.map((marker, id) => (
-                    <Marker key={id} coordinate={marker.coordinate}>
+            >
+                {(searchResults.length > 0 ? searchResults : farmData).map((farm, id) => (
+                    <Marker
+                        key={id}
+                        coordinate={{
+                            latitude: farm.coordinates.latitude,
+                            longitude: farm.coordinates.longitude,
+                        }}
+                        onPress={() => handleFarmCardPress(farm._id)}
+                    >
                         <View style={styles.marker}>
                             <Image source={require('../assets/icons/marker.png')} style={{ width: 45, height: 45 }} />
                             <View style={styles.markerBox}>
-                                <Text style={styles.markerText}>{marker.title}</Text>
+                                <Text style={styles.markerText}>{farm.name}</Text>
                             </View>
                         </View>
                     </Marker>
                 ))}
+                {currentLocation && (
+                    <Marker
+                    coordinate={{
+                        latitude: currentLocation.coords.latitude,
+                        longitude: currentLocation.coords.longitude,
+                    }}
+                    title="Uw locatie"
+                    >
+                    <View style={styles.currentLocationMarker} />
+                </Marker>
+                )}
             </MapView>
             <View>
                 <TouchableOpacity style={styles.lijst} onPress={() => navigation.goBack()}>
@@ -87,7 +160,7 @@ const styles = StyleSheet.create({
     },
     searchContainer: {
         position: 'absolute',
-        top: 30,
+        top: 60,
         left: 30,
         right: 30,
         zIndex: 1,
@@ -133,7 +206,25 @@ const styles = StyleSheet.create({
     arrow: {
         width: 24,
         height: 24,
-    }
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    loadingText: {
+        marginTop: 20,
+        fontSize: 16,
+        color: COLORS.offBlack,
+    },
+    currentLocationMarker: {
+        width: 25,
+        height: 25,
+        borderRadius: 30,
+        backgroundColor: "#378ee3",
+        borderWidth: 4,
+        borderColor: "white",
+    },
 });
 
 export default Map;
