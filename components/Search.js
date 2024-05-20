@@ -2,13 +2,13 @@ import React from 'react';
 import { View, Image, StyleSheet, TextInput } from 'react-native';
 import COLORS from '../constants/color';
 
-const InputField = ({ searchTerm, onSearchTermChange}) => {
+const InputField = ({ searchTerm, onSearchTermChange, placeholder}) => {
     return (
         <View style={styles.sectionStyle}>
             <Image style={styles.icon} source={require('../assets/icons/zoek.png')} />
             <TextInput
                 style={styles.searchBar} 
-                placeholder="Zoek een boerderij"
+                placeholder={placeholder}
                 onChangeText={onSearchTermChange}
                 value={searchTerm}
                 />

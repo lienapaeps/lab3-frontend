@@ -1,31 +1,79 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
 
-const AcitvityCard = () => {
+const AcitvityCard = ({ activityData, onPress }) => {
+    const [farmData, setFarmData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const farmId = activityData.farm;
+
+    const date = new Date(activityData.start.date);
+    const options = { day: '2-digit', month: 'long'};
+    const formattedDate = date.toLocaleDateString('nl-NL', options); // 06 juni
+
+    useEffect(() => {
+        const fetchFarmDataById = async (id) => {
+          try {
+            const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/farms/${farmId}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              mode: 'cors',
+            });
+            const data = await response.json();
+            // console.log(data.data.farm);
+            setFarmData(data.data.farm);
+          } catch (error) {
+            setError(error);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        const { id } = farmId
+    
+        fetchFarmDataById(id);
+      }, []);
+    
+      if (loading) {
+        return <Text>Loading...</Text>;
+      }
+    
+      if (error) {
+        return <Text>Error: {error.message}</Text>;
+      }
+
+      const category = activityData.category;
+      const background = category === "Workshop" ? COLORS.orange : COLORS.green;
+
     return (
         <TouchableOpacity style={styles.card}>
                 <View style={styles.cardImage}>
-                    <Image style={styles.image} source={require('../assets/onboarding/onboarding1.png')} />
+                    <Image style={styles.image} source={{uri: activityData.image }} />
                 </View>
                 <View style={styles.cardTitle}>
-                    <Text style={{...globalStyles.headerTextSmaller, fontSize: 18}}>Koken met Koen</Text>
+                    <Text style={{...globalStyles.headerTextSmaller, fontSize: 18}}>{activityData.title}</Text>
                 </View>
                 <View style={styles.cardDate}>
-                    <Text style={{...globalStyles.headerTextSmaller, color: COLORS.offBlack}}>24 dec</Text>
+                    <Text style={{...globalStyles.headerTextSmaller, color: COLORS.offBlack}}>{formattedDate}</Text>
                 </View>
-                <View style={styles.cardType}>
-                    <Text style={{...globalStyles.headerTextSmaller, color: COLORS.white}}>Workshop</Text>
+                <View style={{...styles.cardType, backgroundColor: background}}>
+                    <Text style={{...globalStyles.headerTextSmaller, color: COLORS.offWhite }}>{activityData.category}</Text>
                 </View>
-                <View style={styles.cardTime}>
-                    <Image source={require('../assets/icons/clock-black.png')} />
-                    <Text style={{...globalStyles.bodyText, color: COLORS.offBlack}}>14:00 - 16:00</Text>
-                </View>
+                {activityData.start.time && (
+                    <View style={styles.cardTime}>
+                        <Image source={require('../assets/icons/clock-black.png')} />
+                        <Text style={{...globalStyles.bodyText, color: COLORS.offBlack}}>{activityData.start.time} - {activityData.end.time}</Text>
+                    </View>
+                )}
                 <View style={styles.cardFarm}>
                     <Image source={require('../assets/icons/locatie-black.png')} />
-                    <Text style={{...globalStyles.bodyText, color: COLORS.OffBlack}}>Hof Ter Dreef</Text>
+                    <Text style={{...globalStyles.bodyText, color: COLORS.OffBlack}}>{farmData.name}</Text>
                 </View>
         </TouchableOpacity>
     );
@@ -61,7 +109,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 5,
         borderRadius: 10,
-        backgroundColor: COLORS.orange,
+        // backgroundColor: COLORS.orange,
         position: 'absolute',
         top: 15,
         left: 15,

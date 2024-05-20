@@ -61,7 +61,7 @@ const Map = ({ navigation }) => {
         return (
             <View style={styles.loadingContainer}>
                 <ActivityIndicator size="large" color={COLORS.offBlack} />
-                <Text style={styles.loadingText}>Loading map...</Text>
+                <Text style={styles.loadingText}>Map is aan het laden...</Text>
             </View>
         );
     }

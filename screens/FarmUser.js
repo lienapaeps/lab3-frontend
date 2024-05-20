@@ -69,7 +69,7 @@ const FarmUser = ({ navigation }) => {
     return (
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.options}>
-                <Search searchTerm={searchTerm} onSearchTermChange={handleSearchTermChange} />
+                <Search placeholder={"Zoek een boerderij"} searchTerm={searchTerm} onSearchTermChange={handleSearchTermChange} />
                 <Filter />
             </View>
             <View style={{ flex: 1 }}>

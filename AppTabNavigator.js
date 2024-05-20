@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // alle schermen ivm de inhoud vd app
 import HomeScreenUser from './screens/HomeUser';
 import FarmUser from './screens/FarmUser';
-import ExploreUser from './screens/ExploreUser';
+import Explore from './screens/Explore';
 import ChatUser from './screens/ChatUser';
 
 import COLORS from './constants/color';
@@ -40,7 +40,7 @@ const AppTabNavigator = () => {
             iconSource = focused ? require('./assets/icons/home-icon-active.png') : require('./assets/icons/home-icon-inactive.png');
           } else if (route.name === 'FarmUser') {
             iconSource = focused ? require('./assets/icons/farm-icon-active.png') : require('./assets/icons/farm-icon-inactive.png');
-          } else if (route.name === 'ExploreUser') {
+          } else if (route.name === 'Explore') {
             iconSource = focused ? require('./assets/icons/explore-icon-active.png') : require('./assets/icons/explore-icon-inactive.png');
           } else if (route.name === 'ChatUser') {
             iconSource = focused ? require('./assets/icons/chat-icon-active.png') : require('./assets/icons/chat-icon-inactive.png');
@@ -60,7 +60,7 @@ const AppTabNavigator = () => {
             labelText = 'Home';
           } else if (route.name === 'FarmUser') {
             labelText = 'Boerderij';
-          } else if (route.name === 'ExploreUser') {
+          } else if (route.name === 'Explore') {
             labelText = 'Explore';
           } else if (route.name === 'ChatUser') {
             labelText = 'Chat';
@@ -78,7 +78,7 @@ const AppTabNavigator = () => {
     >
       <Tab.Screen name="HomeUser" component={HomeScreenUser} options={screenOptions}/>
       <Tab.Screen name="FarmUser" component={FarmUser} options={screenOptions}/>
-      <Tab.Screen name="ExploreUser" component={ExploreUser} options={screenOptions}/>
+      <Tab.Screen name="Explore" component={Explore} options={screenOptions}/>
       <Tab.Screen name="ChatUser" component={ChatUser} options={screenOptions}/>
     </Tab.Navigator>
   );
