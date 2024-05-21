@@ -3,7 +3,6 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'rea
 
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../components/Button';
 
 const ActivityDetail = ({ navigation, route }) => {
@@ -49,7 +48,7 @@ const ActivityDetail = ({ navigation, route }) => {
     }, []);
   
     if (loading) {
-      return <Text>Loading...</Text>;
+      return <Text>Laden...</Text>;
     }
   
     if (error) {

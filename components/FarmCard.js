@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
-import * as Location from 'expo-location';
+import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
 
-import { calculateDistance, checkStatus, getUserLocation } from '../utils/utils';
+import { calculateDistance, getUserLocation } from '../utils/utils';
 
 const FarmCard = ({ farmData, onPress }) => {
 
@@ -107,7 +106,7 @@ const FarmCard = ({ farmData, onPress }) => {
                         <View style={styles.infoItem}>
                             <Image source={require('../assets/icons/locatie.png')} />
                             {loading ? (
-                                <ActivityIndicator size="small" color={COLORS.orange} /> // Laadindicator
+                                <Text>Laden...</Text>
                             ) : (
                                 <Text style={{...globalStyles.bodyText, ...styles.label, ... {color:COLORS.orange}}}>{distance.toFixed(1) + " km"}</Text>
                             )}

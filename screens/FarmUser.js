@@ -80,7 +80,7 @@ const FarmUser = ({ navigation }) => {
     if (loading) {
         return (
             <SafeAreaView style={globalStyles.container}>
-                <Text style={globalStyles.bodyText}>Loading...</Text>
+                <Text style={globalStyles.bodyText}>Laden...</Text>
             </SafeAreaView>
         );
     }

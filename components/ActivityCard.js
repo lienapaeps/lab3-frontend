@@ -41,7 +41,7 @@ const AcitvityCard = ({ activityData, onPress }) => {
       }, []);
     
       if (loading) {
-        return <Text>Loading...</Text>;
+        return <Text>Laden...</Text>;
       }
     
       if (error) {

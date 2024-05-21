@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
 
-import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
 import Search from '../components/Search';
-import Filter from '../components/Filter';
 import AcitvityCard from '../components/ActivityCard';
-import { ScrollView } from 'react-native-gesture-handler';
+import COLORS from '../constants/color';
 
 const Explore = ({ navigation }) => {
     const [activityData, setActivityData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('All');
 
     useEffect(() => {
         const fetchActivityData = async () => {
@@ -43,13 +43,20 @@ const Explore = ({ navigation }) => {
     const handleSearchTermChange = (text) => setSearchTerm(text);
 
     const filteredActivities = activityData.filter((activity) => {
-        return activity.title.toLowerCase().includes(searchTerm.toLowerCase());
+        return (
+            activity.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+            (selectedCategory === 'All' || activity.category === selectedCategory)
+        )
     });
+
+    const handleCategoryChange = (category) => {
+        setSelectedCategory(category);
+    };
 
     if (loading) {
         return (
             <SafeAreaView style={globalStyles.container}>
-                <Text style={globalStyles.bodyText}>Loading...</Text>
+                <Text style={globalStyles.bodyText}>Laden...</Text>
             </SafeAreaView>
         );
     }
@@ -63,8 +70,6 @@ const Explore = ({ navigation }) => {
     }
 
     const handleActivityCardPress = (activityId, farmName) => {
-        // console.log('Activity ID:', activityId);
-        // console.log('Farm Name:', farmName);
         navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmName: farmName}});
     }
 
@@ -74,8 +79,35 @@ const Explore = ({ navigation }) => {
                 <Text style={globalStyles.headerText}>Explore</Text>
             </View>
             <View style={styles.options}>
-                <Search placeholder={"Zoek een activiteit"} searchTerm={searchTerm} onSearchTermChange={handleSearchTermChange} />
-                <Filter />
+                <Search width={'100%'} placeholder={"Zoek een activiteit"} searchTerm={searchTerm} onSearchTermChange={handleSearchTermChange} />
+                {!searchTerm && (
+                <View style={styles.filters}>
+                    <TouchableOpacity
+                        style={[styles.categoryButton, selectedCategory === 'All' && styles.selectedCategoryButton]}
+                        onPress={() => handleCategoryChange('All')}
+                    >
+                        <Text style={[styles.categoryButtonText, selectedCategory === 'All' && styles.selectedCategoryButtonText]}>Alles</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.categoryButton, selectedCategory === 'Workshop' && styles.selectedCategoryButton]}
+                        onPress={() => handleCategoryChange('Workshop')}
+                    >
+                        <Text style={[styles.categoryButtonText, selectedCategory === 'Workshop' && styles.selectedCategoryButtonText]}>Workshop</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.categoryButton, selectedCategory === 'Artikel' && styles.selectedCategoryButton]}
+                        onPress={() => handleCategoryChange('Artikel')}
+                    >
+                        <Text style={[styles.categoryButtonText, selectedCategory === 'Artikel' && styles.selectedCategoryButtonText]}>Artikel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.categoryButton, selectedCategory === 'Recept' && styles.selectedCategoryButton]}
+                        onPress={() => handleCategoryChange('Recept')}
+                    >
+                        <Text style={[styles.categoryButtonText, selectedCategory === 'Recept' && styles.selectedCategoryButtonText]}>Recept</Text>
+                    </TouchableOpacity>
+                </View>
+                )}
             </View>
             <View style={styles.section}>
                 <Text style={globalStyles.headerTextSmall}>{searchTerm ? "Zoekresultaten" : "Nieuwste"}</Text>
@@ -104,9 +136,8 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     options: {
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'space-between',
-        alignItems: 'center',
         marginBottom: 20,
     },
     cards: {
@@ -117,7 +148,29 @@ const styles = StyleSheet.create({
     },
     section: {
         marginBottom: 20,
-    }
+    },
+    filters:{
+        marginTop: 20,
+        flexDirection: "row",
+        gap: 15
+    },
+    categoryButton: {
+        backgroundColor: COLORS.veryLightOffBlack,
+        padding: 12,
+        borderRadius: 10,
+    },
+    selectedCategoryButton: {
+        backgroundColor: COLORS.offBlack,
+    },
+    categoryButtonText: {
+        fontFamily: 'Quicksand_500Medium',
+        fontSize: 16,
+        color: COLORS.offBlack,
+    },
+    selectedCategoryButtonText: {
+        color: COLORS.white,
+        fontFamily: 'Quicksand_600SemiBold',
+    },
 })
 
 export default Explore;
