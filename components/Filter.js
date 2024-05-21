@@ -5,10 +5,9 @@ import Slider from '@react-native-community/slider';
 import { globalStyles } from '../styles/global';
 import COLORS from '../constants/color';
 
-const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }) => {
+const Filter = ({ onFilterChange, onDistanceFilterChange }) => {
     const [showModal, setShowModal] = useState(false);
     const [selectedOption, setSelectedOption] = useState('All');
-    const [selectedRating, setSelectedRating] = useState(0);
     const [distance, setDistance] = useState(0);
     const translateY = useRef(new Animated.Value(600)).current;
 
@@ -28,10 +27,8 @@ const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }
 
     const handleClearFilter = () => {
         setSelectedOption('All');
-        setSelectedRating(0);
         setDistance(0); // Reset distance to 0
         onFilterChange('All');
-        onRatingFilterChange(0);
         onDistanceFilterChange(0); // Reset distance to 0
         // setShowModal(false);
         handleModalClose();
@@ -49,11 +46,6 @@ const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }
           duration: 250,
           useNativeDriver: true,
       }).start(() => setShowModal(false));
-    };
-
-    const handleRatingPress = (rating) => {
-        setSelectedRating(rating);
-        onRatingFilterChange(rating);
     };
 
     const handleDistanceChange = (value) => {
@@ -87,26 +79,6 @@ const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }
                       </TouchableOpacity>
                     </View>
                   </View>
-                  {/* sorteren op beoordeling */}
-                  <View style={styles.modalSection}>
-                    <Text style={[globalStyles.headerTextSmall, styles.modalSectionHeader]}>Beoordeling</Text>
-                    <View style={styles.modalSectionContent}>
-                      {[1, 2, 3, 4, 5].map((rating) => (
-                        <TouchableOpacity
-                          key={rating}
-                          style={[
-                            styles.modalOption,
-                            selectedRating === rating && styles.selectedOption
-                          ]}
-                          onPress={() => handleRatingPress(rating)}
-                        >
-                          <Text style={[styles.modelOptionText, selectedRating === rating && styles.selectedOptionText]}>
-                            {rating}+
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
-                    </View>
-                  </View>
                   {/* sorteren op afstand in km */}
                   <View style={styles.modalSection}>
                     <Text style={[globalStyles.headerTextSmall, styles.modalSectionHeader]}>Afstand in km</Text>
@@ -116,7 +88,7 @@ const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }
                       maximumTrackTintColor={COLORS.veryLightOffBlack}
                       thumbTintColor={COLORS.green}
                       minimumValue={0}
-                      maximumValue={10}
+                      maximumValue={20}
                       step={1}
                       value={distance}
                       onValueChange={handleDistanceChange}

@@ -48,11 +48,15 @@ const AcitvityCard = ({ activityData, onPress }) => {
         return <Text>Error: {error.message}</Text>;
       }
 
+      const handlePress = () => {
+        onPress(activityData._id, farmData.name);
+    }
+
       const category = activityData.category;
       const background = category === "Workshop" ? COLORS.orange : COLORS.green;
 
     return (
-        <TouchableOpacity style={styles.card}>
+        <TouchableOpacity onPress={handlePress} style={styles.card}>
                 <View style={styles.cardImage}>
                     <Image style={styles.image} source={{uri: activityData.image }} />
                 </View>

@@ -1,50 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import * as Location from 'expo-location';
 
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
+
+import { calculateDistance, checkStatus, getUserLocation } from '../utils/utils';
 
 const FarmCard = ({ farmData, onPress }) => {
 
     const [currentTime, setCurrentTime] = useState(new Date());
     const [location, setLocation] = useState();
     const [distance, setDistance] = useState(0);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const getPermissions = async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                console.error('Permission to access location was denied');
-                return;
-            }
-            let currentLocation = await Location.getCurrentPositionAsync({});
-            setLocation(currentLocation); // Instellen van de locatie
-    
-            // Bereken de afstand en stel deze in in de state
+        const getLocationAndDistance = async () => {
+            const userLocation = await getUserLocation();
+            setLocation(userLocation);
+
             const calculatedDistance = calculateDistance(
-                currentLocation.coords.latitude,
-                currentLocation.coords.longitude,
+                userLocation.coords.latitude,
+                userLocation.coords.longitude,
                 farmData.coordinates.latitude,
                 farmData.coordinates.longitude
             );
             setDistance(calculatedDistance);
-            // console.log("currentLocation:", currentLocation); // Controleer de waarde van currentLocation
+            setLoading(false);
         };
-        getPermissions();
+        getLocationAndDistance();
     }, []);
-
-    const calculateDistance = (lat1, lon1, lat2, lon2) => {
-        const R = 6371; // Straal van de aarde in kilometers
-        const dLat = (lat2 - lat1) * Math.PI / 180; // Omrekenen naar radialen
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        const distance = R * c; // Afstand in kilometers
-        return distance;
-    };
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -92,7 +77,7 @@ const FarmCard = ({ farmData, onPress }) => {
         }
     };
 
-    const status = checkStatus(farmData.openinghours);
+    const status = checkStatus(farmData.openinghours, currentTime);
     const textColor = status === "Open" ? COLORS.green : COLORS.alert;
     const imageSource = status === "Open" ? require('../assets/icons/clock.png') : require('../assets/icons/clock-inactive.png');
 
@@ -121,7 +106,11 @@ const FarmCard = ({ farmData, onPress }) => {
                         </View> */}
                         <View style={styles.infoItem}>
                             <Image source={require('../assets/icons/locatie.png')} />
-                            <Text style={{...globalStyles.bodyText, ...styles.label, ... {color:COLORS.orange}}}>{distance.toFixed(1) + " km"}</Text>
+                            {loading ? (
+                                <ActivityIndicator size="small" color={COLORS.orange} /> // Laadindicator
+                            ) : (
+                                <Text style={{...globalStyles.bodyText, ...styles.label, ... {color:COLORS.orange}}}>{distance.toFixed(1) + " km"}</Text>
+                            )}
                         </View>
                         <View style={styles.infoItem}>
                             <Image source={imageSource} />

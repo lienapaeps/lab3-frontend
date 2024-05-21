@@ -56,6 +56,12 @@ const Explore = ({ navigation }) => {
         );
     }
 
+    const handleActivityCardPress = (activityId, farmName) => {
+        // console.log('Activity ID:', activityId);
+        // console.log('Farm Name:', farmName);
+        navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmName: farmName}});
+    }
+
     return (
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.header}>
@@ -74,7 +80,7 @@ const Explore = ({ navigation }) => {
                     contentContainerStyle={{ gap: 15}}
                     >
                         {activityData.map((activity) => {
-                            return <AcitvityCard key={activity._id} activityData={activity} />
+                            return <AcitvityCard key={activity._id} activityData={activity} onPress={handleActivityCardPress}/>
                         })}
                     </ScrollView>
                 </View>

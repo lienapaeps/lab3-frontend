@@ -9,11 +9,17 @@ import Filter from '../components/Filter';
 import Search from '../components/Search';
 import MapButton from '../components/MapButton';
 
+import { checkStatus, calculateDistance, getUserLocation } from '../utils/utils';
+
 const FarmUser = ({ navigation }) => {
     const [farmData, setFarmData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+
+    const [openNowFilter, setOpenNowFilter] = useState('All');
+    const [distanceFilter, setDistanceFilter] = useState(0)
+    const [userLocation, setUserLocation] = useState(null);
 
     useEffect(() => {
         const fetchFarmData = async () => {
@@ -26,7 +32,6 @@ const FarmUser = ({ navigation }) => {
                     mode: 'cors'
                 });
                 const data = await response.json();
-                // console.log(data.data.farms);
                 setFarmData(data.data.farms);
             } catch (error) {
                 setError(error);
@@ -36,19 +41,41 @@ const FarmUser = ({ navigation }) => {
         };
 
         fetchFarmData();
+
+        const fetchUserLocation = async () => {
+            try {
+                const location = await getUserLocation();
+                setUserLocation(location);
+            } catch (error) {
+                console.error(error.message);
+            }
+        };
+
+        fetchUserLocation();
     }, []);
 
-    const handleSearchTermChange = (text) => {
-        setSearchTerm(text);
-    }
+    const handleSearchTermChange = (text) => setSearchTerm(text);
+
+    const handleFilterChange = (status) => setOpenNowFilter(status);
+
+    const handleDistanceFilterChange = (distance) => setDistanceFilter(distance);
 
     const handleFarmCardPress = (id) => {
-        navigation.navigate('AppStack', { screen: 'FarmUserDetails', params: { id }});
-    }
+        navigation.navigate('AppStack', { screen: 'FarmUserDetails', params: { id } });
+    };
 
     const filteredFarmData = farmData.filter((farm) => {
-        return farm.name.toLowerCase().includes(searchTerm.toLowerCase());
-    })
+        const matchesSearchTerm = farm.name.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesOpenNow = openNowFilter === 'All' || (openNowFilter === 'Open' && checkStatus(farm.openinghours));
+        const matchesDistance = distanceFilter === 0 || (userLocation && calculateDistance(
+            userLocation.coords.latitude,
+            userLocation.coords.longitude,
+            farm.coordinates.latitude,
+            farm.coordinates.longitude
+        ) <= distanceFilter);
+
+        return matchesSearchTerm && matchesOpenNow && matchesDistance;
+    });
 
     if (loading) {
         return (
@@ -70,7 +97,7 @@ const FarmUser = ({ navigation }) => {
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.options}>
                 <Search placeholder={"Zoek een boerderij"} searchTerm={searchTerm} onSearchTermChange={handleSearchTermChange} />
-                <Filter />
+                <Filter onFilterChange={handleFilterChange} onDistanceFilterChange={handleDistanceFilterChange} />
             </View>
             <View style={{ flex: 1 }}>
                 <FlatList

@@ -6,8 +6,7 @@ import HomeUser from './screens/HomeUser';
 import Calendar from './screens/CalendarPage';
 import FarmUserDetails from './screens/FarmUserDetails';
 import Map from './screens/Map';
-import FarmHeader from './components/FarmHeader';
-
+import ActivityDetail from './screens/ActivityDetail';
 
 import NavigationOptions from './components/NavigationOptions';
 
@@ -19,6 +18,11 @@ const AppStackNavigator = () => {
       <Stack.Screen name="HomeUser" component={HomeUser} options={NavigationOptions}/>
       <Stack.Screen name="Calendar" component={Calendar} options={NavigationOptions}/>
       <Stack.Screen name="FarmUserDetails" component={FarmUserDetails}
+        options={() => ({
+          headerShown: false,
+        })}
+      />
+      <Stack.Screen name="ActivityDetail" component={ActivityDetail}
         options={() => ({
           headerShown: false,
         })}
