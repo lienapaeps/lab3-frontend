@@ -10,10 +10,10 @@ import AcitvityCard from '../components/ActivityCard';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const Explore = ({ navigation }) => {
-
     const [activityData, setActivityData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         const fetchActivityData = async () => {
@@ -39,6 +39,12 @@ const Explore = ({ navigation }) => {
 
         fetchActivityData();
     }, []);
+
+    const handleSearchTermChange = (text) => setSearchTerm(text);
+
+    const filteredActivities = activityData.filter((activity) => {
+        return activity.title.toLowerCase().includes(searchTerm.toLowerCase());
+    });
 
     if (loading) {
         return (
@@ -68,18 +74,18 @@ const Explore = ({ navigation }) => {
                 <Text style={globalStyles.headerText}>Explore</Text>
             </View>
             <View style={styles.options}>
-                <Search placeholder={"Zoek een activiteit"} />
+                <Search placeholder={"Zoek een activiteit"} searchTerm={searchTerm} onSearchTermChange={handleSearchTermChange} />
                 <Filter />
             </View>
-            <View>
-                <Text style={globalStyles.headerTextSmall}>Nieuwste</Text>
+            <View style={styles.section}>
+                <Text style={globalStyles.headerTextSmall}>{searchTerm ? "Zoekresultaten" : "Nieuwste"}</Text>
                 <View style={styles.cards}>
                     <ScrollView 
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={{ gap: 15}}
                     >
-                        {activityData.map((activity) => {
+                        {filteredActivities.map((activity) => {
                             return <AcitvityCard key={activity._id} activityData={activity} onPress={handleActivityCardPress}/>
                         })}
                     </ScrollView>
@@ -101,7 +107,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 30,
+        marginBottom: 20,
     },
     cards: {
         marginTop: 10,
@@ -109,6 +115,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         gap: 15,
     },
+    section: {
+        marginBottom: 20,
+    }
 })
 
 export default Explore;

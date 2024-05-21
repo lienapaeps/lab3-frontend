@@ -4,6 +4,7 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'rea
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Button from '../components/Button';
 
 const ActivityDetail = ({ navigation, route }) => {
 
@@ -56,40 +57,63 @@ const ActivityDetail = ({ navigation, route }) => {
     }
 
     return (
-        <SafeAreaView>
+        <View>
             <View style={styles.btn}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Image style={styles.backButton} source={require('../assets/Back-arrow.png')} />
                 </TouchableOpacity>
             </View>
-            <View style={styles.bgImg}>
-                <Image style={styles.headerImage} source={{ uri: activityData.image }} />
-            </View>
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <Text style={globalStyles.headerTextSmall}>{activityData.title}</Text>
-                    <View style={styles.info}>
-                        <View style={styles.headerInfo}>
-                            <Image source={require('../assets/icons/clock-black.png')} />
-                            <Text style={globalStyles.bodyText}>{activityData.start.time}{activityData.end.time}</Text>
-                        </View>
-                        <View style={styles.headerInfo}>
-                            <Image source={require('../assets/icons/date-black.png')} />
-                            <Text style={globalStyles.bodyText}>{formatDate(activityData.start.date)}</Text>
-                        </View>
-                        <View style={styles.headerInfo}>
-                            <Image source={require('../assets/icons/locatie-black.png')} />
-                            <Text style={globalStyles.bodyText}>{farmName}</Text>
+            <ScrollView contentContainerStyle={{ flexGrow: 1, height: '100%' }}>
+                <View style={styles.bgImg}>
+                    <Image style={styles.headerImage} source={{ uri: activityData.image }} />
+                </View>
+                <View style={styles.container}>
+                    <View style={styles.header}>
+                        <Text style={globalStyles.headerTextSmall}>{activityData.title}</Text>
+                        <View style={styles.info}>
+                            {activityData.category === 'Workshop' && (
+                            <View style={styles.headerInfo}>
+                                <Image source={require('../assets/icons/clock-black.png')} />
+                                <Text style={globalStyles.bodyText}>{activityData.start.time} - {activityData.end.time}</Text>
+                            </View>
+                            )}
+                            <View style={styles.headerInfo}>
+                                <Image source={require('../assets/icons/date-black.png')} />
+                                <Text style={globalStyles.bodyText}>{formatDate(activityData.start.date)}</Text>
+                            </View>
+                            <View style={styles.headerInfo}>
+                                <Image source={require('../assets/icons/locatie-black.png')} />
+                                <Text style={globalStyles.bodyText}>{farmName}</Text>
+                            </View>
                         </View>
                     </View>
+                    <View style={styles.body}>
+                        {activityData.description && (
+                            <View style={styles.details}>
+                                <Text style={{...globalStyles.headerTextSmall, marginBottom: 5}}>Details</Text>
+                                <Text style={globalStyles.bodyText}>{activityData.description}</Text>
+                            </View>
+                        )}
+                        {activityData.text && (
+                            <View style={styles.content}>
+                                <Text style={globalStyles.bodyText}>{activityData.text}</Text>
+                            </View>
+                        )}
+                        {activityData.enrolledUsers && (
+                        <View style={styles.users}>
+                            <Text style={{...globalStyles.headerTextSmall, marginBottom: 5}}>Gaan ook</Text>
+                            <Text style={globalStyles.bodyText}>Leden</Text>
+                        </View>
+                        )}
+                        {activityData.description && activityData.enrolledUsers && (
+                        <View style={styles.btnContainer}>
+                            <Button title="Inschrijven" filled />
+                        </View>
+                        )}
+                    </View>
                 </View>
-                <View style={styles.body}>
-                    <Text style={globalStyles.headerTextSmall}>Details</Text>
-                    <Text style={globalStyles.bodyText}>{activityData.description}</Text>
-                    <Text style={globalStyles.bodyText}>{activityData.text}</Text>
-                </View>
-            </View>
-        </SafeAreaView>
+            </ScrollView>
+        </View>
     )
 }
 
@@ -101,6 +125,15 @@ const styles = StyleSheet.create({
         paddingBottom: -30,
         paddingTop: 20,
     },
+    scrollContainer: {
+        paddingBottom: 20,
+    },
+    btnContainer: {
+        marginTop: 30,
+    },
+    users: {
+        marginTop: 10,
+    },
     btn: {
         position: 'absolute',
         top: 40,
@@ -110,11 +143,11 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         padding: 10,
         margin: 20,
-      },
-      backButton: {
-          width: 30,
-          height: 30,
-      },
+    },
+    backButton: {
+        width: 30,
+        height: 30,
+    },
     headerImage: {
         padding: 0,
         width: '100%',

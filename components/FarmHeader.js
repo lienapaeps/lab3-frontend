@@ -45,7 +45,7 @@ export default function FarmHeader ({ navigation, route }) {
     }
 
     return (
-        <SafeAreaView>
+        <View>
           <View style={styles.bgImg}>
             <Image style={styles.cardImage} source={{ uri: farmData.farmImage }} />
           </View>
@@ -59,7 +59,7 @@ export default function FarmHeader ({ navigation, route }) {
             <Button title="Word Lid" filled/>
             </View>
           </View>
-        </SafeAreaView>
+        </View>
     );
 }
 
