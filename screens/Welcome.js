@@ -12,7 +12,7 @@ const Welcome = ({navigation}) => {
             <View style={styles.header}>
                 <Image source={require('../assets/Logo.png')} style={{width: 80, height: 80}} />
                 <Text style={styles.logo}>Plant & Pluk</Text>
-                <Text style={{marginTop: 15, ...globalStyles.bodyText}}>Plant & Pluk je groen geluk</Text>
+                <Text style={{marginTop: 15, ...globalStyles.bodyText}}>Plant & Pluk je groen geluk TEST</Text>
             </View>
             {/* buttons */}
             <View>
