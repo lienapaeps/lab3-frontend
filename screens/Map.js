@@ -4,6 +4,7 @@ import { StyleSheet, View, TextInput, Image, Text, TouchableOpacity, ActivityInd
 import * as Location from 'expo-location';
 
 import COLORS from '../constants/color';
+import Search from '../components/Search';
 
 const Map = ({ navigation }) => {
     const [searchText, setSearchText] = useState('');
@@ -78,19 +79,20 @@ const Map = ({ navigation }) => {
         // Zoom in op de locatie van de eerste gevonden marker (als er resultaten zijn)
         if (results.length > 0) {
             const firstResult = results[0];
+            console.log(firstResult); 
             setRegion({
-                latitude: firstResult.coordinate.latitude,
-                longitude: firstResult.coordinate.longitude,
+                latitude: firstResult.coordinates.latitude,
+                longitude: firstResult.coordinates.longitude,
                 latitudeDelta: 0.05,
                 longitudeDelta: 0.05,
             });
         } else {
             // Als er geen resultaten zijn, reset de regio naar de standaardregio
             setRegion({
-                latitude: 51.004433,
-                longitude: 4.472707,
-                latitudeDelta: .05,
-                longitudeDelta: .05,
+                latitude: currentLocation.coords.latitude,
+                longitude: currentLocation.coords.longitude,
+                latitudeDelta: 0.05,
+                longitudeDelta: 0.05,
             });
         }
     };
