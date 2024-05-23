@@ -100,12 +100,11 @@ const Map = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View style={styles.searchContainer}>
-                <Image source={require('../assets/icons/zoek.png')}/>
-                <TextInput
-                    style={styles.searchInput}
+                <Search
+                    searchTerm={searchText}
+                    onSearchTermChange={handleSearch}
                     placeholder="Zoek een boerderij"
-                    value={searchText}
-                    onChangeText={handleSearch}
+                    width={'100%'}
                 />
             </View>
             <MapView
@@ -166,13 +165,6 @@ const styles = StyleSheet.create({
         left: 30,
         right: 30,
         zIndex: 1,
-        backgroundColor: COLORS.white,
-        borderRadius: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-        gap: 10,
     },
     searchInput: {
         flex: 1,
