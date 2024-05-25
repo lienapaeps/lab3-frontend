@@ -1,17 +1,17 @@
 import React from 'react';
 import { StyleSheet, View, Text, Button, Pressable, Image } from 'react-native';
 
-import COLORS from '../../constants/color';
-import { globalStyles } from '../../styles/global';
+import COLORS from '../../../constants/color';
+import { globalStyles } from '../../../styles/global';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const CooperateSubscription = () => {
+const CollectiveSubscription = () => {
 
     return (
         <SafeAreaView style={globalStyles.container}>
             {/* header */}
             <View>
-                <Text style={globalStyles.headerText}>Je koos voor het Samenwerkingspakket</Text>
+                <Text style={globalStyles.headerText}>Je koos voor het Groentenpakket</Text>
             </View>
             {/* abonnement informatie*/}
             <View style={styles.card}>
@@ -23,6 +23,7 @@ const CooperateSubscription = () => {
             <View style={styles.card}>
                 <Text style={globalStyles.headerTextSmaller}>Kostprijs bedraagt 100 per maand</Text>
             </View>
+
             <View style={globalStyles.Header}>
                 <Pressable style={styles.button}>
                     <Text style={styles.text}>Betalen</Text>
@@ -68,5 +69,5 @@ const styles = StyleSheet.create({
     },
 })
 
-export default CooperateSubscription;
+export default CollectiveSubscription;
 

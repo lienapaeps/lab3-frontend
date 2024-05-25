@@ -3,10 +3,10 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 
-import { globalStyles } from '../styles/global';
-import Search from '../components/Search';
-import AcitvityCard from '../components/ActivityCard';
-import COLORS from '../constants/color';
+import { globalStyles } from '../../styles/global';
+import Search from '../../components/Search';
+import AcitvityCard from '../../components/ActivityCard';
+import COLORS from '../../constants/color';
 
 const Explore = ({ navigation }) => {
     const [activityData, setActivityData] = useState([]);

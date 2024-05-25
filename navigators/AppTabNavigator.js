@@ -3,13 +3,13 @@ import { Image, Text, View, Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // alle schermen ivm de inhoud vd app
-import HomeScreenUser from './screens/HomeUser';
-import FarmUser from './screens/FarmUser';
-import Explore from './screens/Explore';
-import ChatUser from './screens/ChatUser';
+import HomeScreenUser from '../screens/User/Home';
+import FarmUser from '../screens/User/Farm';
+import Explore from '../screens/User/Explore';
+import ChatUser from '../screens/User/Chat';
 
-import COLORS from './constants/color';
-import { globalStyles } from './styles/global';
+import COLORS from '../constants/color';
+import { globalStyles } from '../styles/global';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,13 +37,13 @@ const AppTabNavigator = () => {
 
           // Bepaal de bron van het icoon op basis van de route
           if (route.name === 'HomeUser') {
-            iconSource = focused ? require('./assets/icons/home-icon-active.png') : require('./assets/icons/home-icon-inactive.png');
+            iconSource = focused ? require('../assets/icons/home-icon-active.png') : require('../assets/icons/home-icon-inactive.png');
           } else if (route.name === 'FarmUser') {
-            iconSource = focused ? require('./assets/icons/farm-icon-active.png') : require('./assets/icons/farm-icon-inactive.png');
+            iconSource = focused ? require('../assets/icons/farm-icon-active.png') : require('../assets/icons/farm-icon-inactive.png');
           } else if (route.name === 'Explore') {
-            iconSource = focused ? require('./assets/icons/explore-icon-active.png') : require('./assets/icons/explore-icon-inactive.png');
+            iconSource = focused ? require('../assets/icons/explore-icon-active.png') : require('../assets/icons/explore-icon-inactive.png');
           } else if (route.name === 'ChatUser') {
-            iconSource = focused ? require('./assets/icons/chat-icon-active.png') : require('./assets/icons/chat-icon-inactive.png');
+            iconSource = focused ? require('../assets/icons/chat-icon-active.png') : require('../assets/icons/chat-icon-inactive.png');
           }
 
           return (

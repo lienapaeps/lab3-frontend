@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, Text, Button, Pressable, Image } from 'react-native';
 
-import COLORS from '../../constants/color';
-import { globalStyles } from '../../styles/global';
+import COLORS from '../../../constants/color';
+import { globalStyles } from '../../../styles/global';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const CollectiveSubscription = () => {
+const TakeawaySubscription = () => {
 
     return (
         <SafeAreaView style={globalStyles.container}>
@@ -69,5 +69,5 @@ const styles = StyleSheet.create({
     },
 })
 
-export default CollectiveSubscription;
+export default TakeawaySubscription;
 

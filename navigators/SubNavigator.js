@@ -2,13 +2,13 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 // alle schermen ivm abonneren en abonnementen
-import Subscription from './screens/Subscription';
-import CooperateSubscription from './screens/userSubscription/cooperateSubscription';
-import CollectiveSubscription from './screens/userSubscription/collectiveSubscription';
-import TakeawaySubscription from './screens/userSubscription/takeawaySubscription';
+import Subscription from '../screens/User/Subscription';
+import CooperateSubscription from '../screens/User/userSubscription/cooperateSubscription';
+import CollectiveSubscription from '../screens/User/userSubscription/collectiveSubscription';
+import TakeawaySubscription from '../screens/User/userSubscription/takeawaySubscription';
 
 
-import NavigationOptions from './components/NavigationOptions';
+import NavigationOptions from '../components/NavigationOptions';
 
 const Stack = createStackNavigator();
 

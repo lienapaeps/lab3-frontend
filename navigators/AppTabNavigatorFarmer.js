@@ -3,13 +3,13 @@ import { Image, Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 // alle schermen ivm de inhoud vd app voor de landbouwer
-import HomeFarmer from './screens/FarmerScreens/HomeFarmer';
-import FarmFarmer from './screens/FarmerScreens/FarmFarmer';
-import CalendarFarmer from './screens/FarmerScreens/CalendarFarmer';
-import ChatFarmer from './screens/FarmerScreens/ChatFarmer';
+import HomeFarmer from '../screens/Farmer/Home';
+import FarmFarmer from '../screens/Farmer/MyFarm';
+import CalendarFarmer from '../screens/Farmer/Calendar';
+import ChatFarmer from '../screens/Farmer/Chat';
 
-import COLORS from './constants/color';
-import { globalStyles } from './styles/global';
+import COLORS from '../constants/color';
+import { globalStyles } from '../styles/global';
 
 const Tab2 = createBottomTabNavigator();
 
@@ -37,13 +37,13 @@ const AppTabNavigatorFarmer = () => {
 
           // Bepaal de bron van het icoon op basis van de route
           if (route.name === 'HomeFarmer') {
-            iconSource = focused ? require('./assets/icons/home-icon-active.png') : require('./assets/icons/home-icon-inactive.png');
+            iconSource = focused ? require('../assets/icons/home-icon-active.png') : require('../assets/icons/home-icon-inactive.png');
           } else if (route.name === 'FarmFarmer') {
-            iconSource = focused ? require('./assets/icons/farm-icon-active.png') : require('./assets/icons/farm-icon-inactive.png');
+            iconSource = focused ? require('../assets/icons/farm-icon-active.png') : require('../assets/icons/farm-icon-inactive.png');
           } else if (route.name === 'CalendarFarmer') {
-            iconSource = focused ? require('./assets/icons/calendar-icon-active.png') : require('./assets/icons/calendar-icon-inactive.png');
+            iconSource = focused ? require('../assets/icons/calendar-icon-active.png') : require('../assets/icons/calendar-icon-inactive.png');
           } else if (route.name === 'ChatFarmer') {
-            iconSource = focused ? require('./assets/icons/chat-icon-active.png') : require('./assets/icons/chat-icon-inactive.png');
+            iconSource = focused ? require('../assets/icons/chat-icon-active.png') : require('../assets/icons/chat-icon-inactive.png');
           }
 
           return (

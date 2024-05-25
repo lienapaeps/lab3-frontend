@@ -2,14 +2,14 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 // alle schermen ivm inloggen en registreren
-import Welcome from './screens/Welcome';
-import LoginScreen from './screens/Login';
-import RegisterScreen from './screens/Register';
-import RegisterUserScreen from './screens/userRegisterForm/RegisterUser';
-import RegisterFarmerScreen from './screens/farmerRegisterForm/RegisterFarmer';
-import OnBoarding from './screens/userRegisterForm/OnBoarding';
+import Welcome from '../screens/Welcome';
+import LoginScreen from '../screens/Login';
+import RegisterScreen from '../screens/Register';
+import RegisterUserScreen from '../screens/User/Register/Register';
+import RegisterFarmerScreen from '../screens/Farmer/Register/Register';
+import OnBoarding from '../screens/User/Register/OnBoarding';
 
-import NavigationOptions from './components/NavigationOptions';
+import NavigationOptions from '../components/NavigationOptions';
 
 const Stack = createStackNavigator();
 

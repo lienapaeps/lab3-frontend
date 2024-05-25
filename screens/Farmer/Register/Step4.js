@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { globalStyles } from '../../styles/global';
-import FarmRegistrationSucces from '../../components/FarmRegistrationSucces';
+import { globalStyles } from '../../../styles/global';
+import FarmRegistrationSucces from '../../../components/FarmRegistrationSucces';
 
 const Step4 = ({ navigation }) => {
 

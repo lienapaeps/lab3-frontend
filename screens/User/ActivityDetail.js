@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 
-import COLORS from '../constants/color';
-import { globalStyles } from '../styles/global';
-import Button from '../components/Button';
+import COLORS from '../../constants/color';
+import { globalStyles } from '../../styles/global';
+import Button from '../../components/Button';
 
 const ActivityDetail = ({ navigation, route }) => {
 
@@ -59,7 +59,7 @@ const ActivityDetail = ({ navigation, route }) => {
         <View>
             <View style={styles.btn}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Image style={styles.backButton} source={require('../assets/Back-arrow.png')} />
+                    <Image style={styles.backButton} source={require('../../assets/Back-arrow.png')} />
                 </TouchableOpacity>
             </View>
             <ScrollView contentContainerStyle={{ flexGrow: 1, height: '100%' }}>
@@ -72,16 +72,16 @@ const ActivityDetail = ({ navigation, route }) => {
                         <View style={styles.info}>
                             {activityData.category === 'Workshop' && (
                             <View style={styles.headerInfo}>
-                                <Image source={require('../assets/icons/clock-black.png')} />
+                                <Image source={require('../../assets/icons/clock-black.png')} />
                                 <Text style={globalStyles.bodyText}>{activityData.start.time} - {activityData.end.time}</Text>
                             </View>
                             )}
                             <View style={styles.headerInfo}>
-                                <Image source={require('../assets/icons/date-black.png')} />
+                                <Image source={require('../../assets/icons/date-black.png')} />
                                 <Text style={globalStyles.bodyText}>{formatDate(activityData.start.date)}</Text>
                             </View>
                             <View style={styles.headerInfo}>
-                                <Image source={require('../assets/icons/locatie-black.png')} />
+                                <Image source={require('../../assets/icons/locatie-black.png')} />
                                 <Text style={globalStyles.bodyText}>{farmName}</Text>
                             </View>
                         </View>

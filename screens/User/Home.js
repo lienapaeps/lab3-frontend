@@ -3,8 +3,8 @@ import { StyleSheet, View, Text, Pressable, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import COLORS from '../constants/color';
-import { globalStyles } from '../styles/global';
+import COLORS from '../../constants/color';
+import { globalStyles } from '../../styles/global';
 
 
 const HomeUser = ({ navigation }) => {
@@ -46,7 +46,7 @@ const HomeUser = ({ navigation }) => {
             </View>
             <View style={globalStyles.Header}>
                 <Image style={styles.iconImage}
-                    source={require('../assets/icon.png')} />
+                    source={require('../../assets/icon.png')} />
                 <Text style={styles.subText}>Je hebt nog geen paketten.</Text>
                 <Pressable style={styles.button} onPress={goToFarm}>
                     <Text style={styles.text}>Zoek Boerderij</Text>

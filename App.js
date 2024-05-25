@@ -4,15 +4,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as SplashScreen from 'expo-splash-screen';
 
-import AuthNavigator from './AuthNavigator';
-import AppTabNavigator from './AppTabNavigator';
-import AppStackNavigator from './AppStackNavigator';
+import AuthNavigator from './navigators/AuthNavigator';
+import AppTabNavigator from './navigators/AppTabNavigator';
+import AppStackNavigator from './navigators/AppStackNavigator';
 
-import AppTabNavigatorFarmer from './AppTabNavigatorFarmer';
-import AppStackNavigatorFarmer from './AppStackNavigatorFarmer';
+import AppTabNavigatorFarmer from './navigators/AppTabNavigatorFarmer';
+import AppStackNavigatorFarmer from './navigators/AppStackNavigatorFarmer';
 
 // sub navigator
-import SubNavigator from './SubNavigator';
+import SubNavigator from './navigators/SubNavigator';
 
 import useCustomFonts from './constants/loadFonts';
 

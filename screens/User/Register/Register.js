@@ -3,10 +3,10 @@ import { View, Text, TouchableOpacity, StyleSheet, Platform, SafeAreaView, Image
 import ProgressBar from 'react-native-progress/Bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { globalStyles } from '../../styles/global';
-import COLORS from '../../constants/color';
-import InputField from '../../components/InputField';
-import Button from '../../components/Button';
+import { globalStyles } from '../../../styles/global';
+import COLORS from '../../../constants/color';
+import InputField from '../../../components/InputField';
+import Button from '../../../components/Button';
 
 const RegisterUser = ({ navigation }) => {
     const totalSteps = 3; // Totaal aantal stappen in het formulier
@@ -147,7 +147,7 @@ const RegisterUser = ({ navigation }) => {
                     <View style={styles.stepContainer}>
                         {/* terug knop naar registreer */}
                         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-                            <Image source={require('../../assets/Back-arrow.png')} style={styles.arrowImg} />
+                            <Image source={require('../../../assets/Back-arrow.png')} style={styles.arrowImg} />
                         </TouchableOpacity>
                         {/* foutmelding */}
                         {errorMessage !== '' && (
@@ -231,7 +231,7 @@ const RegisterUser = ({ navigation }) => {
             {/* terug knop naar vorige stap */}
             {currentStep > 0 && (
                 <TouchableOpacity style={styles.left} onPress={prevStep}>
-                    <Image source={require('../../assets/Back-arrow.png')} style={styles.arrowImg} />
+                    <Image source={require('../../../assets/Back-arrow.png')} style={styles.arrowImg} />
                 </TouchableOpacity>
             )}          
             {/* Huidige stap inhoud */}

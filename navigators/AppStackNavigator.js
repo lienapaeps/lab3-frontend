@@ -2,13 +2,13 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 // alle extra/detail schermen ivm de inhoud vd app
-import HomeUser from './screens/HomeUser';
-import Calendar from './screens/CalendarPage';
-import FarmUserDetails from './screens/FarmUserDetails';
-import Map from './screens/Map';
-import ActivityDetail from './screens/ActivityDetail';
+import HomeUser from '../screens/User/Home';
+import Calendar from '../screens/User/CalendarPage';
+import FarmUserDetails from '../screens/User/FarmDetails';
+import Map from '../screens/User/Map';
+import ActivityDetail from '../screens/User/ActivityDetail';
 
-import NavigationOptions from './components/NavigationOptions';
+import NavigationOptions from '../components/NavigationOptions';
 
 const Stack = createStackNavigator();
 

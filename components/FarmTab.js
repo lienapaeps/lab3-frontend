@@ -3,7 +3,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { StyleSheet } from 'react-native';
 import COLORS from '../constants/color';
 
-import ChatUser from '../screens/ChatUser';
+import ChatUser from '../screens/User/Chat';
 import FarmPackage from '../components/FarmPackage';
 import { globalStyles } from '../styles/global';
 import { processFontFamily } from 'expo-font';

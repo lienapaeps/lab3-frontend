@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, View, TextInput, Image, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import * as Location from 'expo-location';
 
-import COLORS from '../constants/color';
-import Search from '../components/Search';
+import COLORS from '../../constants/color';
+import Search from '../../components/Search';
 
 const Map = ({ navigation }) => {
     const [searchText, setSearchText] = useState('');
@@ -123,7 +123,7 @@ const Map = ({ navigation }) => {
                         onPress={() => handleFarmCardPress(farm._id)}
                     >
                         <View style={styles.marker}>
-                            <Image source={require('../assets/icons/marker.png')} style={{ width: 45, height: 45 }} />
+                            <Image source={require('../../assets/icons/marker.png')} style={{ width: 45, height: 45 }} />
                             <View style={styles.markerBox}>
                                 <Text style={styles.markerText}>{farm.name}</Text>
                             </View>
@@ -145,7 +145,7 @@ const Map = ({ navigation }) => {
             <View>
                 <TouchableOpacity style={styles.lijst} onPress={() => navigation.goBack()}>
                     <Text style={styles.buttonText}>Lijst tonen</Text>
-                    <Image style={styles.arrow} source={require('../assets/arrow-up.png')} />
+                    <Image style={styles.arrow} source={require('../../assets/arrow-up.png')} />
                 </TouchableOpacity>
             </View>
         </View>

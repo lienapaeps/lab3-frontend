@@ -1,11 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { View, SafeAreaView, Text, StyleSheet, TouchableOpacity, FlatList, Dimensions, Platform } from 'react-native';
 
-import { globalStyles } from '../../styles/global.js';
+import { globalStyles } from '../../../styles/global.js';
 import slides from './onboarding/slides.js'
-import SlideStep from '../../components/SlideStep.js';
-import Button from '../../components/Button.js';
-import COLORS from '../../constants/color.js';
+import SlideStep from '../../../components/SlideStep.js';
+import Button from '../../../components/Button.js';
+import COLORS from '../../../constants/color.js';
 
 const OnBoarding = ({ navigation }) => {
   const [currentIndex, setCurrentIndex] = useState(0);

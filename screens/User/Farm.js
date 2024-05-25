@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { globalStyles } from '../styles/global';
+import { globalStyles } from '../../styles/global';
 
-import FarmCard from '../components/FarmCard';
-import Filter from '../components/Filter';
-import Search from '../components/Search';
-import MapButton from '../components/MapButton';
+import FarmCard from '../../components/FarmCard';
+import Filter from '../../components/Filter';
+import Search from '../../components/Search';
+import MapButton from '../../components/MapButton';
 
-import { checkStatus, calculateDistance, getUserLocation } from '../utils/utils';
+import { checkStatus, calculateDistance, getUserLocation } from '../../utils/utils';
 
 const FarmUser = ({ navigation }) => {
     const [farmData, setFarmData] = useState([]);
