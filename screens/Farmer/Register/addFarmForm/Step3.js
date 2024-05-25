@@ -2,9 +2,9 @@ import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { globalStyles } from '../../../styles/global';
-import InputField from '../../../components/InputField';
-import Button from '../../../components/Button';
+import { globalStyles } from '../../../../styles/global';
+// import InputField from '../../../components/InputField';
+import Button from '../../../../components/Button';
 
 const Step6 = () => {
   return (
