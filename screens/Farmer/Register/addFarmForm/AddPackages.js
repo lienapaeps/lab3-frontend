@@ -53,7 +53,7 @@ const AddPackages = ({ navigation, route }) => {
             if (response.ok) {
                 Alert.alert('Success', 'Pakketten succesvol toegevoegd');
                 // Navigatie of andere acties hier
-                navigation.navigate('AppStackFarmer', { screen: 'HomeFarmer' });
+                navigation.navigate('AppFarmer', { screen: 'HomeFarmer' });
             } else {
                 Alert.alert('Error', data.message || 'Er is iets misgegaan');
             }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import COLORS from '../constants/color';
@@ -33,10 +33,19 @@ const LoginForm = ({ navigation }) => {
                 // Sla JWT token op in local storage
                 await AsyncStorage.setItem('token', json.data.token);
 
-                console.log(json.data.token)
+                // console.log(json.data.token)
 
-                // Navigeer naar de volgende pagina (bijv. HomeUser)
-                navigation.navigate('App', { screen: 'HomeUser' });
+                console.log(json.data.isFarmer)
+
+                if (json.data.isFarmer) {
+                    navigation.navigate('AppFarmer', { screen: 'HomeFarmer' });
+                } else {
+                    navigation.navigate('App', { screen: 'HomeUser' });
+                }
+
+                Alert.alert('Success', 'Je bent succesvol ingelogd');
+
+                // navigation.navigate('App', { screen: 'HomeUser' });
             } else {
                 // Toon een foutmelding als inloggegevens onjuist zijn
                 setErrorMessage(json.message);
