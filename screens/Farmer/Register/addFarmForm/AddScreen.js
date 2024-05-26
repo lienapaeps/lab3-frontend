@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform, SafeAreaView, Image, ScrollView, KeyboardAvoidingView } from 'react-native';
 import ProgressBar from 'react-native-progress/Bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { format } from 'date-fns';
 
 import { globalStyles } from '../../../../styles/global';
 import COLORS from '../../../../constants/color';
 import InputField from '../../../../components/InputField';
 import Button from '../../../../components/Button';
-import { validate } from 'react-native-web/dist/cjs/exports/StyleSheet/validate';
 
 const AddFarm = ({ navigation, route }) => {
     const totalSteps = 4; // Totaal aantal stappen in het formulier
-
-    // console.log('farmerID:', route.params.params.userId);
 
     const farmerId = route.params.params.userId;
 
@@ -34,41 +33,13 @@ const AddFarm = ({ navigation, route }) => {
         },
         //
         openinghours: [
-            {
-                day: 'Maandag',
-                openinghour: '',
-                closinghour: '',
-            },
-            {
-                day: 'Dinsdag',
-                openinghour: '',
-                closinghour: '',
-            },
-            {
-                day: 'Woensdag',
-                openinghour: '',
-                closinghour: '',
-            },
-            {
-                day: 'Donderdag',
-                openinghour: '',
-                closinghour: '',
-            },
-            {
-                day: 'Vrijdag',
-                openinghour: '',
-                closinghour: '',
-            },
-            {
-                day: 'Zaterdag',
-                openinghour: '',
-                closinghour: '',
-            },
-            {
-                day: 'Zondag',
-                openinghour: '',
-                closinghour: '',
-            },
+            { day: 'Maandag', openinghour: '09:00', closinghour: '17:00' },
+            { day: 'Dinsdag', openinghour: '09:00', closinghour: '17:00' },
+            { day: 'Woensdag', openinghour: '09:00', closinghour: '17:00' },
+            { day: 'Donderdag', openinghour: '09:00', closinghour: '17:00' },
+            { day: 'Vrijdag', openinghour: '09:00', closinghour: '17:00' },
+            { day: 'Zaterdag', openinghour: '09:00', closinghour: '17:00' },
+            { day: 'Zondag', openinghour: '09:00', closinghour: '17:00' },
         ],
         //
         contact: {
@@ -78,6 +49,24 @@ const AddFarm = ({ navigation, route }) => {
         },
         owner: farmerId,
     });
+
+    const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+    const [selectedTimeField, setSelectedTimeField] = useState(null);
+
+    const showTimePicker = (field) => {
+        setSelectedTimeField(field);
+        setTimePickerVisibility(true);
+    };
+    
+    const hideTimePicker = () => {
+        setTimePickerVisibility(false);
+    };
+    
+    const handleConfirm = (date) => {
+        const formattedTime = format(date, 'HH:mm');
+        updateFormData(selectedTimeField, formattedTime);
+        hideTimePicker();
+    };
 
     // Huidige stapnummer en progressie
     const [currentStep, setCurrentStep] = useState(0);
@@ -101,7 +90,6 @@ const AddFarm = ({ navigation, route }) => {
           throw new Error('Fout bij het ophalen van coördinaten: ' + error.message);
       }
     };
-
 
     // Functie om naar de volgende stap te gaan
     const nextStep = () => {
@@ -349,22 +337,34 @@ const AddFarm = ({ navigation, route }) => {
                         </View>
                         {/* input fields */}
                         <View style={styles.inputs}>
-                          {formData.openinghours.map((item, index) => (
-                              <View key={index}>
-                                  <InputField
-                                      label={`${item.day} - Opening`}
-                                      placeholder="Opening"
-                                      value={item.openinghour}
-                                      onChangeText={text => updateFormData(`openinghours[${index}].openinghour`, text)}
-                                  />
-                                  <InputField
-                                      label={`${item.day} - Sluiting`}
-                                      placeholder="Sluiting"
-                                      value={item.closinghour}
-                                      onChangeText={text => updateFormData(`openinghours[${index}].closinghour`, text)}
-                                  />
-                              </View>
-                          ))}
+                        {formData.openinghours.map((item, index) => (
+                            <View key={index} style={styles.row}>
+                                <View style={{flex: 1, marginRight: 10}}>
+                                    <TouchableOpacity onPress={() => showTimePicker(`openinghours[${index}].openinghour`)}>
+                                        <InputField
+                                            label={`${item.day} - Opening`}
+                                            placeholder="Opening"
+                                            value={item.openinghour}
+                                            editable={false}
+                                            onPress={() => showTimePicker(`openinghours[${index}].openinghour`)}
+                                            fullWidth
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={{flex: 1}}>
+                                    <TouchableOpacity onPress={() => showTimePicker(`openinghours[${index}].closinghour`)}>
+                                        <InputField
+                                            label={"Sluiting"}
+                                            placeholder="Sluiting"
+                                            value={item.closinghour}
+                                            editable={false}
+                                            onPress={() => showTimePicker(`openinghours[${index}].closinghour`)}
+                                            fullWidth
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        ))}
                       </View>             
                     </View>
                 );
@@ -429,6 +429,13 @@ const AddFarm = ({ navigation, route }) => {
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
+            <DateTimePickerModal
+                isVisible={isTimePickerVisible}
+                mode="time"
+                onConfirm={handleConfirm}
+                onCancel={hideTimePicker}
+                textColor="#000000"
+            />
         </SafeAreaView>
     );
 };
@@ -491,6 +498,10 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginTop: -15,
         marginBottom: 30
+    },
+    row: {
+        flexDirection: 'row',
+        marginBottom: 15,
     },
 });
 

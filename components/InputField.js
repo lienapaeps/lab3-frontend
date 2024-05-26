@@ -3,10 +3,20 @@ import { View, Text, StyleSheet, TextInput } from 'react-native';
 import COLORS from '../constants/color';
 
 const InputField = (props) => {
+
+    const { fullWidth } = props;
+
     return (
         <View style={styles.inputField}>
             <Text style={styles.label}>{props.label}</Text>
-            <TextInput placeholder={props.placeholder} style={styles.input} {...props} />
+            <TextInput
+                placeholder={props.placeholder}
+                style={[
+                    styles.input,
+                    fullWidth ? styles.fullWidth : null
+                ]}
+                {...props}
+            />
         </View>
     );
 }
@@ -19,6 +29,9 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginTop: 15,
     },
+    fullWidth: {
+        width: '100%',
+    },
     input: {
         paddingVertical: 16,
         paddingHorizontal: 16,
@@ -27,7 +40,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         fontSize: 16,
-    }
+    },
 })
 
 export default InputField;
