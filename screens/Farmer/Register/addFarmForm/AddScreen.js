@@ -188,11 +188,11 @@ const AddFarm = ({ navigation, route }) => {
 
             if (json.status === 'success') {
                 // Sla JWT token op in local storage
-                // await AsyncStorage.setItem('token', json.data.token);
+                const farmId = json.data.farm._id;
+                console.log('Nieuwe boerderij toegevoegd, id is:', farmId);
+                // console.log(json.data.farm._id);
 
-                // console.log(json.data.token);
-
-                navigation.navigate('AddPackages');
+                navigation.navigate('AddPackages', { params: { farmId: farmId } });
             } else {
                 // Toon een foutmelding als registratgegevens onjuist zijn
                 setErrorMessage(json.message);

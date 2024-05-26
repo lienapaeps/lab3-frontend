@@ -15,7 +15,6 @@ const RegistrationSucces = ({ navigation }) => {
         const userId = await AsyncStorage.getItem('userId');
         if (userId) {
           setUserId(JSON.parse(userId));
-          console.log('Gebruikers-ID:', userId)
         }
       } catch (error) {
         console.error('Fout bij het ophalen van gebruikers-ID:', error);
@@ -31,7 +30,6 @@ const RegistrationSucces = ({ navigation }) => {
 
   const goToAddFarm = () => {
     navigation.navigate('AddFarm', { params: { userId: userId } });
-    console.log('Navigeer naar boerderij toevoegen' + " " + userId)
   }
 
   return (
