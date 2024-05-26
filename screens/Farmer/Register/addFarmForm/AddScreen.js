@@ -158,12 +158,12 @@ const AddFarm = ({ navigation, route }) => {
 
     // Functie om het formulier te verzenden
     const submitForm = async () => {
-        console.log('submit data:' + JSON.stringify(formData));
+        // console.log('submit data:' + JSON.stringify(formData));
         try {
 
             const coordinates = await getCoordinates();
 
-            console.log('coordinates:', coordinates);
+            // console.log('coordinates:', coordinates);
 
             const updatedFormData = {
               ...formData,
@@ -173,7 +173,7 @@ const AddFarm = ({ navigation, route }) => {
               },
           };
 
-            console.log('form data na coords:', updatedFormData);
+            // console.log('form data na coords:', updatedFormData);
 
             const response = await fetch("https://lab3-backend-w1yl.onrender.com/api/farms", {
                 method: 'POST',
@@ -189,7 +189,7 @@ const AddFarm = ({ navigation, route }) => {
             if (json.status === 'success') {
                 // Sla JWT token op in local storage
                 const farmId = json.data.farm._id;
-                console.log('Nieuwe boerderij toegevoegd, id is:', farmId);
+                // console.log('Nieuwe boerderij toegevoegd, id is:', farmId);
                 // console.log(json.data.farm._id);
 
                 navigation.navigate('AddPackages', { params: { farmId: farmId } });

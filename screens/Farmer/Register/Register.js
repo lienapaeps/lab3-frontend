@@ -59,7 +59,7 @@ const RegisterFarmer = ({ navigation }) => {
 
     // Functie om het formulier te verzenden
     const submitForm = async () => {
-        console.log('submit data:' + JSON.stringify(formData));
+        // console.log('submit data:' + JSON.stringify(formData));
 
         if (!validateStep()) {
             return;

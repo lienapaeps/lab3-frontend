@@ -24,6 +24,12 @@ export const globalStyles = StyleSheet.create({
         lineHeight: 20,
         color: COLORS.offBlack,
     },
+    bodyTextSemiBold: {
+        fontFamily: 'Quicksand_600SemiBold',
+        fontSize: 16,
+        lineHeight: 20,
+        color: COLORS.offBlack,
+    },
     bodyTextBold: {
         fontFamily: 'Quicksand_700Bold',
         fontSize: 16,

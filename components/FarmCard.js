@@ -94,8 +94,8 @@ const FarmCard = ({ farmData, onPress }) => {
                             <Text style={globalStyles.bodyText}>{farmData.adress.number}</Text>
                         </View>
                         <View style={styles.adress}>
-                            <Text style={globalStyles.bodyText}>{farmData.adress.city}</Text>
                             <Text style={globalStyles.bodyText}>{farmData.adress.zipcode}</Text>
+                            <Text style={globalStyles.bodyText}>{farmData.adress.city}</Text>
                         </View>
                     </View>
                     <View style={styles.info}>

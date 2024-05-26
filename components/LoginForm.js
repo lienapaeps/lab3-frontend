@@ -32,10 +32,11 @@ const LoginForm = ({ navigation }) => {
             if (json.status === 'success') {
                 // Sla JWT token op in local storage
                 await AsyncStorage.setItem('token', json.data.token);
+                await AsyncStorage.setItem('userId', json.data.userId);
 
-                // console.log(json.data.token)
+                // console.log(json.data)
 
-                console.log(json.data.isFarmer)
+                // console.log(json.data.isFarmer)
 
                 if (json.data.isFarmer) {
                     navigation.navigate('AppFarmer', { screen: 'HomeFarmer' });

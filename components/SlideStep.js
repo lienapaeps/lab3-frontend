@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
         ...Platform.select({
             ios: {
                 height: 400,
-                width: 333,
             },
         }),
     },
