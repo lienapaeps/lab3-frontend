@@ -260,14 +260,16 @@ const AddFarm = ({ navigation, route }) => {
       return true;
   };
 
-    const validateStep4 = () => {
-      const { number, email, website } = formData.contact;
-      if (!number || !email || !website) {
-          setErrorMessage('Alle velden zijn verplicht.');
-          return false;
-      }
-      return true;
-  };
+  const validateStep4 = () => {
+    const { number, email, website } = formData.contact;
+    // Controleer alleen de verplichte velden als ze zijn ingevuld
+    if (number && email && website) {
+        // Als alle velden zijn ingevuld, geef true terug
+        return true;
+    }
+    // Als geen van de velden is ingevuld, geef true terug
+    return true;
+};
 
     // Functie om de huidige stapinhoud te renderen
     const renderStep = () => {
@@ -384,9 +386,9 @@ const AddFarm = ({ navigation, route }) => {
                         </View>
                         {/* input fields */}
                         <View style={styles.inputs}>
-                            <InputField label="Telefoonnummer*" placeholder="Telefoonnummer" value={formData.contact.number} onChangeText={text => updateFormData('contact.number', text)}/>
-                            <InputField label="Email*" placeholder="Email" keyboardType="email-address" value={formData.contact.email} onChangeText={text => updateFormData('contact.email', text)}/>
-                            <InputField label="Website*" placeholder="Website" value={formData.contact.website} onChangeText={text => updateFormData('contact.website', text)}/>
+                            <InputField label="Telefoonnummer (optioneel)" placeholder="Telefoonnummer" value={formData.contact.number} onChangeText={text => updateFormData('contact.number', text)}/>
+                            <InputField label="Email (optioneel)" placeholder="Email" keyboardType="email-address" value={formData.contact.email} onChangeText={text => updateFormData('contact.email', text)}/>
+                            <InputField label="Website (optioneel)" placeholder="Website" value={formData.contact.website} onChangeText={text => updateFormData('contact.website', text)}/>
                         </View>
                     </View>
                 );

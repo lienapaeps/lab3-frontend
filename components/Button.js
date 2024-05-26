@@ -5,14 +5,26 @@ import COLORS from '../constants/color';
 // voeg property 'filled' toe aan een button component voor een gevulde button, anders een outline button
 
 const Button = (props) => {
-    const filledBgColor = props.color || COLORS.green;
-    const bgColor = props.filled ? filledBgColor : 'transparent';
-    const textColor = props.filled ? COLORS.white : COLORS.offBlack;
-    const buttonBorderStyle = props.filled ? {} : { borderColor: COLORS.green, borderWidth: 2 };
+
+    const { filled, disabled, title, onPress, color, style } = props;
+
+    const filledBgColor = color || COLORS.green;
+    const bgColor = filled ? filledBgColor : 'transparent';
+    const textColor = filled ? COLORS.white : COLORS.offBlack;
+    const buttonBorderStyle = filled ? {} : { borderColor: COLORS.green, borderWidth: 2 };
 
     return (
-        <TouchableOpacity style={{ ...styles.button, ...{ backgroundColor: bgColor, ...buttonBorderStyle }, ...props.style }} onPress={props.onPress}>
-            <Text style={{fontFamily:'Baloo2_500Medium', fontSize:18, ... {color:textColor}}} >{props.title}</Text>
+        <TouchableOpacity
+            style={{
+                ...styles.button,
+                backgroundColor: bgColor,
+                ...buttonBorderStyle,
+                opacity: disabled ? 0.5 : 1, // Opacity is set to 0.5 when disabled
+                ...style
+            }}
+            onPress={disabled ? null : onPress} // Disable onPress when disabled is true
+        >
+            <Text style={{ fontFamily: 'Baloo2_500Medium', fontSize: 18, color: textColor }}>{title}</Text>
         </TouchableOpacity>
     );
 }

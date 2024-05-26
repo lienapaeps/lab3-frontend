@@ -11,10 +11,11 @@ const AddPackages = ({ navigation, route }) => {
 
     const [selectedPackages, setSelectedPackages] = useState([]);
     const [packagePrices, setPackagePrices] = useState({});
-    // const [errorMessage, setErrorMessage] = useState('');
+    const [isPackageSelected, setIsPackageSelected] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const { farmId } = route.params.params;
-    console.log("farm, id: ", route.params.params)
+    // console.log("farm, id: ", route.params.params)
 
     const handlePackageSelection = (index) => {
         if (selectedPackages.includes(index)) {
@@ -22,6 +23,7 @@ const AddPackages = ({ navigation, route }) => {
         } else {
             setSelectedPackages([...selectedPackages, index]);
         }
+        setIsPackageSelected(selectedPackages.length > 0);
     };
 
     const handlePriceChange = (index, price) => {
@@ -29,6 +31,21 @@ const AddPackages = ({ navigation, route }) => {
     };
 
     const handleSumbit = async () => {
+
+        if (selectedPackages.length === 0) {
+            setErrorMessage('Selecteer minstens één pakket.');
+            return;
+        }
+
+        for (const index of selectedPackages) {
+            if (!packagePrices[index]) {
+                setErrorMessage('Vul de prijs in voor elk geselecteerd pakket.');
+                return;
+            }
+        }
+
+        setErrorMessage('');
+
         const packagesToSubmit = selectedPackages.map(index => ({
             name: packages[index].name,
             description: packages[index].description,
@@ -66,17 +83,17 @@ const AddPackages = ({ navigation, route }) => {
     return (
         <SafeAreaView>
             <View style={styles.container}>
-            {/* foutmelding */}
-                {/* {errorMessage !== '' && (
-                    <View style={styles.errorMessageContainer}>
-                        <Text style={globalStyles.errorText}>{errorMessage}</Text>
-                    </View>
-                )} */}
                 {/* title */}
                 <View style={styles.form}>
                     <Text style={{...globalStyles.headerText, marginBottom: 5}}>Pakketten toevoegen</Text>
                     <Text style={globalStyles.bodyTextMedium}>Welke diensten wilt u bieden aan uw klanten?</Text>
                 </View>
+                {/* foutmelding */}
+                {errorMessage !== '' && (
+                <View style={styles.errorMessageContainer}>
+                    <Text style={globalStyles.errorText}>{errorMessage}</Text>
+                </View>
+                )}
                 {/* input fields */}
                 <ScrollView contentContainerStyle={styles.scrollViewContent}>
                     <View style={styles.packages}>
@@ -165,6 +182,11 @@ const styles = StyleSheet.create({
     scrollViewContent: {
         flexGrow: 1,
         justifyContent: 'center',
+    },
+    errorMessageContainer: {
+        backgroundColor: '#f8d7da',
+        padding: 12,
+        borderRadius: 5,
     },
 });
 
