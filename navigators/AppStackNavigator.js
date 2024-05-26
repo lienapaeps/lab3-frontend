@@ -7,6 +7,7 @@ import Calendar from '../screens/User/CalendarPage';
 import FarmUserDetails from '../screens/User/FarmDetails';
 import Map from '../screens/User/Map';
 import ActivityDetail from '../screens/User/ActivityDetail';
+import PackageDetail from '../screens/User/PackageDetail';
 
 import NavigationOptions from '../components/NavigationOptions';
 
@@ -28,6 +29,11 @@ const AppStackNavigator = () => {
         })}
       />
       <Stack.Screen name="Map" component={Map}
+        options={() => ({
+          headerShown: false,
+        })}
+      />
+      <Stack.Screen name="PackageDetail" component={PackageDetail}
         options={() => ({
           headerShown: false,
         })}

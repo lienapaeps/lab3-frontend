@@ -7,7 +7,6 @@ import COLORS from '../../constants/color';
 import { globalStyles } from '../../styles/global';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-
 const HomeUser = ({ navigation }) => {
     const [userData, setUserData] = useState(null);
     const [subscriptionData, setSubscriptionData] = useState(null);
@@ -94,9 +93,12 @@ const HomeUser = ({ navigation }) => {
         navigation.navigate('AppStack', { screen: 'Calendar' });
     };
     const goToFarm = () => {
-       //nagiate to subscription page
-        navigation.navigate('Sub', { screen: 'Subscription' });
+        navigation.navigate('App', { screen: 'FarmUser' });
     };    
+
+    const goToPackageDetails = (packageId, farmId) => {
+        navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId }});
+    }
 
     return (
         <SafeAreaView style={globalStyles.container}>
@@ -112,13 +114,13 @@ const HomeUser = ({ navigation }) => {
                 <Text style={globalStyles.headerTextSmall}>Huidig Pakket</Text>
             </View>
             {subscriptionData && subscriptionData.isSubscribedToPackage ? (
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => goToPackageDetails(packageData.data.package._id, farmData._id)}>
                     <View style={styles.packageCard}>
-                        <Text style={{...globalStyles.headerText, ...styles.packageFarm}}>{farmData.name}</Text>
-                        <Image style={styles.packageImage} source={{ uri: farmData.farmImage }}/>
+                        <Text style={{...globalStyles.headerText, ...styles.packageFarm}}>{farmData?.name}</Text>
+                        <Image style={styles.packageImage} source={{ uri: farmData?.farmImage }}/>
                         <View style={styles.overlayImage}></View>
                         <View style={styles.packageLabel}>
-                            <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white}}>{packageData.data.package.name}</Text>
+                            <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white}}>{packageData?.data.package.name}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -127,7 +129,7 @@ const HomeUser = ({ navigation }) => {
                     <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')}/>
                     <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
                     <Pressable style={styles.button} onPress={goToFarm}>
-                        <Text style={{...globalStyles.bodyText, color: COLORS.white }}>Zoek Boerderij</Text>
+                        <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
                     </Pressable>
                 </View>
                 )}
@@ -151,7 +153,7 @@ const styles = StyleSheet.create({
     button: {
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 12,
+        paddingVertical: 15,
         paddingHorizontal: 20,
         borderRadius: 10,
         elevation: 3,
