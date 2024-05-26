@@ -14,7 +14,7 @@ const Stack = createStackNavigator();
 const AppStackNavigatorFarmer = () => {
   return (
     <Stack.Navigator>
-        <Stack.Screen name="HomeFarmer" component={HomeFarmer}/>
+        <Stack.Screen name="HomeFarmer" component={HomeFarmer} options={NavigationOptions}/>
         <Stack.Screen name="FarmFarmer" component={FarmFarmer} options={NavigationOptions}/>
         <Stack.Screen name="CalendarFarmer" component={CalendarFarmer} options={NavigationOptions}/>
         <Stack.Screen name="ChatFarmer" component={ChatFarmer} options={NavigationOptions}/>

@@ -67,6 +67,7 @@ export default function App() {
                 {/* Voeg de AppTabNavigatorFarmer toe als een scherm binnen de Stack.Navigator */}
                 <Stack.Screen name="AppFarmer" component={AppTabNavigatorFarmer} options={{ headerShown: false }} />
                 {/* Voeg de AppStackNavigatorFarmer toe als een scherm binnen de Stack.Navigator */}
+                <Stack.Screen name="AppStackFarmer" component={AppStackNavigatorFarmer} options={{ headerShown: false }} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>

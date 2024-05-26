@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, TextInput, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, TextInput, Alert } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 
 import { globalStyles } from '../../../../styles/global';
@@ -53,6 +53,7 @@ const AddPackages = ({ navigation, route }) => {
             if (response.ok) {
                 Alert.alert('Success', 'Pakketten succesvol toegevoegd');
                 // Navigatie of andere acties hier
+                navigation.navigate('AppStackFarmer', { screen: 'HomeFarmer' });
             } else {
                 Alert.alert('Error', data.message || 'Er is iets misgegaan');
             }
@@ -77,40 +78,42 @@ const AddPackages = ({ navigation, route }) => {
                     <Text style={globalStyles.bodyTextMedium}>Welke diensten wilt u bieden aan uw klanten?</Text>
                 </View>
                 {/* input fields */}
-                <View style={styles.packages}>
-                    {packages.map((item, index) => (
-                    <TouchableOpacity key={index} onPress={() => handlePackageSelection(index)}>
-                        <View style={styles.packageContainer}>
-                            <View>
-                                <CheckBox
-                                    checked={selectedPackages.includes(index)}
-                                    onPress={() => handlePackageSelection(index)}
-                                    containerStyle={styles.checkBoxContainer}
-                                    checkedColor={COLORS.orange}  // Change the checked color
-                                    uncheckedColor={COLORS.veryLightOffBlack}
-                                />
-                            </View>
-                            <View style={styles.packageInfo}>
-                                <Text style={{ ...globalStyles.headerTextSmaller, marginBottom: 5 }}>{item.name}</Text>
-                                <Text style={globalStyles.bodyText}>{item.description}</Text>
-                                {selectedPackages.includes(index) && (
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="Prijs"
-                                        keyboardType="numeric"
-                                        value={packagePrices[index] || ''}
-                                        onChangeText={(price) => handlePriceChange(index, price)}
+                <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                    <View style={styles.packages}>
+                        {packages.map((item, index) => (
+                        <TouchableOpacity key={index} onPress={() => handlePackageSelection(index)}>
+                            <View style={styles.packageContainer}>
+                                <View>
+                                    <CheckBox
+                                        checked={selectedPackages.includes(index)}
+                                        onPress={() => handlePackageSelection(index)}
+                                        containerStyle={styles.checkBoxContainer}
+                                        checkedColor={COLORS.orange}  // Change the checked color
+                                        uncheckedColor={COLORS.veryLightOffBlack}
                                     />
-                                )}
+                                </View>
+                                <View style={styles.packageInfo}>
+                                    <Text style={{ ...globalStyles.headerTextSmaller, marginBottom: 5 }}>{item.name}</Text>
+                                    <Text style={globalStyles.bodyText}>{item.description}</Text>
+                                    {selectedPackages.includes(index) && (
+                                        <TextInput
+                                            style={styles.input}
+                                            placeholder="Prijs"
+                                            keyboardType="numeric"
+                                            value={packagePrices[index] || ''}
+                                            onChangeText={(price) => handlePriceChange(index, price)}
+                                        />
+                                    )}
+                                </View>
                             </View>
-                        </View>
-                    </TouchableOpacity>
-                    ))}
-                </View>
-                {/* buttons */}
-                <View>
-                    <Button title="Toevoegen" onPress={handleSumbit} filled />
-                </View>
+                        </TouchableOpacity>
+                        ))}
+                    </View>
+                    {/* buttons */}
+                    <View>
+                        <Button title="Toevoegen" onPress={handleSumbit} filled />
+                    </View>
+                </ScrollView>
             </View>
         </SafeAreaView>
     );
@@ -158,6 +161,10 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         borderWidth: 1,
         borderRadius: 5,
+    },
+    scrollViewContent: {
+        flexGrow: 1,
+        justifyContent: 'center',
     },
 });
 

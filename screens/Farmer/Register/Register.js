@@ -60,6 +60,11 @@ const RegisterFarmer = ({ navigation }) => {
     // Functie om het formulier te verzenden
     const submitForm = async () => {
         console.log('submit data:' + JSON.stringify(formData));
+
+        if (!validateStep()) {
+            return;
+        }
+
         try {
             const response = await fetch("https://lab3-backend-w1yl.onrender.com/users/signup", {
                 method: 'POST',
@@ -130,12 +135,16 @@ const RegisterFarmer = ({ navigation }) => {
 
     const validateStep3 = () => {
         const { password, confirmPassword } = formData;
-        if (!password || !confirmPassword) {
-            setErrorMessage('Alle velden zijn verplicht.');
+        if (!password) {
+            setErrorMessage('Wachtwoord is verplicht.');
             return false;
         }
-        if (password !== confirmPassword) {
+        if (confirmPassword && password !== confirmPassword) {
             setErrorMessage('Wachtwoorden komen niet overeen.');
+            return false;
+        }
+        if (!confirmPassword) {
+            setErrorMessage('Bevestig wachtwoord is verplicht.');
             return false;
         }
         return true;
