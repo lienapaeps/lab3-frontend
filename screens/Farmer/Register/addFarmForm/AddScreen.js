@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform, SafeAreaView, Image, ScrollView, KeyboardAvoidingView } from 'react-native';
 import ProgressBar from 'react-native-progress/Bar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { format } from 'date-fns';
 
@@ -10,29 +9,25 @@ import COLORS from '../../../../constants/color';
 import InputField from '../../../../components/InputField';
 import Button from '../../../../components/Button';
 import ImageUpload from '../../../../components/ImageUpload';
+import { uploadToCloudinary } from '../../../../utils/uploadHelpers';
 
 const AddFarm = ({ navigation, route }) => {
     const totalSteps = 4; // Totaal aantal stappen in het formulier
-
     const farmerId = route.params.params.userId;
+
+    const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+    const [selectedTimeField, setSelectedTimeField] = useState(null);
+    const [currentStep, setCurrentStep] = useState(0);
+    const [errorMessage, setErrorMessage] = useState('');
+    const progress = (currentStep + 1) / totalSteps;
+    const [selectedImageUri, setSelectedImageUri] = useState('');
 
     // Initialisatie van formuliergegevens
     const [formData, setFormData] = useState({
         name: '',
         description: '',
         farmImage: '',
-        //
-        adress: {
-            street: '',
-            number: '',
-            zipcode: '',
-            city: '',
-        },
-        coordinates: {
-            latitude: '',
-            longitude: '',
-        },
-        //
+        adress: { street: '', number: '', zipcode: '', city: '' },
         openinghours: [
             { day: 'Maandag', openinghour: '09:00', closinghour: '17:00' },
             { day: 'Dinsdag', openinghour: '09:00', closinghour: '17:00' },
@@ -42,17 +37,9 @@ const AddFarm = ({ navigation, route }) => {
             { day: 'Zaterdag', openinghour: '09:00', closinghour: '17:00' },
             { day: 'Zondag', openinghour: '09:00', closinghour: '17:00' },
         ],
-        //
-        contact: {
-            number: '',
-            email: '',
-            website: '',
-        },
+        contact: { number: '', email: '', website: '' },
         owner: farmerId,
     });
-
-    const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
-    const [selectedTimeField, setSelectedTimeField] = useState(null);
 
     const showTimePicker = (field) => {
         setSelectedTimeField(field);
@@ -69,10 +56,11 @@ const AddFarm = ({ navigation, route }) => {
         hideTimePicker();
     };
 
-    // Huidige stapnummer en progressie
-    const [currentStep, setCurrentStep] = useState(0);
-    const [errorMessage, setErrorMessage] = useState('');
-    const progress = (currentStep + 1) / totalSteps;
+    const handleImageSelected = async (uri) => {
+        setSelectedImageUri(uri); 
+        updateFormData('farmImage', uri);
+        console.log('imageUri in handleImageSelected:', uri);        
+    };
 
     const getCoordinates = async () => {
       const address = `${formData.adress.street} ${formData.adress.number} ${formData.adress.zipcode} ${formData.adress.city}`;
@@ -106,55 +94,6 @@ const AddFarm = ({ navigation, route }) => {
     const prevStep = () => {
         if (currentStep > 0) {
             setCurrentStep(currentStep - 1);
-        }
-    };
-
-    const [selectedImageUri, setSelectedImageUri] = useState('');
-
-    const handleImageSelected = async (uri) => {
-        setSelectedImageUri(uri); 
-        updateFormData('farmImage', uri);
-        console.log('imageUri in handleImageSelected:', uri);        
-    };
-
-    const uploadToCloudinary = async (uri) => {
-        // upload naar Cloudinary
-        try {
-            let filename = uri.split('/').pop();
-            let match = /\.(\w+)$/.exec(filename);
-            let type = match ? `image/${match[1]}` : `image`;
-
-            const formData = new FormData();
-            formData.append('file', {
-                uri: uri,
-                name: filename,
-                type: type,
-            });
-    
-            formData.append('upload_preset', 'plant-en-pluk'); 
-            formData.append('cloud_name', 'dnzh1re3f'); 
-    
-            const response = await fetch('https://api.cloudinary.com/v1_1/dnzh1re3f/image/upload', {
-                method: 'POST',
-                body: formData,
-            });
-    
-            const data = await response.json();
-            // console.log('Cloudinary response:', data);
-
-            if(data.secure_url) {
-                return data.secure_url;
-            } else {
-                setErrorMessage('Er is een fout opgetreden bij het uploaden van de afbeelding');
-            }
-    
-            // // Update de formData met de URL van de geüploade afbeelding
-            // updateFormData('farmImage', data.secure_url); // Pas 'farmImage' aan naar het juiste veld in je formData
-            // console.log('image url:', data.secure_url);
-
-        } catch (error) {
-            console.error('Fout bij het uploaden naar Cloudinary:', error);
-            // Toon eventueel een foutmelding aan de gebruiker
         }
     };
 
@@ -349,7 +288,7 @@ const AddFarm = ({ navigation, route }) => {
                             <InputField label="Naam boerderij*" placeholder="Naam boerderij" value={formData.name} onChangeText={text => updateFormData('name', text)}/>
                             <InputField label="Beschrijving*" placeholder="Beschrijving" value={formData.description} onChangeText={text => updateFormData('description', text)}/>
                             <View>
-                                <ImageUpload onImageSelected={handleImageSelected} />
+                                <ImageUpload onImageSelected={handleImageSelected} title="foto van boerderij"/>
                             </View>
                         </View>
                     </View>

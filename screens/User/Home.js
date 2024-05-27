@@ -18,24 +18,40 @@ const HomeUser = ({ navigation }) => {
         const fetchData = async () => {
             try {
                 const token = await AsyncStorage.getItem('token');
-                const userId = await AsyncStorage.getItem('userId');
+                let userId = await AsyncStorage.getItem('userId');
 
                 if (!token) {
                     navigation.navigate('Login');
                     return;
                 }
 
+                if (userId.startsWith('"') && userId.endsWith('"')) {
+                    userId = userId.substring(1, userId.length - 1);
+                }
+
+                console.log('Token:', token);
+                console.log('UserID:', userId);
+
                 const userDataResponse = await fetchUserData(token, userId);
-                setUserData(userDataResponse.data.user);
+                console.log('userDataResponse:', userDataResponse);
+                if (userDataResponse && userDataResponse.data && userDataResponse.data.user) {
+                    setUserData(userDataResponse.data.user);
+                } else {
+                    console.error('Invalid user data response');
+                    return;
+                }
 
                 const subscriptionDataResponse = await fetchSubscriptionData(token, userId);
+                console.log('subscriptionDataResponse:', subscriptionDataResponse);
                 setSubscriptionData(subscriptionDataResponse.data);
 
-                if (subscriptionDataResponse.data.isSubscribedToPackage) {
+                if (subscriptionDataResponse.data && subscriptionDataResponse.data.isSubscribedToPackage) {
                     const farmDataResponse = await fetchFarmData(token, subscriptionDataResponse.data.farmId);
+                    console.log('farmDataResponse:', farmDataResponse);
                     setFarmData(farmDataResponse.data.farm);
 
                     const packageDataResponse = await fetchPackageData(token, subscriptionDataResponse.data.packageId);
+                    console.log('packageDataResponse:', packageDataResponse);
                     setPackageData(packageDataResponse);
                 }
 

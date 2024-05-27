@@ -110,17 +110,29 @@ const RegisterFarmer = ({ navigation }) => {
     };
 
     const validateStep1 = () => {
+        // Deconstructie van het formData-object
         const { firstname, lastname, email, telephone } = formData;
-        if (!firstname || !lastname || !email || !telephone) {
+    
+        // Controleer of firstname, lastname en email zijn ingevuld
+        if (!firstname || !lastname || !email) {
             setErrorMessage('Alle velden zijn verplicht.');
             return false;
         }
+    
         // E-mail validatie
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             setErrorMessage('Voer een geldig e-mailadres in.');
             return false;
         }
+    
+        // Telefoonnummer validatie (optioneel)
+        if (telephone) {
+            // Als telefoonnummer is ingevuld, retourneer true
+            return true;
+        }
+    
+        // Als telefoonnummer niet is ingevuld, retourneer true
         return true;
     };
 
@@ -176,7 +188,7 @@ const RegisterFarmer = ({ navigation }) => {
                             <InputField label="Voornaam*" placeholder="Voornaam" value={formData.firstname} onChangeText={text => updateFormData('firstname', text)}/>
                             <InputField label="Achternaam*" placeholder="Achternaam" value={formData.lastname} onChangeText={text => updateFormData('lastname', text)}/>
                             <InputField label="E-mail*" placeholder="E-mail" keyboardType="email-address" value={formData.email} onChangeText={text => updateFormData('email', text)}/>
-                            <InputField label="Telefoon*" placeholder="Telefoon" value={formData.telephone} onChangeText={text => updateFormData('telephone', text)}/>
+                            <InputField label="Telefoon (optioneel)" placeholder="Telefoon" value={formData.telephone} onChangeText={text => updateFormData('telephone', text)}/>
                         </View>
                     </View>
                 );

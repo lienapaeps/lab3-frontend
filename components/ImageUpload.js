@@ -7,7 +7,7 @@ import * as FileSystem from 'expo-file-system';
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
 
-const ImageUpload = ({ onImageSelected }) => {
+const ImageUpload = ({ onImageSelected, title }) => {
 
     const [image, setImage] = useState(null);
 
@@ -33,7 +33,7 @@ const ImageUpload = ({ onImageSelected }) => {
 
     return (
         <View style={styles.uploadImage}>
-            <Text style={styles.label}>Upload hier een foto van de boerderij*</Text>
+            <Text style={styles.label}>Upload hier {title}*</Text>
             <TouchableOpacity onPress={pickImage}>
                 {image ? (
                     <View>
