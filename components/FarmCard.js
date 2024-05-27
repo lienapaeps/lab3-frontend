@@ -104,7 +104,7 @@ const FarmCard = ({ farmData, onPress }) => {
                             <Text style={{...globalStyles.bodyText, ...styles.label}}>{props.farmData.rating}</Text>
                         </View> */}
                         <View style={styles.infoItem}>
-                            <Image source={require('../assets/icons/locatie.png')} />
+                            <Image style={styles.imgLocation} source={require('../assets/icons/locatie.png')} />
                             {loading ? (
                                 <Text>Laden...</Text>
                             ) : (
@@ -112,7 +112,7 @@ const FarmCard = ({ farmData, onPress }) => {
                             )}
                         </View>
                         <View style={styles.infoItem}>
-                            <Image source={imageSource} />
+                            <Image style={styles.imgClock} source={imageSource} />
                             <Text style={{...globalStyles.bodyText, ...styles.label, ... {color: textColor}}}>{status}</Text>
                         </View>
                     </View>
@@ -170,6 +170,14 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         gap: 5,
+    },
+    imgClock: {
+        width: 16,
+        height: 16,
+    },
+    imgLocation: {
+        width: 13,
+        height: 16,
     }
 })
 

@@ -8,6 +8,7 @@ const navigationOptions = ({ navigation }) => ({
           elevation: 0,
           shadowOpacity: 0,
           backgroundColor: 'transparent',
+          height: 60,
         },
         headerTitleStyle: {
           display: 'none',

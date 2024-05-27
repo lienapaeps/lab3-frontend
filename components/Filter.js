@@ -55,7 +55,7 @@ const Filter = ({ onFilterChange, onDistanceFilterChange }) => {
     return (
         <View>
             <TouchableOpacity style={styles.filter} onPress={handleFilterPress}>
-                <Image source={require('../assets/icons/filters.png')} />
+                <Image style={styles.iconImg} source={require('../assets/icons/filters.png')} />
             </TouchableOpacity>
 
             <Modal visible={showModal} transparent={true} animationType="none">
@@ -213,6 +213,10 @@ const styles = StyleSheet.create({
       width: '100%',
       height: 40,
       color: COLORS.green,
+    },
+    iconImg: {
+        width: 30,
+        height: 30,
     }
 });
 

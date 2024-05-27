@@ -24,6 +24,8 @@ const styles = StyleSheet.create({
         padding: 10,
         margin: 10,
         alignItems: 'center',
+        width: 32,
+        height: 32,
     },
     sectionStyle: {
         width: '80%',

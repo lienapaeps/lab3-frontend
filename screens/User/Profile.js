@@ -22,6 +22,18 @@ const Profile = ({ navigation, route }) => {
         }
     };
 
+    const handleGoToAccount = async () => {
+        navigation.navigate('AppStack', { screen: 'MyAccount', params: { userData: userData }});
+    }
+
+    const handleGoToSettings = async () => {
+        navigation.navigate('AppStack', { screen: 'Settings', params: { userData: userData }});
+    }
+
+    const handleGoToFaq = async () => {
+        navigation.navigate('AppStack', { screen: 'FAQ', params: { userData: userData }});
+    }
+
     return (
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.header}>
@@ -29,9 +41,9 @@ const Profile = ({ navigation, route }) => {
                 <Text style={{...globalStyles.headerTextSmall, ...styles.profileName}}>{userData.firstname} {userData.lastname}</Text>
             </View>
             <View style={styles.profileSection}>
-                <ProfileItem title="Mijn account" icon={require('../../assets/icons/user-green.png')}/>
-                <ProfileItem title="Instellingen" icon={require('../../assets/icons/settings-green.png')}/>
-                <ProfileItem title="FAQ" icon={require('../../assets/icons/faq-green.png')}/>
+                <ProfileItem title="Mijn account" onPress={handleGoToAccount} icon={require('../../assets/icons/user-green.png')}/>
+                <ProfileItem title="Instellingen" onPress={handleGoToSettings} icon={require('../../assets/icons/settings-green.png')}/>
+                <ProfileItem title="FAQ" onPress={handleGoToFaq} icon={require('../../assets/icons/faq-green.png')}/>
             </View>
             <View style={styles.logout}>
                 <Button title="Uitloggen" onPress={handleLogout} color={COLORS.alert}/>

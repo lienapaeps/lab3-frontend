@@ -73,10 +73,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: '50%',
         left: '50%',
-        marginLeft: -5,
+        marginLeft: -15,
+        width: 24,
+        height: 24,
     },
     clearImageButton: {
-        color: COLORS.alert,
+        // color: COLORS.alert,
         backgroundColor: COLORS.white,
         padding: 8,
         borderRadius: 5,
@@ -86,8 +88,8 @@ const styles = StyleSheet.create({
         right: 20,
     },
     deleteIcon: {
-        width: 18,
-        height: 18,
+        width: 20,
+        height: 20,
     }
 });
 

@@ -9,6 +9,9 @@ import Map from '../screens/User/Map';
 import ActivityDetail from '../screens/User/ActivityDetail';
 import PackageDetail from '../screens/User/PackageDetail';
 import Profile from '../screens/User/Profile';
+import MyAccount from '../screens/User/Profile/MyAccount';
+import Settings from '../screens/User/Profile/Settings';
+import Faq from '../screens/User/Profile/Faq';
 
 import NavigationOptions from '../components/NavigationOptions';
 
@@ -40,6 +43,9 @@ const AppStackNavigator = () => {
         })}
       />
       <Stack.Screen name="Profile" component={Profile} options={NavigationOptions}/>
+      <Stack.Screen name="MyAccount" component={MyAccount} options={NavigationOptions}/>
+      <Stack.Screen name="Settings" component={Settings} options={NavigationOptions}/>
+      <Stack.Screen name="FAQ" component={Faq} options={NavigationOptions}/>
     </Stack.Navigator>
   );
 };

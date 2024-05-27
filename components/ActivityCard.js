@@ -71,12 +71,12 @@ const AcitvityCard = ({ activityData, onPress }) => {
                 </View>
                 {activityData.start.time && (
                     <View style={styles.cardTime}>
-                        <Image source={require('../assets/icons/clock-black.png')} />
+                        <Image style={styles.imgClock} source={require('../assets/icons/clock-black.png')} />
                         <Text style={{...globalStyles.bodyText, color: COLORS.offBlack}}>{activityData.start.time} - {activityData.end.time}</Text>
                     </View>
                 )}
                 <View style={styles.cardFarm}>
-                    <Image source={require('../assets/icons/locatie-black.png')} />
+                    <Image style={styles.imgLocation} source={require('../assets/icons/locatie-black.png')} />
                     <Text style={{...globalStyles.bodyText, color: COLORS.OffBlack}}>{farmData.name}</Text>
                 </View>
         </TouchableOpacity>
@@ -137,6 +137,14 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 10,
         width: 210,
         height: 150,
+    },
+    imgClock: {
+      width: 16,
+      height: 16,
+    },
+    imgLocation: {
+        width: 13,
+        height: 16,
     }
 })
 

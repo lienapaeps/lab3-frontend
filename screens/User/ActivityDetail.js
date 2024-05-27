@@ -72,16 +72,16 @@ const ActivityDetail = ({ navigation, route }) => {
                         <View style={styles.info}>
                             {activityData.category === 'Workshop' && (
                             <View style={styles.headerInfo}>
-                                <Image source={require('../../assets/icons/clock-black.png')} />
+                                <Image style={styles.imgClock} source={require('../../assets/icons/clock-black.png')} />
                                 <Text style={globalStyles.bodyText}>{activityData.start.time} - {activityData.end.time}</Text>
                             </View>
                             )}
                             <View style={styles.headerInfo}>
-                                <Image source={require('../../assets/icons/date-black.png')} />
+                                <Image style={styles.imgDate} source={require('../../assets/icons/date-black.png')} />
                                 <Text style={globalStyles.bodyText}>{formatDate(activityData.start.date)}</Text>
                             </View>
                             <View style={styles.headerInfo}>
-                                <Image source={require('../../assets/icons/locatie-black.png')} />
+                                <Image style={styles.imgLocation} source={require('../../assets/icons/locatie-black.png')} />
                                 <Text style={globalStyles.bodyText}>{farmName}</Text>
                             </View>
                         </View>
@@ -170,7 +170,19 @@ const styles = StyleSheet.create({
     },
     body: {
         marginTop: 20,
-    }
+    },
+    imgClock: {
+        width: 20,
+        height: 20,
+    },
+    imgLocation: {
+        width: 17,
+        height: 21,
+    },
+    imgDate: {
+        width: 18,
+        height: 20,
+    },
 });
 
 export default ActivityDetail;
