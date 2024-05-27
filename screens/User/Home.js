@@ -109,7 +109,7 @@ const HomeUser = ({ navigation }) => {
     };    
 
     const goToProfile = () => {
-        navigation.navigate('AppStack', { screen: 'Profile' });
+        navigation.navigate('AppStack', { screen: 'Profile', params: { userData }});
     }; 
 
     const goToPackageDetails = (packageId, farmId) => {
@@ -207,8 +207,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     profileImage: {
-        width: 45,
-        height: 45,
+        width: 60,
+        height: 60,
         borderRadius: 50,
         marginRight: 10,
     },
