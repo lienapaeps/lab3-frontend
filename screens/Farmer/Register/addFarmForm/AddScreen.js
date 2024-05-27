@@ -114,13 +114,16 @@ const AddFarm = ({ navigation, route }) => {
     const handleImageSelected = async (uri) => {
         setSelectedImageUri(uri); 
         updateFormData('farmImage', uri);
-        // console.log('imageUri in handleImageSelected:', uri);
+        console.log('imageUri in handleImageSelected:', uri);        
+    };
 
-        let filename = uri.split('/').pop();
-        let match = /\.(\w+)$/.exec(filename);
-        let type = match ? `image/${match[1]}` : `image`;
+    const uploadToCloudinary = async (uri) => {
         // upload naar Cloudinary
         try {
+            let filename = uri.split('/').pop();
+            let match = /\.(\w+)$/.exec(filename);
+            let type = match ? `image/${match[1]}` : `image`;
+
             const formData = new FormData();
             formData.append('file', {
                 uri: uri,
@@ -138,10 +141,17 @@ const AddFarm = ({ navigation, route }) => {
     
             const data = await response.json();
             // console.log('Cloudinary response:', data);
+
+            if(data.secure_url) {
+                return data.secure_url;
+            } else {
+                setErrorMessage('Er is een fout opgetreden bij het uploaden van de afbeelding');
+            }
     
-            // Update de formData met de URL van de geüploade afbeelding
-            updateFormData('farmImage', data.secure_url); // Pas 'farmImage' aan naar het juiste veld in je formData
-    
+            // // Update de formData met de URL van de geüploade afbeelding
+            // updateFormData('farmImage', data.secure_url); // Pas 'farmImage' aan naar het juiste veld in je formData
+            // console.log('image url:', data.secure_url);
+
         } catch (error) {
             console.error('Fout bij het uploaden naar Cloudinary:', error);
             // Toon eventueel een foutmelding aan de gebruiker
@@ -203,10 +213,12 @@ const AddFarm = ({ navigation, route }) => {
 
             const coordinates = await getCoordinates();
 
-            // console.log('coordinates:', coordinates);
+            // upload to cloaudinary
+            const imageUrl = await uploadToCloudinary(selectedImageUri);
 
             const updatedFormData = {
               ...formData,
+              farmImage: imageUrl,
               coordinates: {
                   latitude: coordinates.lat,
                   longitude: coordinates.lng,
