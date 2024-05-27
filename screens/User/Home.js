@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Pressable, Image, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, Pressable, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import COLORS from '../../constants/color';
 import { globalStyles } from '../../styles/global';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const HomeUser = ({ navigation }) => {
     const [userData, setUserData] = useState(null);
@@ -29,11 +28,7 @@ const HomeUser = ({ navigation }) => {
                     userId = userId.substring(1, userId.length - 1);
                 }
 
-                console.log('Token:', token);
-                console.log('UserID:', userId);
-
                 const userDataResponse = await fetchUserData(token, userId);
-                console.log('userDataResponse:', userDataResponse);
                 if (userDataResponse && userDataResponse.data && userDataResponse.data.user) {
                     setUserData(userDataResponse.data.user);
                 } else {
@@ -42,16 +37,13 @@ const HomeUser = ({ navigation }) => {
                 }
 
                 const subscriptionDataResponse = await fetchSubscriptionData(token, userId);
-                console.log('subscriptionDataResponse:', subscriptionDataResponse);
                 setSubscriptionData(subscriptionDataResponse.data);
 
                 if (subscriptionDataResponse.data && subscriptionDataResponse.data.isSubscribedToPackage) {
                     const farmDataResponse = await fetchFarmData(token, subscriptionDataResponse.data.farmId);
-                    console.log('farmDataResponse:', farmDataResponse);
                     setFarmData(farmDataResponse.data.farm);
 
                     const packageDataResponse = await fetchPackageData(token, subscriptionDataResponse.data.packageId);
-                    console.log('packageDataResponse:', packageDataResponse);
                     setPackageData(packageDataResponse);
                 }
 
@@ -111,9 +103,14 @@ const HomeUser = ({ navigation }) => {
     const goToCalendar = () => {
         navigation.navigate('AppStack', { screen: 'Calendar' });
     };
+
     const goToFarm = () => {
         navigation.navigate('App', { screen: 'FarmUser' });
     };    
+
+    const goToProfile = () => {
+        navigation.navigate('AppStack', { screen: 'Profile' });
+    }; 
 
     const goToPackageDetails = (packageId, farmId) => {
         navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId }});
@@ -124,8 +121,10 @@ const HomeUser = ({ navigation }) => {
             {/* header with profile pic and notification bell */}
             {userData && (
                 <View style={styles.profile}>
-                    <Image style={styles.profileImage} source={{ uri: userData.profilePicture }}/>
-                    <Text style={globalStyles.headerTextSmaller}>{userData.firstname}</Text>
+                    <TouchableOpacity style={styles.profileBtn} onPress={goToProfile}>
+                        <Image style={styles.profileImage} source={{ uri: userData.profilePicture }}/>
+                        <Text style={globalStyles.headerTextSmaller}>{userData.firstname}</Text>
+                    </TouchableOpacity>
                 </View>
             )}
             {/* weergave van huidig pakket */}
@@ -200,9 +199,12 @@ const styles = StyleSheet.create({
     },
     profile: {
         flexDirection: 'row',
-        alignItems: 'center',
         marginBottom: 20,
         marginTop: 10,
+    },
+    profileBtn: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     profileImage: {
         width: 45,

@@ -15,6 +15,7 @@ const InputField = (props) => {
                     styles.input,
                     fullWidth ? styles.fullWidth : null
                 ]}
+                autoCapitalize='none'
                 {...props}
             />
         </View>
