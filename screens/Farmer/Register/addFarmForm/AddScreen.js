@@ -9,6 +9,7 @@ import { globalStyles } from '../../../../styles/global';
 import COLORS from '../../../../constants/color';
 import InputField from '../../../../components/InputField';
 import Button from '../../../../components/Button';
+import ImageUpload from '../../../../components/ImageUpload';
 
 const AddFarm = ({ navigation, route }) => {
     const totalSteps = 4; // Totaal aantal stappen in het formulier
@@ -105,6 +106,45 @@ const AddFarm = ({ navigation, route }) => {
     const prevStep = () => {
         if (currentStep > 0) {
             setCurrentStep(currentStep - 1);
+        }
+    };
+
+    const [selectedImageUri, setSelectedImageUri] = useState('');
+
+    const handleImageSelected = async (uri) => {
+        setSelectedImageUri(uri); 
+        updateFormData('farmImage', uri);
+        // console.log('imageUri in handleImageSelected:', uri);
+
+        let filename = uri.split('/').pop();
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+        // upload naar Cloudinary
+        try {
+            const formData = new FormData();
+            formData.append('file', {
+                uri: uri,
+                name: filename,
+                type: type,
+            });
+    
+            formData.append('upload_preset', 'plant-en-pluk'); 
+            formData.append('cloud_name', 'dnzh1re3f'); 
+    
+            const response = await fetch('https://api.cloudinary.com/v1_1/dnzh1re3f/image/upload', {
+                method: 'POST',
+                body: formData,
+            });
+    
+            const data = await response.json();
+            // console.log('Cloudinary response:', data);
+    
+            // Update de formData met de URL van de geüploade afbeelding
+            updateFormData('farmImage', data.secure_url); // Pas 'farmImage' aan naar het juiste veld in je formData
+    
+        } catch (error) {
+            console.error('Fout bij het uploaden naar Cloudinary:', error);
+            // Toon eventueel een foutmelding aan de gebruiker
         }
     };
 
@@ -296,7 +336,9 @@ const AddFarm = ({ navigation, route }) => {
                         <View style={styles.inputs}>
                             <InputField label="Naam boerderij*" placeholder="Naam boerderij" value={formData.name} onChangeText={text => updateFormData('name', text)}/>
                             <InputField label="Beschrijving*" placeholder="Beschrijving" value={formData.description} onChangeText={text => updateFormData('description', text)}/>
-                            <InputField label="Afbeelding van boerderij*" placeholder="Afbeelding" value={formData.farmImage} onChangeText={text => updateFormData('farmImage', text)}/>
+                            <View>
+                                <ImageUpload onImageSelected={handleImageSelected} />
+                            </View>
                         </View>
                     </View>
                 );

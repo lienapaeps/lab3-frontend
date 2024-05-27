@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Pressable, Image } from 'react-native';
+import { StyleSheet, View, Text, Pressable, Image, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -12,6 +12,7 @@ const HomeUser = ({ navigation }) => {
     const [subscriptionData, setSubscriptionData] = useState(null);
     const [farmData, setFarmData] = useState(null);
     const [packageData, setPackageData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -37,6 +38,8 @@ const HomeUser = ({ navigation }) => {
                     const packageDataResponse = await fetchPackageData(token, subscriptionDataResponse.data.packageId);
                     setPackageData(packageDataResponse);
                 }
+
+                setLoading(false);
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -113,26 +116,36 @@ const HomeUser = ({ navigation }) => {
             <View>
                 <Text style={globalStyles.headerTextSmall}>Huidig Pakket</Text>
             </View>
-            {subscriptionData && subscriptionData.isSubscribedToPackage ? (
-                <TouchableOpacity onPress={() => goToPackageDetails(packageData.data.package._id, farmData._id)}>
-                    <View style={styles.packageCard}>
-                        <Text style={{...globalStyles.headerText, ...styles.packageFarm}}>{farmData?.name}</Text>
-                        <Image style={styles.packageImage} source={{ uri: farmData?.farmImage }}/>
-                        <View style={styles.overlayImage}></View>
-                        <View style={styles.packageLabel}>
-                            <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white}}>{packageData?.data.package.name}</Text>
-                        </View>
-                    </View>
-                </TouchableOpacity>
-                ) : (
-                <View style={styles.packageEmpty}>
-                    <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')}/>
-                    <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
-                    <Pressable style={styles.button} onPress={goToFarm}>
-                        <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
-                    </Pressable>
+            {loading ? (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="medium" color={COLORS.orange} />
                 </View>
-                )}
+            ) : (
+                subscriptionData ? (
+                    subscriptionData.isSubscribedToPackage ? (
+                        <TouchableOpacity onPress={() => goToPackageDetails(packageData.data.package._id, farmData._id)}>
+                            <View style={styles.packageCard}>
+                                <Text style={{...globalStyles.headerText, ...styles.packageFarm}}>{farmData?.name}</Text>
+                                <Image style={styles.packageImage} source={{ uri: farmData?.farmImage }}/>
+                                <View style={styles.overlayImage}></View>
+                                <View style={styles.packageLabel}>
+                                    <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white}}>{packageData?.data.package.name}</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    ) : (
+                        <View style={styles.packageEmpty}>
+                            <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')}/>
+                            <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
+                            <Pressable style={styles.button} onPress={goToFarm}>
+                                <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
+                            </Pressable>
+                        </View>
+                    )
+                ) : (
+                    null
+                )
+            )}
             {/* weergave van kalender */}
             <View>
                 <Text style={globalStyles.headerTextSmaller}>Kalender</Text>
@@ -142,6 +155,8 @@ const HomeUser = ({ navigation }) => {
                     <Text style={styles.text}>Kalender</Text>
                 </Pressable>
             </View>
+            <View>
+            </View>
             {/* weergave van activiteiten */}
             <View>
                 <Text style={globalStyles.headerTextSmaller}>Activiteiten</Text>
@@ -149,6 +164,7 @@ const HomeUser = ({ navigation }) => {
         </SafeAreaView>
     );
 }
+
 const styles = StyleSheet.create({
     button: {
         alignItems: 'center',
@@ -216,6 +232,12 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         zIndex: 1,
     },
+    loadingContainer: {
+        // flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 150
+      }
 });
 
 export default HomeUser;

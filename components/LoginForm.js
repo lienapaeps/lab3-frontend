@@ -44,9 +44,6 @@ const LoginForm = ({ navigation }) => {
                     navigation.navigate('App', { screen: 'HomeUser' });
                 }
 
-                Alert.alert('Success', 'Je bent succesvol ingelogd');
-
-                // navigation.navigate('App', { screen: 'HomeUser' });
             } else {
                 // Toon een foutmelding als inloggegevens onjuist zijn
                 setErrorMessage(json.message);
