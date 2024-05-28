@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import * as Linking from 'expo-linking';
 
 // alle schermen ivm inloggen en registreren
 import Welcome from '../screens/Welcome';
@@ -12,6 +13,7 @@ import RegistrationSucces from '../screens/Farmer/Register/RegistrationSucces';
 import AddFarm from '../screens/Farmer/Register/addFarmForm/AddScreen';
 import AddPackages from '../screens/Farmer/Register/addFarmForm/AddPackages';
 import ForgotPassword from '../screens/ForgotPassword';
+import ResetPassword from '../screens/ResetPassword';
 
 import NavigationOptions from '../components/NavigationOptions';
 
@@ -30,6 +32,7 @@ const AuthNavigator = () => {
         <Stack.Screen name="AddFarm" component={AddFarm} options={{headerShown:false}}/>
         <Stack.Screen name="AddPackages" component={AddPackages} options={{headerShown:false}}/>
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={NavigationOptions}/>
+        <Stack.Screen name="ResetPassword" component={ResetPassword} options={NavigationOptions}/>
     </Stack.Navigator>
   );
 };

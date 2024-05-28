@@ -1,12 +1,38 @@
-import React from 'react';
-import { View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { globalStyles } from '../styles/global';
 import InputField from '../components/InputField';
 import Button from '../components/Button';
 
-const ResetPassword = ({ navigation }) => {
+const ResetPassword = ({ route, navigation }) => {
+
+    const { token } = route.params;
+    const [password, setPassword] = useState('');
+
+    const handleResetPassword = async () => {
+        console.log("Reset password");
+
+        try {
+            const response = await fetch(`https://lab3-backend-w1yl.onrender.com/users/reset-password/${token}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ password }),
+            });
+            const data = await response.json();
+            if (data.status === 'success') {
+              alert('Wachtwoord succesvol gewijzigd!');
+              navigation.navigate('Login'); // Navigeer naar het login scherm na succesvolle reset
+            } else {
+              alert('Er is een fout opgetreden: ' + data.message);
+            }
+          } catch (error) {
+            alert('Er is een fout opgetreden: ' + error.message);
+          }
+    };
 
     return (
         <SafeAreaView style={globalStyles.container}>
@@ -18,11 +44,15 @@ const ResetPassword = ({ navigation }) => {
                 <Text style={{...globalStyles.bodyText, marginBottom: 5}}>Voer je nieuwe wachtwoord in.</Text>
             </View>
             <View>
-                <InputField label="Nieuw wachtwoord*" placeholder="Nieuw wachtwoord" secureTextEntry />
-                <InputField label="Bevestig nieuw wachtwoord*" placeholder="Nieuw wachtwoord" secureTextEntry />
+                <TextInput
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                />
+                {/* <InputField label="Nieuw wachtwoord*" placeholder="Nieuw wachtwoord" secureTextEntry value={password} onChangeText={} /> */}
             </View>
             <View style={{marginTop: 25}}>
-                <Button title="Wachtwoord resetten" onPress={() => console.log("Pressed")} filled/>
+                <Button title="Wachtwoord resetten" onPress={handleResetPassword} filled/>
             </View>
         </SafeAreaView>
     );

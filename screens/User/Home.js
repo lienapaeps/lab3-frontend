@@ -17,14 +17,14 @@ const HomeUser = ({ navigation }) => {
         const fetchData = async () => {
             try {
                 const token = await AsyncStorage.getItem('token');
-                let userId = await AsyncStorage.getItem('userId');
+                let userId = await AsyncStorage.getItem('uid');
 
                 if (!token) {
                     navigation.navigate('Login');
                     return;
                 }
 
-                if (userId.startsWith('"') && userId.endsWith('"')) {
+                if (userId && userId.startsWith('"') && userId.endsWith('"')) {
                     userId = userId.substring(1, userId.length - 1);
                 }
 
@@ -196,6 +196,8 @@ const styles = StyleSheet.create({
     },
     iconImage: {
         marginBottom: 15,
+        width: 22,
+        height: 24,
     },
     profile: {
         flexDirection: 'row',

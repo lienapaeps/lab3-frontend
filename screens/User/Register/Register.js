@@ -79,8 +79,7 @@ const RegisterUser = ({ navigation }) => {
             if (json.status === 'success') {
                 // Sla JWT token op in local storage
                 await AsyncStorage.setItem('token', json.data.token);
-
-                // console.log(json.data.token);
+                await AsyncStorage.setItem('uid', json.data.user._id);
 
                 navigation.navigate('OnBoarding');
             } else {
