@@ -11,6 +11,7 @@ import OnBoarding from '../screens/User/Register/OnBoarding';
 import RegistrationSucces from '../screens/Farmer/Register/RegistrationSucces';
 import AddFarm from '../screens/Farmer/Register/addFarmForm/AddScreen';
 import AddPackages from '../screens/Farmer/Register/addFarmForm/AddPackages';
+import ForgotPassword from '../screens/ForgotPassword';
 
 import NavigationOptions from '../components/NavigationOptions';
 
@@ -28,6 +29,7 @@ const AuthNavigator = () => {
         <Stack.Screen name="RegistrationSucces" component={RegistrationSucces} options={{headerShown:false}}/>
         <Stack.Screen name="AddFarm" component={AddFarm} options={{headerShown:false}}/>
         <Stack.Screen name="AddPackages" component={AddPackages} options={{headerShown:false}}/>
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={NavigationOptions}/>
     </Stack.Navigator>
   );
 };

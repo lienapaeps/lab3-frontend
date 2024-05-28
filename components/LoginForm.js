@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import COLORS from '../constants/color';
@@ -55,6 +55,10 @@ const LoginForm = ({ navigation }) => {
         }
     }
 
+    const handleForgotPassword = () => {
+        navigation.navigate('ForgotPassword');
+    }
+
     return (
         <View>
             {/* error message */}
@@ -67,7 +71,9 @@ const LoginForm = ({ navigation }) => {
             <View>
                 <InputField label="E-mail" placeholder="E-mail" keyboardType="email-address" onChangeText={setEmail} value={email} />
                 <InputField label="Wachtwoord" placeholder="Wachtwoord" secureTextEntry onChangeText={setPassword} value={password} />
-                <Text style={{textAlign: 'right', color: COLORS.lightOffBlack, marginTop: 20, ...globalStyles.bodyText}}>Wachtwoord vergeten?</Text>
+                <TouchableOpacity onPress={handleForgotPassword}>
+                    <Text style={{textAlign: 'right', color: COLORS.lightOffBlack, marginTop: 20, ...globalStyles.bodyText}}>Wachtwoord vergeten?</Text>
+                </TouchableOpacity>
             </View>
 
             {/* button */}

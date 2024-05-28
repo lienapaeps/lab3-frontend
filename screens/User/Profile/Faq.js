@@ -9,7 +9,7 @@ const Faq = ({ navigation, route }) => {
     return (
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.header}>
-                <Text>FAQ</Text>
+                <Text style={globalStyles.headerText}>FAQ</Text>
             </View>
         </SafeAreaView>
     );
@@ -20,8 +20,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 10,
         paddingBottom: 20,
-        borderBottomWidth: 1,
-        borderBottomColor: COLORS.veryLightOffBlack,
     },
 });
 

@@ -9,7 +9,7 @@ const Settings = ({ navigation, route }) => {
     return (
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.header}>
-                <Text>Instellingen</Text>
+                <Text style={globalStyles.headerText}>Instellingen</Text>
             </View>
         </SafeAreaView>
     );
@@ -20,8 +20,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 10,
         paddingBottom: 20,
-        borderBottomWidth: 1,
-        borderBottomColor: COLORS.veryLightOffBlack,
     },
 });
 
