@@ -13,7 +13,7 @@ import { uploadToCloudinary } from '../../../../utils/uploadHelpers';
 
 const AddFarm = ({ navigation, route }) => {
     const totalSteps = 4; // Totaal aantal stappen in het formulier
-    const farmerId = route.params.params.userId;
+    const farmerId = route.params.params.uid;
 
     const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
     const [selectedTimeField, setSelectedTimeField] = useState(null);

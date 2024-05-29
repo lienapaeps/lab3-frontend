@@ -31,7 +31,6 @@ const Button = (props) => {
 
 const styles = StyleSheet.create({
     button: {
-        paddingBottom: 16,
         paddingVertical: 18,
         borderColor: COLORS.primary,
         borderWidth: 0,

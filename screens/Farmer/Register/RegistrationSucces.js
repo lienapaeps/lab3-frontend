@@ -12,7 +12,7 @@ const RegistrationSucces = ({ navigation }) => {
   useEffect(() => {
     const fetchUserId = async () => {
       try {
-        const userId = await AsyncStorage.getItem('userId');
+        const userId = await AsyncStorage.getItem('uid');
         if (userId) {
           setUserId(JSON.parse(userId));
         }
@@ -29,7 +29,7 @@ const RegistrationSucces = ({ navigation }) => {
   }
 
   const goToAddFarm = () => {
-    navigation.navigate('AddFarm', { params: { userId: userId } });
+    navigation.navigate('AddFarm', { params: { uid: userId } });
   }
 
   return (

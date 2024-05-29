@@ -88,4 +88,10 @@ export const globalStyles = StyleSheet.create({
         lineHeight: 20,
         color: COLORS.alert,
     },
+    successText: {
+        color: '#155724',
+        fontFamily: 'Quicksand_400Regular',
+        fontSize: 16,
+        lineHeight: 20,
+    }
 });

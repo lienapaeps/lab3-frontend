@@ -80,7 +80,7 @@ const RegisterFarmer = ({ navigation }) => {
             if (json.status === 'success') {
                 // Sla JWT token op in local storage
                 await AsyncStorage.setItem('token', json.data.token);
-                await AsyncStorage.setItem('userId', JSON.stringify(json.data.userId));
+                await AsyncStorage.setItem('uid', JSON.stringify(json.data.uid));
 
                 // console.log(json.data.userId)
 

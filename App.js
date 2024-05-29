@@ -3,7 +3,6 @@ import { StatusBar, View, TouchableWithoutFeedback, Keyboard } from 'react-nativ
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as SplashScreen from 'expo-splash-screen';
-import * as Linking from 'expo-linking';
 
 import AuthNavigator from './navigators/AuthNavigator';
 import AppTabNavigator from './navigators/AppTabNavigator';
@@ -16,22 +15,6 @@ import AppStackNavigatorFarmer from './navigators/AppStackNavigatorFarmer';
 import SubNavigator from './navigators/SubNavigator';
 
 import useCustomFonts from './constants/loadFonts';
-
-const prefix = Linking.createURL('plantenpluk://');
-
-const linking = {
-  prefixes: [prefix],
-  config: {
-    screens: {
-      Auth: {
-        screens: {
-          ResetPassword: 'reset-password/:token',
-        },
-      },
-      // Voeg andere routes hier toe als dat nodig is
-    },
-  },
-};
 
 const Stack = createStackNavigator();
 
@@ -71,7 +54,7 @@ export default function App() {
         <StatusBar color="black" />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-            <NavigationContainer linking={linking} onLayout={onLayoutRootView}>
+            <NavigationContainer onLayout={onLayoutRootView}>
               <Stack.Navigator>
                 {/* AuthNavigator voor inloggen en registreren */}
                 <Stack.Screen name="Auth" component={AuthNavigator} options={{ headerShown: false }} />

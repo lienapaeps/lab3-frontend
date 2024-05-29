@@ -32,7 +32,7 @@ const LoginForm = ({ navigation }) => {
             if (json.status === 'success') {
                 // Sla JWT token op in local storage
                 await AsyncStorage.setItem('token', json.data.token);
-                await AsyncStorage.setItem('userId', json.data.userId);
+                await AsyncStorage.setItem('uid', json.data.uid);
 
                 // console.log(json.data)
 
@@ -71,13 +71,13 @@ const LoginForm = ({ navigation }) => {
             <View>
                 <InputField label="E-mail" placeholder="E-mail" keyboardType="email-address" onChangeText={setEmail} value={email} />
                 <InputField label="Wachtwoord" placeholder="Wachtwoord" secureTextEntry onChangeText={setPassword} value={password} />
-                <TouchableOpacity onPress={handleForgotPassword}>
-                    <Text style={{textAlign: 'right', color: COLORS.lightOffBlack, marginTop: 20, ...globalStyles.bodyText}}>Wachtwoord vergeten?</Text>
+                <TouchableOpacity style={styles.forgot} onPress={handleForgotPassword}>
+                    <Text style={{color: COLORS.lightOffBlack, ...globalStyles.bodyText}}>Wachtwoord vergeten?</Text>
                 </TouchableOpacity>
             </View>
 
             {/* button */}
-            <View style={{marginTop: 25}}>
+            <View style={{marginTop: 15}}>
                 <Button title="Log in" onPress={handleLogin} filled/>
             </View>
             {/* of met */}
@@ -133,6 +133,11 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginTop: 10,
     },
+    forgot: {
+        alignSelf: 'flex-end',
+        paddingVertical: 15,
+        marginTop: 10,
+    }
 });
 
 export default LoginForm;
