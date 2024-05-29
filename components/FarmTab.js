@@ -10,7 +10,8 @@ import Contact from './FarmTabPages/Contact';
 
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
-import { processFontFamily } from 'expo-font';
+import { FontWeight } from '@cloudinary/url-gen/qualifiers';
+import { border, borderGradient } from '@cloudinary/url-gen/qualifiers/background';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -25,15 +26,6 @@ const screenOptions = {
         borderBottomWidth: 1,
         borderColor: COLORS.lightOffBlack,
     },
-    tabBarLabelStyle: {
-        color: COLORS.offBlack,
-        fontSize: 14,
-        padding: 0,
-        margin: 0,
-        textTransform: 'capitalize',
-        fontWeight: '600',
-        fontFamily: 'QuickSand-Regular',
-    },
     tabBarIndicatorStyle: {
         backgroundColor: COLORS.offBlack,
         margin: 0,
@@ -46,6 +38,13 @@ const screenOptions = {
     tabBarIndicatorStyle: {
         backgroundColor: COLORS.offBlack,
         height: 3,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+    },
+    tabBarLabelStyle: {
+        fontFamily: 'Quicksand_600SemiBold',
+        textTransform: 'capitalize',
+        fontSize: 15,
     },
 }
 

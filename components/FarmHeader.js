@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         borderRadius: 50,
         padding: 10,
-        margin: 20,
+        // margin: 20,
     },
     backButton: {
         width: 30,
@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
         height: 240,
     },
     container:{
-        padding: 30,
-        paddingBottom: -30,
+        padding: 20,
+        paddingBottom: -20,
         backgroundColor: '#F5F5F5',
     },
     text:{
@@ -104,6 +104,6 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     memberButton: {
-      paddingBottom: 20,
+      paddingBottom: 15,
     }
   })
