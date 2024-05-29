@@ -1,10 +1,14 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { StyleSheet } from 'react-native';
-import COLORS from '../constants/color';
 
-import ChatUser from '../screens/User/Chat';
-import FarmPackage from '../components/FarmPackage';
+import Services from './FarmTabPages/Services';
+import Agenda from './FarmTabPages/Agenda';
+import Members from './FarmTabPages/Members';
+import Reviews from './FarmTabPages/Reviews';
+import Contact from './FarmTabPages/Contact';
+
+import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
 import { processFontFamily } from 'expo-font';
 
@@ -48,11 +52,11 @@ const screenOptions = {
 const FarmTab = ()  => {
     return (
     <Tab.Navigator style={styles.navigation}>
-        <Tab.Screen name="Services" component={FarmPackage} options={screenOptions}/>
-        <Tab.Screen name="Agenda" component={ChatUser} options={screenOptions}/>
-        <Tab.Screen name="Leden" component={ChatUser} options={screenOptions}/>
-        <Tab.Screen name="Reviews" component={ChatUser} options={screenOptions}/>
-        <Tab.Screen name="Contact" component={ChatUser} options={screenOptions}/>
+        <Tab.Screen name="Services" component={Services} options={screenOptions}/>
+        <Tab.Screen name="Agenda" component={Agenda} options={screenOptions}/>
+        <Tab.Screen name="Leden" component={Members} options={screenOptions}/>
+        <Tab.Screen name="Reviews" component={Reviews} options={screenOptions}/>
+        <Tab.Screen name="Contact" component={Contact} options={screenOptions}/>
     </Tab.Navigator>
     );
 };
