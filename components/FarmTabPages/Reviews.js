@@ -12,8 +12,7 @@ const Reviews = () => {
         <View style={styles.flex}>
             <ScrollView>
             <Review />
-            </ScrollView>
-            
+            </ScrollView>       
         </View> 
     )
 }
