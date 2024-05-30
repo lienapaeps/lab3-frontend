@@ -9,9 +9,6 @@ import Reviews from './FarmTabPages/Reviews';
 import Contact from './FarmTabPages/Contact';
 
 import COLORS from '../constants/color';
-import { globalStyles } from '../styles/global';
-import { FontWeight } from '@cloudinary/url-gen/qualifiers';
-import { border, borderGradient } from '@cloudinary/url-gen/qualifiers/background';
 
 const Tab = createMaterialTopTabNavigator();
 

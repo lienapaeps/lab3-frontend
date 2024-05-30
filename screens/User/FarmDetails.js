@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 
 import FarmHeader from '../../components/FarmHeader';
 import FarmTab from '../../components/FarmTab';

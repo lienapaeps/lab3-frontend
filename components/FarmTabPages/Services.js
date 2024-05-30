@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, ScrollView } from 'react-native'
 
 import { globalStyles } from '../../styles/global';
  
@@ -10,13 +10,13 @@ const Services = () => {
             <Text style={globalStyles.headerText}>Pakketten</Text>
         </View>
     </View>
-)
+    )
 }
   
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        margin: 20
+        margin: 20,
     }
 })
 
