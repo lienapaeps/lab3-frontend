@@ -95,6 +95,9 @@ const HomeUser = ({ navigation }) => {
                         <Image style={styles.profileImage} source={{ uri: userData.profilePicture }}/>
                         <Text style={globalStyles.headerTextSmaller}>{userData.firstname}</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity style={styles.notification}>
+                        <Image style={styles.notificationImage} source={require('../../assets/icons/notification.png')} />
+                    </TouchableOpacity>
                 </View>
             )}
             {/* weergave van huidig pakket */}
@@ -173,6 +176,7 @@ const styles = StyleSheet.create({
     },
     profile: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
         marginBottom: 20,
         marginTop: 10,
     },
@@ -185,6 +189,20 @@ const styles = StyleSheet.create({
         height: 55,
         borderRadius: 50,
         marginRight: 10,
+    },
+    notification: {
+        backgroundColor: COLORS.white,
+        padding: 15,
+        borderRadius: 100, 
+        shadowColor: 'rgba(0,0,0, .1)',
+        shadowOffset: { height: 1, width: 1 }, 
+        shadowOpacity: 1,
+        shadowRadius: 1,
+        elevation: 2,    
+    },
+    notificationImage: {
+        width: 22,
+        height: 24,
     },
     packageEmpty: {
         paddingVertical: 40,
