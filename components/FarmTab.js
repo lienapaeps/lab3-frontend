@@ -13,6 +13,12 @@ import COLORS from '../constants/color';
 const Tab = createMaterialTopTabNavigator();
 
 const screenOptions = {
+    tabBarOptions: {
+        scrollEnabled: true,
+        swipeEnabled: false,
+        animationEnabled: true,
+        tabBarPosition: 'top',
+    },
     tabBarStyle: {
         backgroundColor: COLORS.white,
         elevation: 0,
