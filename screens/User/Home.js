@@ -37,7 +37,7 @@ const HomeUser = ({ navigation }) => {
 
                 const subscriptionDataResponse = await fetchSubscriptionData(token, userId);
                 setSubscriptionData(subscriptionDataResponse.data);
-                console.log("subscription data: ", subscriptionDataResponse.data);
+                // console.log("subscription data: ", subscriptionDataResponse.data);
 
                 setLoading(false);
             } catch (error) {
@@ -82,8 +82,8 @@ const HomeUser = ({ navigation }) => {
         navigation.navigate('AppStack', { screen: 'Profile', params: { userData }});
     }; 
 
-    const goToPackageDetails = (packageId, farmId) => {
-        navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId }});
+    const goToPackageDetails = (packageId, farmId, userId) => {
+        navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId, userId }});
     }
 
     return (
@@ -109,7 +109,7 @@ const HomeUser = ({ navigation }) => {
                 subscriptionData ? (
                     subscriptionData.package ? (
                         // er is een pakket
-                        <TouchableOpacity onPress={() => goToPackageDetails(subscriptionData.package._id, subscriptionData.farm._id)}>
+                        <TouchableOpacity onPress={() => goToPackageDetails(subscriptionData.package._id, subscriptionData.farm._id, userData._id)}>
                             <View style={styles.packageCard}>
                                 <Text style={{...globalStyles.headerText, ...styles.packageFarm}}>{subscriptionData.farm.name}</Text>
                                 <Image style={styles.packageImage} source={{ uri: subscriptionData.farm.farmImage }}/>
