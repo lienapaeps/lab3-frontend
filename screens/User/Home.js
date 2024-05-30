@@ -9,8 +9,6 @@ import { globalStyles } from '../../styles/global';
 const HomeUser = ({ navigation }) => {
     const [userData, setUserData] = useState(null);
     const [subscriptionData, setSubscriptionData] = useState(null);
-    const [farmData, setFarmData] = useState(null);
-    const [packageData, setPackageData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -31,6 +29,7 @@ const HomeUser = ({ navigation }) => {
                 const userDataResponse = await fetchUserData(token, userId);
                 if (userDataResponse && userDataResponse.data && userDataResponse.data.user) {
                     setUserData(userDataResponse.data.user);
+                    // console.log("user data: " + userDataResponse.data.user)
                 } else {
                     console.error('Invalid user data response');
                     return;
@@ -38,14 +37,7 @@ const HomeUser = ({ navigation }) => {
 
                 const subscriptionDataResponse = await fetchSubscriptionData(token, userId);
                 setSubscriptionData(subscriptionDataResponse.data);
-
-                if (subscriptionDataResponse.data && subscriptionDataResponse.data.isSubscribedToPackage) {
-                    const farmDataResponse = await fetchFarmData(token, subscriptionDataResponse.data.farmId);
-                    setFarmData(farmDataResponse.data.farm);
-
-                    const packageDataResponse = await fetchPackageData(token, subscriptionDataResponse.data.packageId);
-                    setPackageData(packageDataResponse);
-                }
+                console.log("subscription data: ", subscriptionDataResponse.data);
 
                 setLoading(false);
             } catch (error) {
@@ -69,28 +61,6 @@ const HomeUser = ({ navigation }) => {
 
     const fetchSubscriptionData = async (token, userId) => {
         const response = await fetch(`https://lab3-backend-w1yl.onrender.com/users/check-subscription/${userId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
-        return await response.json();
-    };
-
-    const fetchFarmData = async (token, farmId) => {
-        const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/farms/${farmId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
-        return await response.json();
-    };
-
-    const fetchPackageData = async (token, packageId) => {
-        const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/packages/${packageId}`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -137,18 +107,20 @@ const HomeUser = ({ navigation }) => {
                 </View>
             ) : (
                 subscriptionData ? (
-                    subscriptionData.isSubscribedToPackage ? (
-                        <TouchableOpacity onPress={() => goToPackageDetails(packageData.data.package._id, farmData._id)}>
+                    subscriptionData.package ? (
+                        // er is een pakket
+                        <TouchableOpacity onPress={() => goToPackageDetails(subscriptionData.package._id, subscriptionData.farm._id)}>
                             <View style={styles.packageCard}>
-                                <Text style={{...globalStyles.headerText, ...styles.packageFarm}}>{farmData?.name}</Text>
-                                <Image style={styles.packageImage} source={{ uri: farmData?.farmImage }}/>
+                                <Text style={{...globalStyles.headerText, ...styles.packageFarm}}>{subscriptionData.farm.name}</Text>
+                                <Image style={styles.packageImage} source={{ uri: subscriptionData.farm.farmImage }}/>
                                 <View style={styles.overlayImage}></View>
                                 <View style={styles.packageLabel}>
-                                    <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white}}>{packageData?.data.package.name}</Text>
+                                    <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white}}>{subscriptionData.package.name}</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
                     ) : (
+                        // er is nog geen pakket
                         <View style={styles.packageEmpty}>
                             <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')}/>
                             <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
