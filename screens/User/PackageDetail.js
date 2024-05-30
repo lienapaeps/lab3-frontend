@@ -7,7 +7,7 @@ import Button from '../../components/Button';
 
 const PackageDetail = ({ navigation, route }) => {
     const [farmData, setFarmData] = useState([]);
-
+    const [packageData, setPackageData] = useState([]);
 
     const farmId = route.params.farmId;
     const packageId = route.params.packageId;
@@ -29,7 +29,26 @@ const PackageDetail = ({ navigation, route }) => {
             }
         };
 
+        const fetchPackageData = async (packageId) => {
+            try {
+                const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/packages/${packageId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    mode: 'cors'
+                });
+                const data = await response.json();
+                // console.log(data.data.package);
+                setPackageData(data.data.package);
+            }
+            catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
         fetchFarmData(farmId);
+        fetchPackageData(packageId);
     }, []);
 
     return (
@@ -46,6 +65,17 @@ const PackageDetail = ({ navigation, route }) => {
                     <View style={styles.overlayImage}></View>
                 </View>
                 <View style={styles.container}>
+                    <View style={styles.infoContainer}>
+                        <Text style={globalStyles.headerText}>{packageData.name}</Text>
+                        <Text style={globalStyles.bodyText}>{packageData.description}</Text>
+                        <Text style={globalStyles.bodyText}>{packageData.price} euro</Text>    
+                        <Text style={globalStyles.bodyText}>Start datum, verloopt op</Text>   
+                        <Text style={globalStyles.bodyText}>Abonnement beheren</Text>    
+                    </View>
+                    <View style={styles.detailsContainer}>
+                        <Text style={globalStyles.headerTextSmall}>Inhoud van het pakket</Text>
+                        <Text>bla bla bla</Text>
+                    </View>
                 </View>
             </ScrollView>
 
