@@ -50,17 +50,14 @@ const styles = StyleSheet.create({
         shadowOpacity: 1,
         shadowRadius: 1,
         elevation: 2, 
-        width: 210,
+        width: 200,
         paddingBottom: 20,
-    },
-    cardImage: {
-        // backgroundColor: 'red',
     },
     image: {
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
-        width: 210,
-        height: 150,
+        width: 200,
+        height: 120,
     },
     cardInfo: {
         marginLeft: 15,

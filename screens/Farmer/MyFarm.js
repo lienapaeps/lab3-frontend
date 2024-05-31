@@ -179,7 +179,6 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 5,
         borderWidth: 1,
         borderColor: COLORS.orange,
     }
