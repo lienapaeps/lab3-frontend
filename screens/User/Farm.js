@@ -1,38 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Text } from 'react-native';
+import { View, StyleSheet, FlatList, Text, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { globalStyles } from '../../styles/global';
+import { checkStatus, calculateDistance, getUserLocation } from '../../utils/utils';
+import { fetchFarmData } from '../../utils/fetchHelpers';
 
 import FarmCard from '../../components/FarmCard';
 import Filter from '../../components/Filter';
 import Search from '../../components/Search';
 import MapButton from '../../components/MapButton';
-
-import { checkStatus, calculateDistance, getUserLocation } from '../../utils/utils';
+import { globalStyles } from '../../styles/global';
+import COLORS from '../../constants/color';
 
 const FarmUser = ({ navigation }) => {
     const [farmData, setFarmData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-
     const [openNowFilter, setOpenNowFilter] = useState('All');
     const [distanceFilter, setDistanceFilter] = useState(0)
     const [userLocation, setUserLocation] = useState(null);
 
     useEffect(() => {
-        const fetchFarmData = async () => {
+        const fetchData = async () => {
             try {
-                const response = await fetch('https://lab3-backend-w1yl.onrender.com/api/farms', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    mode: 'cors'
-                });
-                const data = await response.json();
-                setFarmData(data.data.farms);
+                const farmDataResponse = await fetchFarmData();
+                setFarmData(farmDataResponse.data.farms);
             } catch (error) {
                 setError(error);
             } finally {
@@ -40,7 +33,7 @@ const FarmUser = ({ navigation }) => {
             }
         };
 
-        fetchFarmData();
+        fetchData();
 
         const fetchUserLocation = async () => {
             try {
@@ -79,8 +72,8 @@ const FarmUser = ({ navigation }) => {
 
     if (loading) {
         return (
-            <SafeAreaView style={globalStyles.container}>
-                <Text style={globalStyles.bodyText}>Laden...</Text>
+            <SafeAreaView style={globalStyles.loadingContainer}>
+                <ActivityIndicator size="medium" color={COLORS.offBlack} />
             </SafeAreaView>
         );
     }
@@ -126,7 +119,7 @@ const styles = StyleSheet.create({
     },
     map: {
         alignItems: 'center',
-    }
+    },
 });
 
 export default FarmUser;

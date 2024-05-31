@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, ActivityIndicator } from 'react-native'
 
+import { fetchFarmDataById, fetchPackageDataById } from '../../utils/fetchHelpers';
+
 import { globalStyles } from '../../styles/global';
 import COLORS from '../../constants/color';
 
@@ -13,52 +15,27 @@ const PackageDetail = ({ navigation, route }) => {
     const { farmId, packageId, userId } = route.params;
 
     useEffect(() => {
-        const fetchFarmData = async (farmId) => {
+        const fetchData = async () => {
             try {
-                const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/farms/${farmId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    mode: 'cors'
-                });
-                const data = await response.json();
-                setFarmData(data.data.farm);
+                const farmResponse = await fetchFarmDataById(farmId);
+                setFarmData(farmResponse.data.farm);
+
+                const packageResponse = await fetchPackageDataById(packageId, userId);
+                setPackageData(packageResponse.packageData);
+                setSubscriptionDetails(packageResponse.subscriptionDetails);
             } catch (error) {
-                console.error('Error:', error);
-            }
-        };
-
-        const fetchPackageData = async (packageId) => {
-            try {
-                const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/packages/${packageId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    mode: 'cors'
-                });
-                const data = await response.json();
-                const userSubscription = data.data.package.subscribedUsers.find(sub => sub.user === userId);
-                setSubscriptionDetails(userSubscription);
-                setPackageData(data.data.package);
-
-                console.log(data.data.package);
-            }
-            catch (error) {
                 console.error('Error:', error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchFarmData(farmId);
-        fetchPackageData(packageId);
+        fetchData();
     }, [farmId, packageId, userId]);
 
     if (loading) {
         return (
-            <View style={styles.loadingContainer}>
+            <View style={globalStyles.loadingContainer}>
                 <ActivityIndicator size="medium" color={COLORS.offBlack} />
                 <Text>Laden...</Text>
             </View>
@@ -126,11 +103,6 @@ const styles = StyleSheet.create({
         marginRight: 20,
         paddingBottom: -30,
         paddingTop: 20,
-    },
-    loadingContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     btn: {
         position: 'absolute',

@@ -3,6 +3,8 @@ import { StyleSheet, View, Text, Pressable, Image, ActivityIndicator, TouchableO
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { fetchUserData, fetchSubscriptionData, getUserIdAndToken } from '../../utils/fetchHelpers';
+
 import COLORS from '../../constants/color';
 import { globalStyles } from '../../styles/global';
 
@@ -10,65 +12,6 @@ const HomeUser = ({ navigation }) => {
     const [userData, setUserData] = useState(null);
     const [subscriptionData, setSubscriptionData] = useState(null);
     const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const token = await AsyncStorage.getItem('token');
-                let userId = await AsyncStorage.getItem('uid');
-
-                if (!token) {
-                    navigation.navigate('Login');
-                    return;
-                }
-
-                if (userId && userId.startsWith('"') && userId.endsWith('"')) {
-                    userId = userId.substring(1, userId.length - 1);
-                }
-
-                const userDataResponse = await fetchUserData(token, userId);
-                if (userDataResponse && userDataResponse.data && userDataResponse.data.user) {
-                    setUserData(userDataResponse.data.user);
-                    // console.log("user data: " + userDataResponse.data.user)
-                } else {
-                    console.error('Invalid user data response');
-                    return;
-                }
-
-                const subscriptionDataResponse = await fetchSubscriptionData(token, userId);
-                setSubscriptionData(subscriptionDataResponse.data);
-                // console.log("subscription data: ", subscriptionDataResponse.data);
-
-                setLoading(false);
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    const fetchUserData = async (token, userId) => {
-        const response = await fetch(`https://lab3-backend-w1yl.onrender.com/users/${userId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
-        return await response.json();
-    };
-
-    const fetchSubscriptionData = async (token, userId) => {
-        const response = await fetch(`https://lab3-backend-w1yl.onrender.com/users/check-subscription/${userId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
-        return await response.json();
-    };
 
     const goToCalendar = () => {
         navigation.navigate('AppStack', { screen: 'Calendar' });
@@ -85,6 +28,36 @@ const HomeUser = ({ navigation }) => {
     const goToPackageDetails = (packageId, farmId, userId) => {
         navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId, userId }});
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const { token, userId } = await getUserIdAndToken();
+
+                if (!token) {
+                    navigation.navigate('Login');
+                    return;
+                }
+
+                const userDataResponse = await fetchUserData(token, userId);
+                if (userDataResponse && userDataResponse.data && userDataResponse.data.user) {
+                    setUserData(userDataResponse.data.user);
+                } else {
+                    console.error('Invalid user data response');
+                    return;
+                }
+
+                const subscriptionDataResponse = await fetchSubscriptionData(token, userId);
+                setSubscriptionData(subscriptionDataResponse.data);
+
+                setLoading(false);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     return (
         <SafeAreaView style={globalStyles.container}>

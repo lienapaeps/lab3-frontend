@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 
+import { fetchActivityDataById } from '../../utils/fetchHelpers';
+
 import COLORS from '../../constants/color';
 import { globalStyles } from '../../styles/global';
 import Button from '../../components/Button';
@@ -25,27 +27,19 @@ const ActivityDetail = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-      const fetchActivityDataById = async (id) => {
-        try {
-          const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/activities/${id}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            mode: 'cors',
-          });
-          const data = await response.json();
-          setActivityData(data.data.activity);
-        } catch (error) {
-          setError(error);
-        } finally {
-          setLoading(false);
-        }
-      };
-  
-      const { id } = route.params;
-      fetchActivityDataById(id);
-    }, []);
+        const fetchData = async () => {
+            try {
+                const data = await fetchActivityDataById(id);
+                setActivityData(data.data.activity);
+            } catch (error) {
+                setError(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [id]);
   
     if (loading) {
       return <Text>Laden...</Text>;

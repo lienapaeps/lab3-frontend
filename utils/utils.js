@@ -46,3 +46,12 @@ export const getUserLocation = async () => {
     }
     return await Location.getCurrentPositionAsync({});
 };
+
+export const getCurrentLocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+        console.error('Permission to access location was denied');
+        return;
+    }
+    return await Location.getCurrentPositionAsync({});
+};

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Pressable, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import { fetchUserData, getUserIdAndToken } from '../../utils/fetchHelpers';
 
 import COLORS from '../../constants/color';
 import { globalStyles } from '../../styles/global';
@@ -17,44 +18,37 @@ const HomeFarmer = ({ navigation }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = await AsyncStorage.getItem('token');
-                let userId = await AsyncStorage.getItem('uid');
+                const { token, userId } = await getUserIdAndToken();
 
                 if (!token) {
                     navigation.navigate('Login');
                     return;
                 }
 
-                if (userId && userId.startsWith('"') && userId.endsWith('"')) {
-                    userId = userId.substring(1, userId.length - 1);
-                }
-
                 const userDataResponse = await fetchUserData(token, userId);
                 if (userDataResponse && userDataResponse.data && userDataResponse.data.user) {
                     setUserData(userDataResponse.data.user);
-                    console.log("user data: " + userDataResponse.data.user)
                 } else {
                     console.error('Invalid user data response');
                     return;
                 }
+
+                setLoading(false);
             } catch (error) {
                 console.error('Error:', error);
             }
-        }
+        };
 
         fetchData();
     }, []);
 
-    const fetchUserData = async (token, userId) => {
-        const response = await fetch(`https://lab3-backend-w1yl.onrender.com/users/${userId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
-        return await response.json();
-    };
+    if (loading) {
+        return (
+            <SafeAreaView style={globalStyles.loadingContainer}>
+                <ActivityIndicator size="medium" color={COLORS.offBlack} />
+            </SafeAreaView>
+        );
+    }
     
     return (
         <SafeAreaView style={globalStyles.container}>

@@ -3,6 +3,9 @@ import MapView, { Marker } from 'react-native-maps';
 import { StyleSheet, View, Image, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import * as Location from 'expo-location';
 
+import { fetchFarmData } from '../../utils/fetchHelpers';
+import { getCurrentLocation } from '../../utils/utils';
+
 import COLORS from '../../constants/color';
 import Search from '../../components/Search';
 
@@ -20,17 +23,10 @@ const Map = ({ navigation }) => {
     }
 
     useEffect(() => {
-        const fetchFarmData = async () => {
+        const fetchData = async () => {
             try {
-                const response = await fetch('https://lab3-backend-w1yl.onrender.com/api/farms/', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    mode: 'cors',
-                });
-                const data = await response.json();
-                setFarmData(data.data.farms);
+                const farmDataResponse = await fetchFarmData();
+                setFarmData(farmDataResponse.data.farms);
             } catch (error) {
                 setError(error);
             } finally {
@@ -38,29 +34,29 @@ const Map = ({ navigation }) => {
             }
         };
 
-        const getCurrentLocation = async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                console.error('Permission to access location was denied');
-                return;
+        fetchData();
+
+        const fetchUserLocation = async () => {
+            try {
+                const location = await getCurrentLocation();
+                setCurrentLocation(location);
+                setRegion({
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                    latitudeDelta: 0.05,
+                    longitudeDelta: 0.05,
+                });
+            } catch (error) {
+                console.error(error.message);
             }
-            let currentLocation = await Location.getCurrentPositionAsync({});
-            setCurrentLocation(currentLocation);
-            setRegion({
-                latitude: currentLocation.coords.latitude,
-                longitude: currentLocation.coords.longitude,
-                latitudeDelta: 0.05,
-                longitudeDelta: 0.05,
-            });
         };
 
-        fetchFarmData();
-        getCurrentLocation();
+        fetchUserLocation();
     }, []);
     
     if (loading || !region) {
         return (
-            <View style={styles.loadingContainer}>
+            <View style={globalStyles.loadingContainer}>
                 <ActivityIndicator size="large" color={COLORS.offBlack} />
                 <Text style={styles.loadingText}>Map is aan het laden...</Text>
             </View>
@@ -200,11 +196,6 @@ const styles = StyleSheet.create({
     arrow: {
         width: 24,
         height: 24,
-    },
-    loadingContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     loadingText: {
         marginTop: 20,

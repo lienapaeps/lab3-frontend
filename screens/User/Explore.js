@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
+
+import { fetchActivityData } from '../../utils/fetchHelpers';
 
 import { globalStyles } from '../../styles/global';
 import Search from '../../components/Search';
@@ -16,19 +18,10 @@ const Explore = ({ navigation }) => {
     const [selectedCategory, setSelectedCategory] = useState('All');
 
     useEffect(() => {
-        const fetchActivityData = async () => {
+        const fetchData = async () => {
             try {
-                const response = await fetch('https://lab3-backend-w1yl.onrender.com/api/activities', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    mode: 'cors'
-                });
-                const data = await response.json();
-                // console.log(data.data.farms);
+                const data = await fetchActivityData();
                 const sortedActivities = data.data.activities.sort((a, b) => new Date(a.start.date) - new Date(b.start.date));
-
                 setActivityData(sortedActivities);
             } catch (error) {
                 setError(error);
@@ -37,7 +30,7 @@ const Explore = ({ navigation }) => {
             }
         };
 
-        fetchActivityData();
+        fetchData();
     }, []);
 
     const handleSearchTermChange = (text) => setSearchTerm(text);
@@ -55,8 +48,8 @@ const Explore = ({ navigation }) => {
 
     if (loading) {
         return (
-            <SafeAreaView style={globalStyles.container}>
-                <Text style={globalStyles.bodyText}>Laden...</Text>
+            <SafeAreaView style={globalStyles.loadingContainer}>
+                <ActivityIndicator size="medium" color={COLORS.offBlack} />
             </SafeAreaView>
         );
     }

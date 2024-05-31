@@ -97,4 +97,9 @@ export const globalStyles = StyleSheet.create({
     capitalize: {
         textTransform: 'capitalize',
     },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });

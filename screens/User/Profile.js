@@ -10,7 +10,7 @@ const Profile = ({ navigation, route }) => {
 
     const userData = route.params.userData;
 
-    console.log(userData);
+    // console.log(userData);
 
     const handleLogout = async () => {
         // Clear AsyncStorage
