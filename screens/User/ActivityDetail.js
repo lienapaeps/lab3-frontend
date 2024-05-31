@@ -62,55 +62,57 @@ const ActivityDetail = ({ navigation, route }) => {
                     <Image style={styles.backButton} source={require('../../assets/Back-arrow.png')} />
                 </TouchableOpacity>
             </View>
-            <ScrollView contentContainerStyle={{ flexGrow: 1, height: '100%' }}>
-                <View style={styles.bgImg}>
-                    <Image style={styles.headerImage} source={{ uri: activityData.image }} />
-                </View>
-                <View style={styles.container}>
-                    <View style={styles.header}>
-                        <Text style={globalStyles.headerTextSmall}>{activityData.title}</Text>
-                        <View style={styles.info}>
-                            {activityData.category === 'Workshop' && (
-                            <View style={styles.headerInfo}>
-                                <Image style={styles.imgClock} source={require('../../assets/icons/clock-black.png')} />
-                                <Text style={globalStyles.bodyText}>{activityData.start.time} - {activityData.end.time}</Text>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <TouchableOpacity activeOpacity={1}>
+                    <View style={styles.bgImg}>
+                        <Image style={styles.headerImage} source={{ uri: activityData.image }} />
+                    </View>
+                    <View style={styles.container}>
+                        <View style={styles.header}>
+                            <Text style={globalStyles.headerTextSmall}>{activityData.title}</Text>
+                            <View style={styles.info}>
+                                {activityData.category === 'Workshop' && (
+                                <View style={styles.headerInfo}>
+                                    <Image style={styles.imgClock} source={require('../../assets/icons/clock-black.png')} />
+                                    <Text style={globalStyles.bodyText}>{activityData.start.time} - {activityData.end.time}</Text>
+                                </View>
+                                )}
+                                <View style={styles.headerInfo}>
+                                    <Image style={styles.imgDate} source={require('../../assets/icons/date-black.png')} />
+                                    <Text style={globalStyles.bodyText}>{formatDate(activityData.start.date)}</Text>
+                                </View>
+                                <View style={styles.headerInfo}>
+                                    <Image style={styles.imgLocation} source={require('../../assets/icons/locatie-black.png')} />
+                                    <Text style={globalStyles.bodyText}>{farmName}</Text>
+                                </View>
+                            </View>
+                        </View>
+                        <View style={styles.body}>
+                            {activityData.description && (
+                                <View style={styles.details}>
+                                    <Text style={{...globalStyles.headerTextSmall, marginBottom: 5}}>Details</Text>
+                                    <Text style={globalStyles.bodyText}>{activityData.description}</Text>
+                                </View>
+                            )}
+                            {activityData.text && (
+                                <View style={styles.content}>
+                                    <Text style={globalStyles.bodyText}>{activityData.text}</Text>
+                                </View>
+                            )}
+                            {activityData.description && (
+                            <View style={styles.users}>
+                                <Text style={{...globalStyles.headerTextSmall, marginBottom: 5}}>Gaan ook</Text>
+                                <Text style={globalStyles.bodyText}>Leden</Text>
                             </View>
                             )}
-                            <View style={styles.headerInfo}>
-                                <Image style={styles.imgDate} source={require('../../assets/icons/date-black.png')} />
-                                <Text style={globalStyles.bodyText}>{formatDate(activityData.start.date)}</Text>
+                            {activityData.description && activityData.enrolledUsers && (
+                            <View style={styles.btnContainer}>
+                                <Button title="Inschrijven" filled />
                             </View>
-                            <View style={styles.headerInfo}>
-                                <Image style={styles.imgLocation} source={require('../../assets/icons/locatie-black.png')} />
-                                <Text style={globalStyles.bodyText}>{farmName}</Text>
-                            </View>
+                            )}
                         </View>
                     </View>
-                    <View style={styles.body}>
-                        {activityData.description && (
-                            <View style={styles.details}>
-                                <Text style={{...globalStyles.headerTextSmall, marginBottom: 5}}>Details</Text>
-                                <Text style={globalStyles.bodyText}>{activityData.description}</Text>
-                            </View>
-                        )}
-                        {activityData.text && (
-                            <View style={styles.content}>
-                                <Text style={globalStyles.bodyText}>{activityData.text}</Text>
-                            </View>
-                        )}
-                        {activityData.enrolledUsers && (
-                        <View style={styles.users}>
-                            <Text style={{...globalStyles.headerTextSmall, marginBottom: 5}}>Gaan ook</Text>
-                            <Text style={globalStyles.bodyText}>Leden</Text>
-                        </View>
-                        )}
-                        {activityData.description && activityData.enrolledUsers && (
-                        <View style={styles.btnContainer}>
-                            <Button title="Inschrijven" filled />
-                        </View>
-                        )}
-                    </View>
-                </View>
+                </TouchableOpacity>
             </ScrollView>
         </View>
     )
@@ -118,7 +120,6 @@ const ActivityDetail = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
         marginLeft: 20,
         marginRight: 20,
         paddingBottom: -30,
@@ -129,6 +130,7 @@ const styles = StyleSheet.create({
     },
     btnContainer: {
         marginTop: 30,
+        paddingBottom: 60,
     },
     users: {
         marginTop: 10,
@@ -183,6 +185,9 @@ const styles = StyleSheet.create({
         width: 18,
         height: 20,
     },
+    content: {
+        paddingBottom: 60,
+    }
 });
 
 export default ActivityDetail;

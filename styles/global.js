@@ -93,5 +93,8 @@ export const globalStyles = StyleSheet.create({
         fontFamily: 'Quicksand_400Regular',
         fontSize: 16,
         lineHeight: 20,
-    }
+    },
+    capitalize: {
+        textTransform: 'capitalize',
+    },
 });

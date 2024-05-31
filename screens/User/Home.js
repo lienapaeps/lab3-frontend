@@ -37,7 +37,7 @@ const HomeUser = ({ navigation }) => {
 
                 const subscriptionDataResponse = await fetchSubscriptionData(token, userId);
                 setSubscriptionData(subscriptionDataResponse.data);
-                console.log("subscription data: ", subscriptionDataResponse.data);
+                // console.log("subscription data: ", subscriptionDataResponse.data);
 
                 setLoading(false);
             } catch (error) {
@@ -82,8 +82,8 @@ const HomeUser = ({ navigation }) => {
         navigation.navigate('AppStack', { screen: 'Profile', params: { userData }});
     }; 
 
-    const goToPackageDetails = (packageId, farmId) => {
-        navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId }});
+    const goToPackageDetails = (packageId, farmId, userId) => {
+        navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId, userId }});
     }
 
     return (
@@ -94,6 +94,9 @@ const HomeUser = ({ navigation }) => {
                     <TouchableOpacity style={styles.profileBtn} onPress={goToProfile}>
                         <Image style={styles.profileImage} source={{ uri: userData.profilePicture }}/>
                         <Text style={globalStyles.headerTextSmaller}>{userData.firstname}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.notification}>
+                        <Image style={styles.notificationImage} source={require('../../assets/icons/notification.png')} />
                     </TouchableOpacity>
                 </View>
             )}
@@ -109,7 +112,7 @@ const HomeUser = ({ navigation }) => {
                 subscriptionData ? (
                     subscriptionData.package ? (
                         // er is een pakket
-                        <TouchableOpacity onPress={() => goToPackageDetails(subscriptionData.package._id, subscriptionData.farm._id)}>
+                        <TouchableOpacity onPress={() => goToPackageDetails(subscriptionData.package._id, subscriptionData.farm._id, userData._id)}>
                             <View style={styles.packageCard}>
                                 <Text style={{...globalStyles.headerText, ...styles.packageFarm}}>{subscriptionData.farm.name}</Text>
                                 <Image style={styles.packageImage} source={{ uri: subscriptionData.farm.farmImage }}/>
@@ -173,6 +176,7 @@ const styles = StyleSheet.create({
     },
     profile: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
         marginBottom: 20,
         marginTop: 10,
     },
@@ -185,6 +189,20 @@ const styles = StyleSheet.create({
         height: 55,
         borderRadius: 50,
         marginRight: 10,
+    },
+    notification: {
+        backgroundColor: COLORS.white,
+        padding: 15,
+        borderRadius: 100, 
+        shadowColor: 'rgba(0,0,0, .1)',
+        shadowOffset: { height: 1, width: 1 }, 
+        shadowOpacity: 1,
+        shadowRadius: 1,
+        elevation: 2,    
+    },
+    notificationImage: {
+        width: 22,
+        height: 24,
     },
     packageEmpty: {
         paddingVertical: 40,
