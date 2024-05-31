@@ -10,6 +10,10 @@ const HomeFarmer = ({ navigation }) => {
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const goToProfile = () => {
+        navigation.navigate('AppStack', { screen: 'Profile', params: { userData }});
+    }; 
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -57,7 +61,7 @@ const HomeFarmer = ({ navigation }) => {
             {/* header with profile pic and notification bell */}
             {userData && (
                 <View style={styles.profile}>
-                    <TouchableOpacity style={styles.profileBtn}>
+                    <TouchableOpacity style={styles.profileBtn} onPress={goToProfile}>
                         <Image style={styles.profileImage} source={{ uri: userData.profilePicture }}/>
                         <Text style={globalStyles.headerTextSmaller}>{userData.firstname} {userData.lastname}</Text>
                     </TouchableOpacity>
