@@ -8,6 +8,7 @@ import { getCurrentLocation } from '../../utils/utils';
 
 import COLORS from '../../constants/color';
 import Search from '../../components/Search';
+import { globalStyles } from '../../styles/global';
 
 const Map = ({ navigation }) => {
     const [searchText, setSearchText] = useState('');
