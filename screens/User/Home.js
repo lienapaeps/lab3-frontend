@@ -59,6 +59,11 @@ const HomeUser = ({ navigation }) => {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        console.log('userData:', userData);
+        console.log('subscriptionData:', subscriptionData);
+    }, [userData, subscriptionData]);
+
     return (
         <SafeAreaView style={globalStyles.container}>
             {/* header with profile pic and notification bell */}
@@ -106,7 +111,14 @@ const HomeUser = ({ navigation }) => {
                         </View>
                     )
                 ) : (
-                    null
+                    // er is nog geen abonnement data beschikbaar
+                    <View style={styles.packageEmpty}>
+                        <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')}/>
+                        <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
+                        <Pressable style={styles.button} onPress={goToFarm}>
+                            <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
+                        </Pressable>
+                    </View>
                 )
             )}
             {/* weergave van kalender */}

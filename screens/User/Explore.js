@@ -72,7 +72,7 @@ const Explore = ({ navigation }) => {
                 <Text style={globalStyles.headerText}>Explore</Text>
             </View>
             <View style={styles.options}>
-                <Search width={'100%'} placeholder={"Zoek een activiteit"} searchTerm={searchTerm} onSearchTermChange={handleSearchTermChange} />
+                <Search width={'100%'} placeholder={"Zoek"} searchTerm={searchTerm} onSearchTermChange={handleSearchTermChange} />
                 {!searchTerm && (
                 <View style={styles.filters}>
                     <TouchableOpacity
