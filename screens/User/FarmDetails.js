@@ -15,7 +15,7 @@ const FarmUserDetails = ({ navigation, route }) => {
         </TouchableOpacity>
       </View>
       <FarmHeader route={route} />
-      <FarmTab />
+      <FarmTab route={route}/>
   </>
 }
 

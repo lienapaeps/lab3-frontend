@@ -1,80 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Touch} from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Touch, FlatList} from 'react-native'
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
 
+import { fetchReviewsData } from '../utils/fetchHelpers';
 
-const Review = () => {
+const Review = ({ farmId }) => {
     const [reviewData, setReviewData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [searchTerm, setSearchTerm] = useState('');
     
     useEffect(() => {
         const fetchReviewData = async () => {
             try {
-                const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/farms/id/reviews`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    mode: 'cors'
-                });
-                const data = await response.json();
+                const data = await fetchReviewsData(farmId);
+                console.log(data.data);
                 setReviewData(data.data.reviews);
             } catch (error) {
-                setError(error);
+                console.log("Error", error);
             } finally {
                 setLoading(false);
             }
         };
 
         fetchReviewData();
-    }, []);
-
-    const handleSearchTermChange = (text) => setSearchTerm(text);
+    }, [farmId]);
 
     return (
-        <TouchableOpacity activeOpacity={1} style={styles.flex}>
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.title}>8 recensies</Text>
-                <TouchableOpacity style={styles.filter}>
-                    <Text style={globalStyles.headerTextSmaller}>Meest recent</Text>
+        <FlatList
+            data={reviewData}
+            keyExtractor={(item) => item._id.toString()}
+            renderItem={({ item }) => (
+                <TouchableOpacity activeOpacity={1} style={styles.flex}>
+                    <View style={styles.line}></View>
+                    <View style={[styles.container, styles.namesection]}>
+                        <Image style={styles.profileImage} source={"../assets/kelvin.png"} />
+                        <Text style={globalStyles.headerTextSmaller}>{item.user}</Text>
+                    </View>
+
+                    <View style={styles.datestar}>
+                        <View style={styles.starreview}>
+                            {[...Array(item.rating)].map((_, index) => (
+                                <Image key={index} style={styles.star} source={require('../assets/icons/star.png')} />
+                            ))}
+                        </View>
+                        <Text style={globalStyles.bodyTextSmall}>{item.date}</Text>
+                    </View>
+
+                    <View style={styles.message}>
+                        <Text style={globalStyles.bodyText}>{item.text}</Text>
+                    </View>
                 </TouchableOpacity>
-        </View>
-        </View>
-            <View style={styles.line}>
-            </View>
-            <View style={[styles.container, styles.namesection]}>
-                <Image style={styles.profileImage} source={{ uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimage.tmdb.org%2Ft%2Fp%2Foriginal%2Fvr7VssmRTR1uXwNff5YYSR0GD7.jpg&f=1&nofb=1&ipt=95769528c57593956cb2b4a0a3a60ddacfe6a5ddc9b895a211a31982936f8626&ipo=images"}}/>
-                <Text style={globalStyles.headerTextSmaller}>Firmin Crets</Text>
-            </View>
-
-            <View style={styles.datestar}>
-                <View style={styles.starreview}>
-                    <Image style={styles.star} source={require('../assets/icons/star.png')}/>
-                    <Image style={styles.star} source={require('../assets/icons/star.png')}/>
-                    <Image style={styles.star} source={require('../assets/icons/star.png')}/>
-                    <Image style={styles.star} source={require('../assets/icons/star.png')}/>
-                    <Image style={styles.star} source={require('../assets/icons/star.png')}/>
-                </View>
-                <Text style={globalStyles.bodyTextSmall}>December 2023</Text>
-            </View>
-
-            <View style={styles.message}>
-                <Text style={globalStyles.bodyText}>Dit is een review van Firmin Crets</Text>
-            </View>
-            <View style={styles.line}>
-            </View>
-            <View style={[styles.container, styles.namesection]}>
-                <Image style={styles.profileImage} source={{ uri: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimage.tmdb.org%2Ft%2Fp%2Foriginal%2Fvr7VssmRTR1uXwNff5YYSR0GD7.jpg&f=1&nofb=1&ipt=95769528c57593956cb2b4a0a3a60ddacfe6a5ddc9b895a211a31982936f8626&ipo=images"}}/>
-                <Text style={globalStyles.headerTextSmaller}>Firmin Crets</Text>
-            </View>
-            <View style={styles.message}>
-                <Text style={globalStyles.bodyText}>Dit is een review van Firmin Crets</Text>
-            </View>
-            </TouchableOpacity>
+            )}
+            ListEmptyComponent={<Text>No reviews available</Text>}
+        />
     );
 };
 

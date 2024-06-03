@@ -18,6 +18,7 @@ const PackageDetail = ({ navigation, route }) => {
         const fetchData = async () => {
             try {
                 const farmResponse = await fetchFarmDataById(farmId);
+                console.log("Dit is farmresponse " + farmResponse);
                 setFarmData(farmResponse.data.farm);
 
                 const packageResponse = await fetchPackageDataById(packageId, userId);

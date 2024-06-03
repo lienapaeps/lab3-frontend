@@ -81,7 +81,18 @@ export const fetchPackagesData = async (token, farmId) => {
         },
     });
     return await response.json();
-}
+};
+
+// fetch review data by id
+export const fetchReviewsData = async (farmId) => {
+    const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/farms/${farmId}/reviews`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return await response.json();
+};
 
 // fetch package data by id
 export const fetchPackageDataById = async (packageId, userId) => {
