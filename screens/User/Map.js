@@ -85,7 +85,11 @@ const Map = ({ navigation }) => {
     if (loading || !region || !currentLocation || !farmData || farmData.length === 0) {
         return (
             <View style={globalStyles.loadingContainer}>
-                <ActivityIndicator size="large" color={COLORS.offBlack} />
+                {Platform.OS === "web" ? (
+                    <ActivityIndicator size="small" color={COLORS.offBlack} />
+                ) : (
+                    <ActivityIndicator size="medium" color={COLORS.offBlack} />
+                )}
                 <Text style={styles.loadingText}>Map is aan het laden...</Text>
             </View>
         );
