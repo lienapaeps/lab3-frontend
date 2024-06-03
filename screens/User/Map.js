@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import MapView, { Marker } from 'react-native-maps';
-import { StyleSheet, View, Image, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import * as Location from 'expo-location';
+import { StyleSheet, View, Image, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 
 import { fetchFarmData } from '../../utils/fetchHelpers';
 import { getCurrentLocation } from '../../utils/utils';
 
+import loadGoogleMapsAPI from './webMap';
+
 import COLORS from '../../constants/color';
 import Search from '../../components/Search';
 import { globalStyles } from '../../styles/global';
+
+let MapViewMob, MarkerMob;
 
 const Map = ({ navigation }) => {
     const [searchText, setSearchText] = useState('');
@@ -18,6 +20,17 @@ const Map = ({ navigation }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentLocation, setCurrentLocation] = useState(null);
+    const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
+
+    if (Platform.OS === "android" || Platform.OS === "ios") {
+        MapViewMob = require("react-native-maps").default;
+        MarkerMob = require("react-native-maps").Marker;
+      }
+      
+      if (Platform.OS === "web") {
+        MapView = require("@preflower/react-native-web-maps").default;
+        MarkerWeb = require("@preflower/react-native-web-maps").Marker;
+      }
 
     const handleFarmCardPress = (id) => {
         navigation.navigate('AppStack', { screen: 'FarmUserDetails', params: { id }});
@@ -37,10 +50,13 @@ const Map = ({ navigation }) => {
 
         fetchData();
 
+        console.log("Farm data: ", farmData);
+
         const fetchUserLocation = async () => {
             try {
                 const location = await getCurrentLocation();
                 setCurrentLocation(location);
+                console.log("Current location: ", location)
                 setRegion({
                     latitude: location.coords.latitude,
                     longitude: location.coords.longitude,
@@ -53,9 +69,20 @@ const Map = ({ navigation }) => {
         };
 
         fetchUserLocation();
+
+        if (Platform.OS === "web") {
+            loadGoogleMapsAPI(() => {
+                setGoogleMapsLoaded(true);
+                console.log("Google Maps API loaded: " + googleMapsLoaded);
+            });
+        }
+
+        if (farmData.length > 0) {
+            console.log("First farm coordinates:  ", farmData[0].coordinates);
+        }
     }, []);
     
-    if (loading || !region) {
+    if (loading || !region || !currentLocation || !farmData || farmData.length === 0) {
         return (
             <View style={globalStyles.loadingContainer}>
                 <ActivityIndicator size="large" color={COLORS.offBlack} />
@@ -104,41 +131,68 @@ const Map = ({ navigation }) => {
                     width={'100%'}
                 />
             </View>
-            <MapView
-                style={styles.map}
-                region={region}
-                zoomControlEnabled={true}
-                loadingEnabled={true}
-            >
-                {(searchResults.length > 0 ? searchResults : farmData).map((farm, id) => (
-                    <Marker
-                        key={id}
-                        coordinate={{
-                            latitude: farm.coordinates.latitude,
-                            longitude: farm.coordinates.longitude,
-                        }}
-                        onPress={() => handleFarmCardPress(farm._id)}
+                {googleMapsLoaded && Platform.OS === "web" ? (
+                    <MapView
+                        style={styles.map}
+                        initialRegion={region}
+                        zoomEnabled={true}
+                        zoomControlEnabled={true}
                     >
-                        <View style={styles.marker}>
-                            <Image source={require('../../assets/icons/marker.png')} style={{ width: 45, height: 45 }} />
-                            <View style={styles.markerBox}>
-                                <Text style={styles.markerText}>{farm.name}</Text>
+            
+                    {(searchResults.length > 0 ? searchResults : farmData).map((farm, id) => (
+                        <MarkerWeb
+                            key={id}
+                            coordinate={{
+                                latitude: farm.coordinates.latitude,
+                                longitude: farm.coordinates.longitude,
+                            }}
+                            onPress={() => handleFarmCardPress(farm._id)}
+                        >
+                        </MarkerWeb>
+                        ))}
+                    </MapView>
+                ) : Platform.OS === "android" || Platform.OS === "ios" ? (
+                    <MapViewMob
+                        style={styles.map}
+                        initialRegion={region}
+                        zoomEnabled={true}
+                        zoomControlEnabled={true}
+                    >
+{                       (searchResults.length > 0 ? searchResults : farmData).map((farm, id) => (
+                        <MarkerMob
+                            key={id}
+                            coordinate={{
+                                latitude: farm.coordinates.latitude,
+                                longitude: farm.coordinates.longitude,
+                            }}
+                            onPress={() => handleFarmCardPress(farm._id)}
+                        >
+                            <View style={styles.marker}>
+                                <Image source={require('../../assets/icons/marker.png')} style={{ width: 45, height: 45 }} />
+                                <View style={styles.markerBox}>
+                                    <Text style={styles.markerText}>{farm.name}</Text>
+                                </View>
                             </View>
-                        </View>
-                    </Marker>
-                ))}
-                {currentLocation && (
-                    <Marker
-                    coordinate={{
-                        latitude: currentLocation.coords.latitude,
-                        longitude: currentLocation.coords.longitude,
-                    }}
-                    title="Uw locatie"
-                    >
-                    <View style={styles.currentLocationMarker} />
-                </Marker>
+                        </MarkerMob>
+                        ))}
+                        {currentLocation && (
+                            <MarkerMob
+                            coordinate={{
+                                latitude: currentLocation.coords.latitude,
+                                longitude: currentLocation.coords.longitude,
+                            }}
+                            title="Uw locatie"
+                            >
+                            <View style={styles.currentLocationMarker} />
+                        </MarkerMob>
+                        )}
+                    </MapViewMob>
+                ) : (
+                    <View>
+                        <ActivityIndicator size="large" color={COLORS.offBlack} />
+                        <Text style={styles.loadingText}>Map is aan het laden...</Text>
+                    </View>
                 )}
-            </MapView>
             <View>
                 <TouchableOpacity style={styles.lijst} onPress={() => navigation.goBack()}>
                     <Text style={styles.buttonText}>Lijst tonen</Text>

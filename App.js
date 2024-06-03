@@ -52,7 +52,7 @@ export default function App() {
     return (
       <>
         <StatusBar color="black" />
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
           <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
             <NavigationContainer onLayout={onLayoutRootView}>
               <Stack.Navigator>
@@ -71,7 +71,7 @@ export default function App() {
               </Stack.Navigator>
             </NavigationContainer>
           </View>
-        </TouchableWithoutFeedback>
+        {/* </TouchableWithoutFeedback> */}
       </>
     );
   }
