@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Pressable, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Pressable, Image, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -84,7 +84,11 @@ const HomeUser = ({ navigation }) => {
             </View>
             {loading ? (
                 <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="medium" color={COLORS.orange} />
+                    {Platform.OS === "web" ? (
+                        <ActivityIndicator size="small" color={COLORS.offBlack} />
+                    ) : (
+                        <ActivityIndicator size="medium" color={COLORS.offBlack} />
+                    )}
                 </View>
             ) : (
                 subscriptionData ? (
