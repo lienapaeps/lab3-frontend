@@ -1,40 +1,69 @@
 import React, { useState, useEffect } from  'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { fetchMembersData, getUserIdAndToken, fetchFarmDataById, fetchSubscriptionData } from '../utils/fetchHelpers';
+
 import { globalStyles } from '../styles/global';
 import COLORS from '../constants/color';
 import Button from '../components/Button';
 
 export default function FarmHeader ({ navigation, route }) {
   const [farmData, setFarmData] = useState([]);
+  const [membersData, setMembersData] = useState([]);
+  const [isMember, setIsMember] = useState(false);
+  const [subscriptionData, setSubscriptionData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-    const id = route.params;
-    console.log(id);
+    const { id } = route.params;
+    // console.log("farmid: " + id);
 
     useEffect(() => {
-      const fetchFarmDataById = async (id) => {
+      const fetchData = async () => {
+
         try {
-          const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/farms/${id}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            mode: 'cors',
-          });
-          const data = await response.json();
-          setFarmData(data.data.farm);
+          const { token, userId } = await getUserIdAndToken();
+
+          if (!token) {
+            navigation.navigate('Login');
+            return;
+          }
+
+          const farmDataResponse = await fetchFarmDataById(id);
+          setFarmData(farmDataResponse.data.farm);
+          // console.log("Farm data: ", farmDataResponse);
+
+          const membersDataResponse = await fetchMembersData(id);
+          setMembersData(membersDataResponse.data.members);
+          // console.log("Members data: ", membersDataResponse);
+
+          try {
+            const subscriptionDataResponse = await fetchSubscriptionData(token, userId);
+            console.log("er is subscription data: ", subscriptionDataResponse.data)
+            if (subscriptionDataResponse.data) {
+              setIsMember(true);
+            } else {
+              setIsMember(false);
+            }
+          } catch (subError) {
+            setIsMember(false);
+          }
+
+          setLoading(false); 
         } catch (error) {
-          setError(error);
+            setError(error);
         } finally {
-          setLoading(false);
+            setLoading(false);
         }
-      };
-  
-      const { id } = route.params;
-      fetchFarmDataById(id);
-    }, []);
+      }
+
+      fetchData();
+
+    }, [id]);
+
+    const handlePress = () => {
+      navigation.navigate('SubscribePackage', { farmId: id, farmName: farmData.name });
+    }
   
     if (loading) {
       return <Text>Loading...</Text>;
@@ -56,7 +85,7 @@ export default function FarmHeader ({ navigation, route }) {
           </View>
           <View style={styles.container}>
             <View style={[styles.div,styles.memberButton]}>
-            <Button title="Word Lid" filled/>
+              <Button title="Lid worden" filled disabled={isMember} onPress={handlePress}/>
             </View>
           </View>
         </View>

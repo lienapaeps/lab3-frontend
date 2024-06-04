@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Pressable, Image, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
+
 
 import { fetchUserData, fetchSubscriptionData, getUserIdAndToken } from '../../utils/fetchHelpers';
 
 import COLORS from '../../constants/color';
 import { globalStyles } from '../../styles/global';
 
-const HomeUser = ({ navigation }) => {
+const HomeUser = ({ navigation, route }) => {
     const [userData, setUserData] = useState(null);
     const [subscriptionData, setSubscriptionData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const isFocused = useIsFocused();
 
     const goToCalendar = () => {
         navigation.navigate('AppStack', { screen: 'Calendar' });
@@ -27,7 +29,7 @@ const HomeUser = ({ navigation }) => {
 
     const goToPackageDetails = (packageId, farmId, userId) => {
         navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId, userId }});
-    }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,11 +59,11 @@ const HomeUser = ({ navigation }) => {
         };
 
         fetchData();
-    }, []);
+    }, [isFocused, route.params?.reload]);
 
     useEffect(() => {
-        console.log('userData:', userData);
-        console.log('subscriptionData:', subscriptionData);
+        // console.log('userData:', userData);
+        // console.log('subscriptionData:', subscriptionData);
     }, [userData, subscriptionData]);
 
     return (

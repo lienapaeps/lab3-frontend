@@ -14,7 +14,7 @@ const FarmUserDetails = ({ navigation, route }) => {
           <Image style={styles.backButton} source={require('../../assets/Back-arrow.png')} />
         </TouchableOpacity>
       </View>
-      <FarmHeader route={route} />
+      <FarmHeader navigation={navigation} route={route} />
       <FarmTab route={route}/>
   </>
 }

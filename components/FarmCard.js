@@ -90,11 +90,11 @@ const FarmCard = ({ farmData, onPress }) => {
                     <View style={styles.header}>
                         <Text style={globalStyles.headerTextSmaller}>{farmData.name}</Text>
                         <View style={styles.adress}>
-                            <Text style={globalStyles.bodyText}>{farmData.adress.street}</Text>
+                            <Text style={{...globalStyles.bodyText, ...globalStyles.capitalize}}>{farmData.adress.street}</Text>
                             <Text style={globalStyles.bodyText}>{farmData.adress.number}</Text>
                         </View>
                         <View style={styles.adress}>
-                            <Text style={globalStyles.bodyText}>{farmData.adress.zipcode}</Text>
+                            <Text style={{...globalStyles.bodyText, ...globalStyles.capitalize}}>{farmData.adress.zipcode}</Text>
                             <Text style={globalStyles.bodyText}>{farmData.adress.city}</Text>
                         </View>
                     </View>
