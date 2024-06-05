@@ -110,9 +110,9 @@ const HomeUser = ({ navigation, route }) => {
                         <View style={styles.packageEmpty}>
                             <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')}/>
                             <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
-                            <Pressable style={styles.button} onPress={goToFarm}>
+                            <TouchableOpacity style={styles.button} onPress={goToFarm}>
                                 <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
-                            </Pressable>
+                            </TouchableOpacity>
                         </View>
                     )
                 ) : (
@@ -120,9 +120,9 @@ const HomeUser = ({ navigation, route }) => {
                     <View style={styles.packageEmpty}>
                         <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')}/>
                         <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
-                        <Pressable style={styles.button} onPress={goToFarm}>
+                        <TouchableOpacity style={styles.button} onPress={goToFarm}>
                             <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
-                        </Pressable>
+                        </TouchableOpacity>
                     </View>
                 )
             )}
@@ -152,7 +152,6 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         paddingHorizontal: 20,
         borderRadius: 10,
-        elevation: 3,
         backgroundColor: COLORS.orange,
     },
     emptyText: {

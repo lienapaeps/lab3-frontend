@@ -11,9 +11,6 @@ import AppStackNavigator from './navigators/AppStackNavigator';
 import AppTabNavigatorFarmer from './navigators/AppTabNavigatorFarmer';
 import AppStackNavigatorFarmer from './navigators/AppStackNavigatorFarmer';
 
-// sub navigator
-import SubNavigator from './navigators/SubNavigator';
-
 import useCustomFonts from './constants/loadFonts';
 
 const Stack = createStackNavigator();
@@ -62,8 +59,6 @@ export default function App() {
                 <Stack.Screen name="App" component={AppTabNavigator} options={{ headerShown: false }} />
                 {/* Voeg de AppStackNavigator toe als een scherm binnen de Stack.Navigator */}
                 <Stack.Screen name="AppStack" component={AppStackNavigator} options={{ headerShown: false }} />
-                {/* Voeg de SubNavigator toe als een scherm binnen de Stack.Navigator */}
-                <Stack.Screen name="Sub" component={SubNavigator} options={{ headerShown: false }} />
                 {/* Voeg de AppTabNavigatorFarmer toe als een scherm binnen de Stack.Navigator */}
                 <Stack.Screen name="AppFarmer" component={AppTabNavigatorFarmer} options={{ headerShown: false }} />
                 {/* Voeg de AppStackNavigatorFarmer toe als een scherm binnen de Stack.Navigator */}
