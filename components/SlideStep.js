@@ -1,6 +1,5 @@
 import React from 'react';
 import { Text, StyleSheet, Image, View, Dimensions, Platform } from 'react-native';
-import COLORS from '../constants/color';
 
 import { globalStyles } from '../styles/global';
 

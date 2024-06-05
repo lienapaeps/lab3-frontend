@@ -72,18 +72,28 @@ export const fetchFarmDataByOwner = async (token, userId) => {
 }
 
 // alle packages van een farm ophalen
-export const fetchPackagesData = async (token, farmId) => {
+export const fetchPackagesData = async (farmId) => {
     const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/farms/${farmId}/packages`, {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
         },
     });
     return await response.json();
 };
 
-// fetch review data by id
+// alle members van een farm ophalen
+export const fetchMembersData = async (farmId) => {
+    const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/farms/${farmId}/members`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return await response.json();
+};
+
+// alle reviews van een farm ophalen
 export const fetchReviewsData = async (farmId) => {
     const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/farms/${farmId}/reviews`, {
         method: 'GET',
@@ -128,6 +138,18 @@ export const fetchActivityDataById = async (id) => {
             'Content-Type': 'application/json',
         },
         mode: 'cors',
+    });
+    return await response.json();
+};
+
+// subscribe to a package
+export const subscribeToPackage = async (userId, packageId) => {
+    const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/subscription/subscribe`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, packageId }),
     });
     return await response.json();
 };

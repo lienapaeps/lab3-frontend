@@ -26,7 +26,6 @@ const AcitvityCard = ({ activityData, onPress }) => {
               mode: 'cors',
             });
             const data = await response.json();
-            // console.log(data.data.farm);
             setFarmData(data.data.farm);
           } catch (error) {
             setError(error);

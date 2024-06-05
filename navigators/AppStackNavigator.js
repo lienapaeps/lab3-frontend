@@ -12,6 +12,8 @@ import Profile from '../screens/User/Profile';
 import MyAccount from '../screens/User/Profile/MyAccount';
 import Settings from '../screens/User/Profile/Settings';
 import Faq from '../screens/User/Profile/Faq';
+import SubscribePackage from '../screens/User/subscribePackage/SubscribePackage';
+import FarmHeader from '../components/FarmHeader';
 
 import NavigationOptions from '../components/NavigationOptions';
 
@@ -20,7 +22,11 @@ const Stack = createStackNavigator();
 const AppStackNavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="HomeUser" component={HomeUser} options={NavigationOptions}/>
+      <Stack.Screen name="HomeUser" component={HomeUser}
+        options={() => ({
+          headerShown: false,
+        })}
+      />
       <Stack.Screen name="Calendar" component={Calendar} options={NavigationOptions}/>
       <Stack.Screen name="FarmUserDetails" component={FarmUserDetails}
         options={() => ({
@@ -46,6 +52,11 @@ const AppStackNavigator = () => {
       <Stack.Screen name="MyAccount" component={MyAccount} options={NavigationOptions}/>
       <Stack.Screen name="Settings" component={Settings} options={NavigationOptions}/>
       <Stack.Screen name="FAQ" component={Faq} options={NavigationOptions}/>
+      <Stack.Screen name="SubscribePackage" component={SubscribePackage}
+        options={() => ({
+          headerShown: false,
+        })}
+      />
     </Stack.Navigator>
   );
 };

@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Pressable, Image, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 
 import { fetchUserData, fetchSubscriptionData, getUserIdAndToken } from '../../utils/fetchHelpers';
 
 import COLORS from '../../constants/color';
 import { globalStyles } from '../../styles/global';
 
-const HomeUser = ({ navigation }) => {
+const HomeUser = ({ navigation, route }) => {
     const [userData, setUserData] = useState(null);
     const [subscriptionData, setSubscriptionData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const isFocused = useIsFocused();
 
     const goToCalendar = () => {
         navigation.navigate('AppStack', { screen: 'Calendar' });
@@ -27,7 +28,7 @@ const HomeUser = ({ navigation }) => {
 
     const goToPackageDetails = (packageId, farmId, userId) => {
         navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId, userId }});
-    }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,11 +58,11 @@ const HomeUser = ({ navigation }) => {
         };
 
         fetchData();
-    }, []);
+    }, [isFocused, route.params?.reload]);
 
     useEffect(() => {
-        console.log('userData:', userData);
-        console.log('subscriptionData:', subscriptionData);
+        // console.log('userData:', userData);
+        // console.log('subscriptionData:', subscriptionData);
     }, [userData, subscriptionData]);
 
     return (
@@ -109,9 +110,9 @@ const HomeUser = ({ navigation }) => {
                         <View style={styles.packageEmpty}>
                             <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')}/>
                             <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
-                            <Pressable style={styles.button} onPress={goToFarm}>
+                            <TouchableOpacity style={styles.button} onPress={goToFarm}>
                                 <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
-                            </Pressable>
+                            </TouchableOpacity>
                         </View>
                     )
                 ) : (
@@ -119,9 +120,9 @@ const HomeUser = ({ navigation }) => {
                     <View style={styles.packageEmpty}>
                         <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')}/>
                         <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
-                        <Pressable style={styles.button} onPress={goToFarm}>
+                        <TouchableOpacity style={styles.button} onPress={goToFarm}>
                             <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
-                        </Pressable>
+                        </TouchableOpacity>
                     </View>
                 )
             )}
@@ -151,7 +152,6 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         paddingHorizontal: 20,
         borderRadius: 10,
-        elevation: 3,
         backgroundColor: COLORS.orange,
     },
     emptyText: {
@@ -232,7 +232,6 @@ const styles = StyleSheet.create({
         zIndex: 1,
     },
     loadingContainer: {
-        // flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         height: 150

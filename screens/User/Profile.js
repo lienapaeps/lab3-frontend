@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, Image, StyleSheet, TouchableOpacity, SafeAreaView, Button } from 'react-native'
+import React  from 'react'
+import { View, Text, Image, StyleSheet, SafeAreaView, Button } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import COLORS from '../../constants/color';
@@ -7,13 +7,9 @@ import { globalStyles } from '../../styles/global';
 import ProfileItem from '../../components/ProfileItem';
 
 const Profile = ({ navigation, route }) => {
-
     const userData = route.params.userData;
 
-    // console.log(userData);
-
     const handleLogout = async () => {
-        // Clear AsyncStorage
         try {
             await AsyncStorage.clear();
             navigation.navigate('Welcome');
@@ -38,7 +34,7 @@ const Profile = ({ navigation, route }) => {
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.header}>
                 <Image style={styles.profileImage} source={{ uri: userData.profilePicture }}/>
-                <Text style={{...globalStyles.headerTextSmall, ...styles.profileName}}>{userData.firstname} {userData.lastname}</Text>
+                <Text style={{...globalStyles.headerTextSmall, ...globalStyles.capitalize}}>{userData.firstname} {userData.lastname}</Text>
             </View>
             <View style={styles.profileSection}>
                 <ProfileItem title="Mijn account" onPress={handleGoToAccount} icon={require('../../assets/icons/user-green.png')}/>
@@ -78,9 +74,6 @@ const styles = StyleSheet.create({
         height: 105,
         borderRadius: 100,
         marginBottom: 15,
-    },
-    profileName: {
-        textTransform: 'capitalize',
     },
     logout: {
         position: 'absolute',

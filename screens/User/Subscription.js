@@ -7,15 +7,14 @@ import Button from '../../components/Button';
 import SubscriptionCard from '../../components/Subscription';
 
 const Subscription = ({ navigation }) => {
-
     const [selectedOption, setSelectedOption] = useState(null);
 
     const handlePress = (option) => {
         if (selectedOption === option) {
             setSelectedOption(null);
-          } else {
-            setSelectedOption(option);
-          }
+        } else {
+        setSelectedOption(option);
+        }
     }
 
     return (
@@ -33,7 +32,6 @@ const Subscription = ({ navigation }) => {
                     cardBody="Weinig tijd maar toch wekelijks genieten van verse lokale biologische groenten"
                     isSelected={selectedOption === 'TakeawaySubscription'}
                 />
-
                 <SubscriptionCard
                     onPress={() => handlePress('CollectiveSubscription')}
                  
@@ -48,9 +46,7 @@ const Subscription = ({ navigation }) => {
                     cardBody="Help op het veld, oogst je eigen planten, en draag actief bij aan lokale voedselproductie"
                     isSelected={selectedOption === 'CooperateSubscription'}
                 />
-
             </View>
-
             {/* volgende knop */}
             <View style={{marginTop: 30}}>
                 {/* navigeer naar de volgende pagina met de waarde van de geselecteerde optie */}

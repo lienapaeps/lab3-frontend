@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TextInput } from 'react-native';
 import COLORS from '../constants/color';
 
 const InputField = (props) => {
-
     const { fullWidth } = props;
 
     return (

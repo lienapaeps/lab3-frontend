@@ -12,9 +12,8 @@ import ImageUpload from '../../../../components/ImageUpload';
 import { uploadToCloudinary } from '../../../../utils/uploadHelpers';
 
 const AddFarm = ({ navigation, route }) => {
-    const totalSteps = 4; // Totaal aantal stappen in het formulier
+    const totalSteps = 4;
     const farmerId = route.params.params.uid;
-
     const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
     const [selectedTimeField, setSelectedTimeField] = useState(null);
     const [currentStep, setCurrentStep] = useState(0);
@@ -22,7 +21,6 @@ const AddFarm = ({ navigation, route }) => {
     const progress = (currentStep + 1) / totalSteps;
     const [selectedImageUri, setSelectedImageUri] = useState('');
 
-    // Initialisatie van formuliergegevens
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -59,7 +57,6 @@ const AddFarm = ({ navigation, route }) => {
     const handleImageSelected = async (uri) => {
         setSelectedImageUri(uri); 
         updateFormData('farmImage', uri);
-        console.log('imageUri in handleImageSelected:', uri);        
     };
 
     const getCoordinates = async () => {
@@ -80,7 +77,6 @@ const AddFarm = ({ navigation, route }) => {
       }
     };
 
-    // Functie om naar de volgende stap te gaan
     const nextStep = () => {
         if (validateStep()) {
             setErrorMessage('');
@@ -90,7 +86,6 @@ const AddFarm = ({ navigation, route }) => {
         }
     };
 
-    // Functie om terug te gaan naar de vorige stap
     const prevStep = () => {
         if (currentStep > 0) {
             setCurrentStep(currentStep - 1);
@@ -98,9 +93,8 @@ const AddFarm = ({ navigation, route }) => {
     };
 
     const updateFormData = (key, value) => {
-      // Als de sleutel 'adress' bevat, update adress
       if (key.startsWith('adress')) {
-          const subKey = key.split('.')[1]; // Haal de sub-sleutel op (bijv. street, number, etc.)
+          const subKey = key.split('.')[1];
           setFormData(prevState => ({
               ...prevState,
               adress: {
@@ -109,9 +103,8 @@ const AddFarm = ({ navigation, route }) => {
               },
           }));
       }
-      // Als de sleutel 'openinghours' bevat, update openingstijden
       else if (key.startsWith('openinghours')) {
-          const [, index, field] = key.match(/\[(\d+)\]\.(openinghour|closinghour)/); // Haal index en veld op
+          const [, index, field] = key.match(/\[(\d+)\]\.(openinghour|closinghour)/);
           setFormData(prevState => ({
               ...prevState,
               openinghours: prevState.openinghours.map((item, i) => {
@@ -125,9 +118,8 @@ const AddFarm = ({ navigation, route }) => {
               })
           }));
       }
-      // Als de sleutel 'contact' bevat, update contactgegevens
       else if (key.startsWith('contact')) {
-          const subKey = key.split('.')[1]; // Haal de sub-sleutel op (bijv. number, email, etc.)
+          const subKey = key.split('.')[1];
           setFormData(prevState => ({
               ...prevState,
               contact: {
@@ -136,7 +128,6 @@ const AddFarm = ({ navigation, route }) => {
               },
           }));
       }
-      // Anders update de rest van de velden
       else {
           setFormData(prevState => ({
               ...prevState,
@@ -145,14 +136,9 @@ const AddFarm = ({ navigation, route }) => {
       }
     };
 
-    // Functie om het formulier te verzenden
     const submitForm = async () => {
-        // console.log('submit data:' + JSON.stringify(formData));
         try {
-
             const coordinates = await getCoordinates();
-
-            // upload to cloaudinary
             const imageUrl = await uploadToCloudinary(selectedImageUri);
 
             const updatedFormData = {
@@ -163,9 +149,6 @@ const AddFarm = ({ navigation, route }) => {
                   longitude: coordinates.lng,
               },
           };
-
-            // console.log('form data na coords:', updatedFormData);
-
             const response = await fetch("https://lab3-backend-w1yl.onrender.com/api/farms", {
                 method: 'POST',
                 headers: {
@@ -178,19 +161,13 @@ const AddFarm = ({ navigation, route }) => {
             const json = await response.json();
 
             if (json.status === 'success') {
-                // Sla JWT token op in local storage
                 const farmId = json.data.farm._id;
-                // console.log('Nieuwe boerderij toegevoegd, id is:', farmId);
-                // console.log(json.data.farm._id);
-
                 navigation.navigate('AddPackages', { params: { farmId: farmId } });
             } else {
-                // Toon een foutmelding als registratgegevens onjuist zijn
                 setErrorMessage(json.message);
             }
         } catch (error) {
             console.error('Fout bij het toevoegen van boerderij:', error);
-            // Toon een algemene foutmelding als er een fout optreedt
             setErrorMessage('Er is een fout opgetreden bij het toevoegen van boerderij');
         }
     };
@@ -230,17 +207,14 @@ const AddFarm = ({ navigation, route }) => {
 
     const validateStep3 = () => {
       const { openinghours } = formData;
-      // Controleer eerst of openinghours gedefinieerd is en een array is
       if (!openinghours || !Array.isArray(openinghours)) {
           setErrorMessage('Geen openingstijden ingevuld.');
           return false;
       }
-      // Controleer vervolgens de lengte van openinghours
       if (openinghours.length === 0) {
           setErrorMessage('Geen openingstijden ingevuld.');
           return false;
       }
-      // Controleer elk item in openinghours
       for (let i = 0; i < openinghours.length; i++) {
           const { openinghour, closinghour } = openinghours[i];
           if (!openinghour || !closinghour) {
@@ -253,12 +227,9 @@ const AddFarm = ({ navigation, route }) => {
 
   const validateStep4 = () => {
     const { number, email, website } = formData.contact;
-    // Controleer alleen de verplichte velden als ze zijn ingevuld
     if (number && email && website) {
-        // Als alle velden zijn ingevuld, geef true terug
         return true;
     }
-    // Als geen van de velden is ingevuld, geef true terug
     return true;
 };
 

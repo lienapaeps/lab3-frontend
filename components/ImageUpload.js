@@ -1,19 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Button, Platform, Image, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 
 import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
 
 import COLORS from '../constants/color';
-import { globalStyles } from '../styles/global';
 
 const ImageUpload = ({ onImageSelected, title }) => {
-
     const [image, setImage] = useState(null);
 
     // select image from gallery
     const pickImage = async () => {
-        // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.All,
           allowsEditing: true,

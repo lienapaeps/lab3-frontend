@@ -8,7 +8,6 @@ import { globalStyles } from '../../styles/global';
 import Button from '../../components/Button';
 
 const ActivityDetail = ({ navigation, route }) => {
-
     const [activityData, setActivityData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);

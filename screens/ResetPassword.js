@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { globalStyles } from '../styles/global';
@@ -7,7 +7,6 @@ import InputField from '../components/InputField';
 import Button from '../components/Button';
 
 const ResetPassword = ({ route, navigation }) => {
-
     const { email, token } = route.params || {};
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -20,7 +19,6 @@ const ResetPassword = ({ route, navigation }) => {
     }, [token, email]);
 
     const handleResetPassword = async () => {
-
       try {
           const response = await fetch(`https://lab3-backend-w1yl.onrender.com/users/reset-password/${token}`, {
               method: 'POST',

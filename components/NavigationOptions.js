@@ -1,5 +1,4 @@
 import React from 'react';
-import COLORS from '../constants/color';
 import CustomBackButton from './CustomBackButton';
 
 const navigationOptions = ({ navigation }) => ({

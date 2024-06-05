@@ -58,6 +58,11 @@ export const globalStyles = StyleSheet.create({
         fontSize: 20,
         color: COLORS.offBlack,
     },
+    headerTextMedium: {
+        fontFamily: 'Baloo2_600SemiBold',
+        fontSize: 18,
+        color: COLORS.offBlack,
+    },
     headerTextSmaller: {
         fontFamily: 'Baloo2_600SemiBold',
         fontSize: 16,

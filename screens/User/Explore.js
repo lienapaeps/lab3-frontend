@@ -46,6 +46,10 @@ const Explore = ({ navigation }) => {
         setSelectedCategory(category);
     };
 
+    const handleActivityCardPress = (activityId, farmName) => {
+        navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmName: farmName}});
+    }
+
     if (loading) {
         return (
             <SafeAreaView style={globalStyles.loadingContainer}>
@@ -64,10 +68,6 @@ const Explore = ({ navigation }) => {
                 <Text style={globalStyles.bodyText}>Error: {error.message}</Text>
             </SafeAreaView>
         );
-    }
-
-    const handleActivityCardPress = (activityId, farmName) => {
-        navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmName: farmName}});
     }
 
     return (

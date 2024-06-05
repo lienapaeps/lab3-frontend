@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { globalStyles } from '../styles/global';
@@ -8,7 +8,6 @@ import Button from '../components/Button';
 import CodeInput from '../components/CodeInput';
 
 const ForgotPassword = ({ navigation }) => {
-
     const [email, setEmail] = useState('');
     const [emailSent, setEmailSent] = useState(false);
     const [verificationCode, setVerificationCode] = useState('');
@@ -44,7 +43,6 @@ const ForgotPassword = ({ navigation }) => {
                 }, 5000);
 
                 setEnteringVerificationCode(true);
-
                 setEmailSent(true);
                 setErrorMessage('');
             } else {
@@ -92,7 +90,6 @@ const ForgotPassword = ({ navigation }) => {
             setErrorMessage(error.message || 'Er is iets misgegaan.');
         }
     };
-    
 
     return (
         <SafeAreaView style={globalStyles.container}>
