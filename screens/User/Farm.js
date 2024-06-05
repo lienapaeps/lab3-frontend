@@ -90,6 +90,14 @@ const FarmUser = ({ navigation }) => {
         );
     }
 
+    if (filteredFarmData.length === 0) {
+        return (
+            <SafeAreaView style={globalStyles.container}>
+                <Text style={globalStyles.bodyText}>Geen boerderijen gevonden</Text>
+            </SafeAreaView>
+        );
+    }
+
     return (
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.options}>
