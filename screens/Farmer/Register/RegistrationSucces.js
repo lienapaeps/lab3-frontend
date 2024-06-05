@@ -6,7 +6,6 @@ import { globalStyles } from '../../../styles/global';
 import Button from '../../../components/Button';
 
 const RegistrationSucces = ({ navigation }) => {
-
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {

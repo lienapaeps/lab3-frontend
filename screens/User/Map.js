@@ -3,7 +3,6 @@ import { StyleSheet, View, Image, Text, TouchableOpacity, ActivityIndicator, Pla
 
 import { fetchFarmData } from '../../utils/fetchHelpers';
 import { getCurrentLocation } from '../../utils/utils';
-
 import loadGoogleMapsAPI from './webMap';
 
 import COLORS from '../../constants/color';
@@ -25,79 +24,16 @@ const Map = ({ navigation }) => {
     if (Platform.OS === "android" || Platform.OS === "ios") {
         MapViewMob = require("react-native-maps").default;
         MarkerMob = require("react-native-maps").Marker;
-      }
+    }
       
-      if (Platform.OS === "web") {
+    if (Platform.OS === "web") {
         MapView = require("@preflower/react-native-web-maps").default;
         MarkerWeb = require("@preflower/react-native-web-maps").Marker;
-      }
+    }
 
     const handleFarmCardPress = (id) => {
         navigation.navigate('AppStack', { screen: 'FarmUserDetails', params: { id }});
     }
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const farmDataResponse = await fetchFarmData();
-                setFarmData(farmDataResponse.data.farms);
-            } catch (error) {
-                setError(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-
-        console.log("Farm data: ", farmData);
-
-        const fetchUserLocation = async () => {
-            try {
-                const location = await getCurrentLocation();
-                setCurrentLocation(location);
-                console.log("Current location: ", location)
-                setRegion({
-                    latitude: location.coords.latitude,
-                    longitude: location.coords.longitude,
-                    latitudeDelta: 0.05,
-                    longitudeDelta: 0.05,
-                });
-            } catch (error) {
-                console.error(error.message);
-            }
-        };
-
-        fetchUserLocation();
-
-        if (Platform.OS === "web") {
-            loadGoogleMapsAPI(() => {
-                setGoogleMapsLoaded(true);
-                console.log("Google Maps API loaded: " + googleMapsLoaded);
-            });
-        }
-
-        if (farmData.length > 0) {
-            console.log("First farm coordinates:  ", farmData[0].coordinates);
-        }
-    }, []);
-    
-    if (loading || !region || !currentLocation || !farmData || farmData.length === 0) {
-        return (
-            <View style={globalStyles.loadingContainer}>
-                {Platform.OS === "web" ? (
-                    <ActivityIndicator size="small" color={COLORS.offBlack} />
-                ) : (
-                    <ActivityIndicator size="medium" color={COLORS.offBlack} />
-                )}
-                <Text style={styles.loadingText}>Map is aan het laden...</Text>
-            </View>
-        );
-    }
-    
-      if (error) {
-        return <Text>Error: {error.message}</Text>;
-      }
 
     const handleSearch = (text) => {
         setSearchText(text);
@@ -124,6 +60,70 @@ const Map = ({ navigation }) => {
             });
         }
     };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const farmDataResponse = await fetchFarmData();
+                setFarmData(farmDataResponse.data.farms);
+            } catch (error) {
+                setError(error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+
+        // console.log("Farm data: ", farmData);
+
+        const fetchUserLocation = async () => {
+            try {
+                const location = await getCurrentLocation();
+                setCurrentLocation(location);
+                // console.log("Current location: ", location)
+                setRegion({
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                    latitudeDelta: 0.05,
+                    longitudeDelta: 0.05,
+                });
+            } catch (error) {
+                console.error(error.message);
+            }
+        };
+
+        fetchUserLocation();
+
+        if (Platform.OS === "web") {
+            loadGoogleMapsAPI(() => {
+                setGoogleMapsLoaded(true);
+                // console.log("Google Maps API loaded: " + googleMapsLoaded);
+            });
+        }
+
+        if (farmData.length > 0) {
+            console.log("First farm coordinates:  ", farmData[0].coordinates);
+        }
+    }, []);
+    
+    if (loading || !region || !currentLocation || !farmData || farmData.length === 0) {
+        return (
+            <View style={globalStyles.loadingContainer}>
+                {Platform.OS === "web" ? (
+                    <ActivityIndicator size="small" color={COLORS.offBlack} />
+                ) : (
+                    <ActivityIndicator size="medium" color={COLORS.offBlack} />
+                )}
+                <Text style={styles.loadingText}>Map is aan het laden...</Text>
+            </View>
+        );
+    }
+    
+    if (error) {
+        return <Text>Error: {error.message}</Text>;
+    }
+
 
     return (
         <View style={styles.container}>
@@ -162,7 +162,7 @@ const Map = ({ navigation }) => {
                         zoomEnabled={true}
                         zoomControlEnabled={true}
                     >
-{                       (searchResults.length > 0 ? searchResults : farmData).map((farm, id) => (
+                    {(searchResults.length > 0 ? searchResults : farmData).map((farm, id) => (
                         <MarkerMob
                             key={id}
                             coordinate={{

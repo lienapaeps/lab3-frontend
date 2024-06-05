@@ -19,10 +19,10 @@ const Button = (props) => {
                 ...styles.button,
                 backgroundColor: bgColor,
                 ...buttonBorderStyle,
-                opacity: disabled ? 0.5 : 1, // Opacity is set to 0.5 when disabled
+                opacity: disabled ? 0.5 : 1,
                 ...style
             }}
-            onPress={disabled ? null : onPress} // Disable onPress when disabled is true
+            onPress={disabled ? null : onPress}
         >
             <Text style={{ fontFamily: 'Baloo2_500Medium', fontSize: 18, color: textColor }}>{title}</Text>
         </TouchableOpacity>

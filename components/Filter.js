@@ -27,16 +27,14 @@ const Filter = ({ onFilterChange, onDistanceFilterChange }) => {
 
     const handleClearFilter = () => {
         setSelectedOption('All');
-        setDistance(0); // Reset distance to 0
+        setDistance(0);
         onFilterChange('All');
-        onDistanceFilterChange(0); // Reset distance to 0
-        // setShowModal(false);
+        onDistanceFilterChange(0);
         handleModalClose();
     };
 
     const handleApplyFilter = () => {
         onDistanceFilterChange(distance);
-        // setShowModal(false);
         handleModalClose();
     };
 

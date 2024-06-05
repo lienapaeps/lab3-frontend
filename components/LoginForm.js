@@ -9,12 +9,9 @@ import Button from './Button';
 import SocialButton from './SocialButton';
 
 const LoginForm = ({ navigation }) => {
-    
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-
-    // Opening exp://192.168.0.240:8081 on Pixel_4_API_30
 
     const handleLogin = async () => {
         try {
@@ -30,13 +27,8 @@ const LoginForm = ({ navigation }) => {
             const json = await response.json();
 
             if (json.status === 'success') {
-                // Sla JWT token op in local storage
                 await AsyncStorage.setItem('token', json.data.token);
                 await AsyncStorage.setItem('uid', json.data.uid);
-
-                // console.log(json.data)
-
-                // console.log(json.data.isFarmer)
 
                 if (json.data.isFarmer) {
                     navigation.navigate('AppFarmer', { screen: 'HomeFarmer' });
@@ -45,12 +37,10 @@ const LoginForm = ({ navigation }) => {
                 }
 
             } else {
-                // Toon een foutmelding als inloggegevens onjuist zijn
                 setErrorMessage(json.message);
             }
         } catch (error) {
             console.error('Fout bij het inloggen:', error);
-            // Toon een algemene foutmelding als er een fout optreedt
             setErrorMessage('Er is een fout opgetreden bij het inloggen');
         }
     }

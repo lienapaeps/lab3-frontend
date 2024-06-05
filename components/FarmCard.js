@@ -7,7 +7,6 @@ import { globalStyles } from '../styles/global';
 import { calculateDistance, getUserLocation } from '../utils/utils';
 
 const FarmCard = ({ farmData, onPress }) => {
-
     const [currentTime, setCurrentTime] = useState(new Date());
     const [location, setLocation] = useState();
     const [distance, setDistance] = useState(0);
@@ -44,9 +43,8 @@ const FarmCard = ({ farmData, onPress }) => {
 
     const checkStatus = (openingHours) => {
         const dayNames = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'];
-        const currentDayIndex = currentTime.getDay(); // Hier de verklaring van currentDayIndex
+        const currentDayIndex = currentTime.getDay();
         const currentDay = dayNames[currentDayIndex];
-        // console.log(currentDay);
 
         const todayOpeningHours = openingHours.find((hours) => hours.day === currentDay);
 
@@ -66,8 +64,6 @@ const FarmCard = ({ farmData, onPress }) => {
 
         const closingTime = new Date(currentTime);
         closingTime.setHours(closingHour, closingMinute, 0, 0);
-
-        // console.log(openingTime.toISOString(), closingTime.toISOString(), currentTime.toISOString());
 
         if (currentTime >= openingTime && currentTime <= closingTime) {
             return "Open";

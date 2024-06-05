@@ -3,7 +3,6 @@ import { View, Image, StyleSheet, TextInput } from 'react-native';
 import COLORS from '../constants/color';
 
 const Search = ({ searchTerm, onSearchTermChange, placeholder, width}) => {
-
     const sectionStyle = width ? { ...styles.sectionStyle, width: '100%' } : styles.sectionStyle;
 
     return (

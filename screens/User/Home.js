@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, Pressable, Image, ActivityIndicator, TouchableO
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useIsFocused } from '@react-navigation/native';
 
-
 import { fetchUserData, fetchSubscriptionData, getUserIdAndToken } from '../../utils/fetchHelpers';
 
 import COLORS from '../../constants/color';
@@ -234,7 +233,6 @@ const styles = StyleSheet.create({
         zIndex: 1,
     },
     loadingContainer: {
-        // flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         height: 150

@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import React, { useRef } from 'react';
+import { View, TextInput, StyleSheet } from 'react-native';
 import COLORS from '../constants/color';
 
 const CodeInput = ({ value, onChange }) => {
@@ -13,9 +13,9 @@ const CodeInput = ({ value, onChange }) => {
     };
   
     const handleChange = (text, index) => {
-        const updatedValue = [...value]; // Maak een kopie van de huidige value-array
-        updatedValue[index] = text; // Werk het teken bij op de juiste positie
-        onChange(updatedValue.join('')); // Geef de bijgewerkte waarde als één string door
+        const updatedValue = [...value];
+        updatedValue[index] = text; 
+        onChange(updatedValue.join(''));
         if (text !== '' && index < inputs.length - 1) {
             focusInput(index + 1);
         }
@@ -31,7 +31,6 @@ const CodeInput = ({ value, onChange }) => {
                     value={value[index]}
                     onChangeText={(text) => handleChange(text, index)}
                     keyboardType="default"
-                    // autoCapitalize="characters" 
                     autoCapitalize='none'
                     maxLength={1}
                     textAlign="center"

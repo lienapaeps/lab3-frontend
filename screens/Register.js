@@ -7,7 +7,6 @@ import Button from '../components/Button';
 import OptionButton from '../components/OptionButton';
 
 const Register = ({ navigation }) => {
-
     const [selectedOption, setSelectedOption] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
 

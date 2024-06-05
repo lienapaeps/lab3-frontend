@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView, TextInput, Alert } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 
@@ -8,14 +8,12 @@ import packages from './farmPackages/packages';
 import COLORS from '../../../../constants/color';
 
 const AddPackages = ({ navigation, route }) => {
-
     const [selectedPackages, setSelectedPackages] = useState([]);
     const [packagePrices, setPackagePrices] = useState({});
     const [isPackageSelected, setIsPackageSelected] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
     const { farmId } = route.params.params;
-    // console.log("farm, id: ", route.params.params)
 
     const handlePackageSelection = (index) => {
         if (selectedPackages.includes(index)) {
@@ -53,7 +51,7 @@ const AddPackages = ({ navigation, route }) => {
             farm: farmId, 
         }));
 
-        console.log(packagesToSubmit);
+        // console.log(packagesToSubmit);
 
         try {
             const response = await fetch('https://lab3-backend-w1yl.onrender.com/api/packages', {

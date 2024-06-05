@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform, SafeAreaView, Image, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 
@@ -10,7 +10,6 @@ import Button from '../../../components/Button';
 import paymentMethods from './paymentMethods';
 
 const SubscribePackage = ({ navigation, route }) => {
-
     const { farmId, farmName } = route.params;
     const [packages, setPackages] = useState([]);
     const [selectedPackage, setSelectedPackage] = useState(null);
@@ -35,7 +34,6 @@ const SubscribePackage = ({ navigation, route }) => {
         fetchData();
     }, []);
 
-    // sla user id op in state
     useEffect(() => {
         const fetchUserId = async () => {
             try {
@@ -115,7 +113,6 @@ const SubscribePackage = ({ navigation, route }) => {
         }
     };
 
-    // Functie om naar de volgende stap te gaan
     const nextStep = () => {
         if (validateStep()) {
             setErrorMessage('');
@@ -125,7 +122,6 @@ const SubscribePackage = ({ navigation, route }) => {
         }
     };
 
-    // Functie om terug te gaan naar de vorige stap
     const prevStep = () => {
         if (currentStep > 0) {
             setCurrentStep(currentStep - 1);

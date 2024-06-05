@@ -9,9 +9,11 @@ import InputField from '../../../components/InputField';
 import Button from '../../../components/Button';
 
 const RegisterFarmer = ({ navigation }) => {
-    const totalSteps = 3; // Totaal aantal stappen in het formulier
+    const totalSteps = 3;
+    const [currentStep, setCurrentStep] = useState(0);
+    const [errorMessage, setErrorMessage] = useState('');
+    const progress = (currentStep + 1) / totalSteps;
 
-    // Initialisatie van formuliergegevens
     const [formData, setFormData] = useState({
         firstname: '',
         lastname: '',
@@ -26,12 +28,6 @@ const RegisterFarmer = ({ navigation }) => {
         isFarmer: true,
     });
 
-    // Huidige stapnummer en progressie
-    const [currentStep, setCurrentStep] = useState(0);
-    const [errorMessage, setErrorMessage] = useState('');
-    const progress = (currentStep + 1) / totalSteps;
-
-    // Functie om naar de volgende stap te gaan
     const nextStep = () => {
         if (validateStep()) {
             setErrorMessage('');
@@ -41,14 +37,12 @@ const RegisterFarmer = ({ navigation }) => {
         }
     };
 
-    // Functie om terug te gaan naar de vorige stap
     const prevStep = () => {
         if (currentStep > 0) {
             setCurrentStep(currentStep - 1);
         }
     };
 
-    // Functie om formuliergegevens bij te werken
     const updateFormData = (key, value) => {
         // console.log(formData);
         setFormData(prevState => ({
@@ -57,10 +51,7 @@ const RegisterFarmer = ({ navigation }) => {
         }));
     };
 
-    // Functie om het formulier te verzenden
     const submitForm = async () => {
-        // console.log('submit data:' + JSON.stringify(formData));
-
         if (!validateStep()) {
             return;
         }
@@ -78,20 +69,15 @@ const RegisterFarmer = ({ navigation }) => {
             const json = await response.json();
 
             if (json.status === 'success') {
-                // Sla JWT token op in local storage
                 await AsyncStorage.setItem('token', json.data.token);
                 await AsyncStorage.setItem('uid', JSON.stringify(json.data.uid));
 
-                // console.log(json.data.userId)
-
                 navigation.navigate('RegistrationSucces');
             } else {
-                // Toon een foutmelding als registratgegevens onjuist zijn
                 setErrorMessage(json.message);
             }
         } catch (error) {
             console.error('Fout bij het registreren:', error);
-            // Toon een algemene foutmelding als er een fout optreedt
             setErrorMessage('Er is een fout opgetreden bij het registreren');
         }
     };
@@ -110,29 +96,23 @@ const RegisterFarmer = ({ navigation }) => {
     };
 
     const validateStep1 = () => {
-        // Deconstructie van het formData-object
         const { firstname, lastname, email, telephone } = formData;
     
-        // Controleer of firstname, lastname en email zijn ingevuld
         if (!firstname || !lastname || !email) {
             setErrorMessage('Alle velden zijn verplicht.');
             return false;
         }
     
-        // E-mail validatie
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             setErrorMessage('Voer een geldig e-mailadres in.');
             return false;
         }
     
-        // Telefoonnummer validatie (optioneel)
         if (telephone) {
-            // Als telefoonnummer is ingevuld, retourneer true
             return true;
         }
     
-        // Als telefoonnummer niet is ingevuld, retourneer true
         return true;
     };
 

@@ -6,7 +6,6 @@ import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
 
 const MapButton = () => {
-
     const navigation = useNavigation();
 
     const handleMapPress = () => {
