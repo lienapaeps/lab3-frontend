@@ -82,26 +82,25 @@ const ActivityDetail = ({ navigation, route }) => {
                         </View>
                         <View style={styles.body}>
                             {activityData.description && (
-                                <View style={styles.details}>
-                                    <Text style={{...globalStyles.headerTextSmall, marginBottom: 5}}>Details</Text>
-                                    <Text style={globalStyles.bodyText}>{activityData.description}</Text>
+                                <View>
+                                    <View style={styles.details}>
+                                        <Text style={{...globalStyles.headerTextSmall, marginBottom: 5}}>Details</Text>
+                                        <Text style={globalStyles.bodyText}>{activityData.description}</Text>
+                                    </View>
+                                    <View style={styles.users}>
+                                        <Text style={{...globalStyles.headerTextSmall, marginBottom: 5}}>Gaan ook</Text>
+                                        <Text style={globalStyles.bodyText}>Leden</Text>
+                                        <View style={styles.btnContainer}>
+                                            <Button title="Inschrijven" filled />
+                                        </View>
+                                    </View>
                                 </View>
+                                
                             )}
                             {activityData.text && (
                                 <View style={styles.content}>
                                     <Text style={globalStyles.bodyText}>{activityData.text}</Text>
                                 </View>
-                            )}
-                            {activityData.description && (
-                            <View style={styles.users}>
-                                <Text style={{...globalStyles.headerTextSmall, marginBottom: 5}}>Gaan ook</Text>
-                                <Text style={globalStyles.bodyText}>Leden</Text>
-                            </View>
-                            )}
-                            {activityData.description && activityData.enrolledUsers && (
-                            <View style={styles.btnContainer}>
-                                <Button title="Inschrijven" filled />
-                            </View>
                             )}
                         </View>
                     </View>
