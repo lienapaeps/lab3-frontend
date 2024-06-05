@@ -10,17 +10,19 @@ import InputField from '../../../../components/InputField';
 import Button from '../../../../components/Button';
 import ImageUpload from '../../../../components/ImageUpload';
 import { uploadToCloudinary } from '../../../../utils/uploadHelpers';
+import { CheckBox } from 'react-native-elements';
 
 const AddFarm = ({ navigation, route }) => {
     const totalSteps = 4;
     const farmerId = route.params.params.uid;
     const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
     const [selectedTimeField, setSelectedTimeField] = useState(null);
+    const [selectedTime, setSelectedTime] = useState('');
+    const [defaultTime, setDefaultTime] = useState('');
     const [currentStep, setCurrentStep] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
     const progress = (currentStep + 1) / totalSteps;
     const [selectedImageUri, setSelectedImageUri] = useState('');
-
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -39,9 +41,11 @@ const AddFarm = ({ navigation, route }) => {
         owner: farmerId,
     });
 
-    const showTimePicker = (field) => {
+    const showTimePicker = (field, defaultValue) => {
         setSelectedTimeField(field);
+        setSelectedTime(defaultValue);
         setTimePickerVisibility(true);
+        setDefaultTime(defaultValue);
     };
     
     const hideTimePicker = () => {
@@ -93,47 +97,62 @@ const AddFarm = ({ navigation, route }) => {
     };
 
     const updateFormData = (key, value) => {
-      if (key.startsWith('adress')) {
-          const subKey = key.split('.')[1];
-          setFormData(prevState => ({
-              ...prevState,
-              adress: {
-                  ...prevState.adress,
-                  [subKey]: value,
-              },
-          }));
-      }
-      else if (key.startsWith('openinghours')) {
-          const [, index, field] = key.match(/\[(\d+)\]\.(openinghour|closinghour)/);
-          setFormData(prevState => ({
-              ...prevState,
-              openinghours: prevState.openinghours.map((item, i) => {
-                  if (i === parseInt(index)) {
-                      return {
-                          ...item,
-                          [field]: value
-                      };
-                  }
-                  return item;
-              })
-          }));
-      }
-      else if (key.startsWith('contact')) {
-          const subKey = key.split('.')[1];
-          setFormData(prevState => ({
-              ...prevState,
-              contact: {
-                  ...prevState.contact,
-                  [subKey]: value,
-              },
-          }));
-      }
-      else {
-          setFormData(prevState => ({
-              ...prevState,
-              [key]: value,
-          }));
-      }
+        if (key.startsWith('adress')) {
+            const subKey = key.split('.')[1];
+            setFormData(prevState => ({
+                ...prevState,
+                adress: {
+                    ...prevState.adress,
+                    [subKey]: value,
+                },
+            }));
+        } else if (key.startsWith('openinghours')) {
+            if (key.endsWith('.closed')) {
+                const index = parseInt(key.match(/\[(\d+)\]/)[1]);
+                setFormData(prevState => ({
+                    ...prevState,
+                    openinghours: prevState.openinghours.map((item, i) => {
+                        if (i === index) {
+                            return {
+                                ...item,
+                                closed: value,
+                                openinghour: value ? '00:00' : defaultTime,
+                                closinghour: value ? '00:00' : defaultTime,
+                            };
+                        }
+                        return item;
+                    }),
+                }));
+            } else {
+                const [, index, field] = key.match(/\[(\d+)\]\.(openinghour|closinghour)/);
+                setFormData(prevState => ({
+                    ...prevState,
+                    openinghours: prevState.openinghours.map((item, i) => {
+                        if (i === parseInt(index)) {
+                            return {
+                                ...item,
+                                [field]: value,
+                            };
+                        }
+                        return item;
+                    }),
+                }));
+            }
+        } else if (key.startsWith('contact')) {
+            const subKey = key.split('.')[1];
+            setFormData(prevState => ({
+                ...prevState,
+                contact: {
+                    ...prevState.contact,
+                    [subKey]: value,
+                },
+            }));
+        } else {
+            setFormData(prevState => ({
+                ...prevState,
+                [key]: value,
+            }));
+        }
     };
 
     const submitForm = async () => {
@@ -257,7 +276,7 @@ const AddFarm = ({ navigation, route }) => {
                         {/* input fields */}
                         <View style={styles.inputs}>
                             <InputField label="Naam boerderij*" placeholder="Naam boerderij" value={formData.name} onChangeText={text => updateFormData('name', text)}/>
-                            <InputField label="Beschrijving*" placeholder="Beschrijving" value={formData.description} onChangeText={text => updateFormData('description', text)}/>
+                            <InputField multiline={true} label="Beschrijving*" placeholder="Beschrijving" value={formData.description} onChangeText={text => updateFormData('description', text)}/>
                             <View>
                                 <ImageUpload onImageSelected={handleImageSelected} title="foto van boerderij"/>
                             </View>
@@ -306,28 +325,41 @@ const AddFarm = ({ navigation, route }) => {
                         {formData.openinghours.map((item, index) => (
                             <View key={index} style={styles.row}>
                                 <View style={{flex: 1, marginRight: 10}}>
-                                    <TouchableOpacity onPress={() => showTimePicker(`openinghours[${index}].openinghour`)}>
+                                    <TouchableOpacity onPress={() => showTimePicker(`openinghours[${index}].openinghour`, item.openinghour)}>
                                         <InputField
-                                            label={`${item.day} - Opening`}
+                                            label={`${item.day}`}
                                             placeholder="Opening"
                                             value={item.openinghour}
                                             editable={false}
-                                            onPress={() => showTimePicker(`openinghours[${index}].openinghour`)}
+                                            onPress={() => showTimePicker(`openinghours[${index}].openinghour`, item.openinghour)}
                                             fullWidth
                                         />
                                     </TouchableOpacity>
                                 </View>
                                 <View style={{flex: 1}}>
-                                    <TouchableOpacity onPress={() => showTimePicker(`openinghours[${index}].closinghour`)}>
+                                    <TouchableOpacity onPress={() => showTimePicker(`openinghours[${index}].closinghour`, item.closinghour)}>
                                         <InputField
-                                            label={"Sluiting"}
+                                            label={" "}
                                             placeholder="Sluiting"
                                             value={item.closinghour}
                                             editable={false}
-                                            onPress={() => showTimePicker(`openinghours[${index}].closinghour`)}
+                                            onPress={() => showTimePicker(`openinghours[${index}].closinghour`, item.closinghour)}
                                             fullWidth
                                         />
                                     </TouchableOpacity>
+                                </View>
+                                <View style={{ alignSelf: 'center', marginTop: 50 }}>
+                                    <CheckBox
+                                        title="Gesloten"
+                                        checked={item.closed}
+                                        iconType="material-community"
+                                        checkedIcon="checkbox-marked"
+                                        uncheckedIcon="checkbox-blank-outline"
+                                        onPress={() => updateFormData(`openinghours[${index}].closed`, !item.closed)}
+                                        checkedColor={COLORS.orange}
+                                        uncheckedColor={COLORS.veryLightOffBlack}
+                                        containerStyle={{ borderWidth: 0, paddingHorizontal: 0, paddingVertical: 10, backgroundColor: 'transparent'}}
+                                    />
                                 </View>
                             </View>
                         ))}
@@ -401,6 +433,8 @@ const AddFarm = ({ navigation, route }) => {
                 onConfirm={handleConfirm}
                 onCancel={hideTimePicker}
                 textColor="#000000"
+                minuteInterval={30}
+                date={defaultTime ? new Date(`2000-01-01T${defaultTime}:00`) : new Date()}
             />
         </SafeAreaView>
     );

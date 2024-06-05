@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput } from 'react-native';
 import COLORS from '../constants/color';
 
 const InputField = (props) => {
-    const { fullWidth } = props;
+    const { fullWidth, multiline } = props;
 
     return (
         <View style={styles.inputField}>
@@ -12,9 +12,11 @@ const InputField = (props) => {
                 placeholder={props.placeholder}
                 style={[
                     styles.input,
-                    fullWidth ? styles.fullWidth : null
+                    fullWidth ? styles.fullWidth : null,
+                    multiline ? styles.multiline : null
                 ]}
                 autoCapitalize='none'
+                multiline={multiline} 
                 {...props}
             />
         </View>
@@ -40,6 +42,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         fontSize: 16,
     },
+    multiline: {
+        textAlignVertical: 'top',
+        height: 100,
+    }
 })
 
 export default InputField;
