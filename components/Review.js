@@ -3,38 +3,38 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Touch, Fla
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
 
-import { fetchReviewsData } from '../utils/fetchHelpers';
+import { fetchUserDataById } from '../utils/fetchHelpers';
 
-const Review = ({ farmId }) => {
-    const [reviewData, setReviewData] = useState([]);
-    const [loading, setLoading] = useState(true);
-    
+const Review = ({ item }) => {
+    const [userData, setUserData] = useState(null);
+
     useEffect(() => {
-        const fetchReviewData = async () => {
+        const fetchUserData = async () => {
             try {
-                const data = await fetchReviewsData(farmId);
-                console.log(data.data);
-                setReviewData(data.data.reviews);
+                const data = await fetchUserDataById(item.user);
+                setUserData(data.data.user);
             } catch (error) {
                 console.log("Error", error);
-            } finally {
-                setLoading(false);
             }
         };
 
-        fetchReviewData();
-    }, [farmId]);
+        fetchUserData();
+    }, [item.user]);
+
+    console.log(userData);
+
+
+
+    const formatDate = (dateString) => {
+        return dateString.slice(0, 10).replace('T', ' ');
+    };
 
     return (
-        <FlatList
-            data={reviewData}
-            keyExtractor={(item) => item._id.toString()}
-            renderItem={({ item }) => (
                 <TouchableOpacity activeOpacity={1} style={styles.flex}>
                     <View style={styles.line}></View>
                     <View style={[styles.container, styles.namesection]}>
-                        <Image style={styles.profileImage} source={"../assets/kelvin.png"} />
-                        <Text style={globalStyles.headerTextSmaller}>{item.user}</Text>
+                        <Image style={styles.profileImage} source={require('../assets/kelvin.png')} />
+                        <Text style={[globalStyles.headerTextSmaller, globalStyles.capitalize]}>{userData.firstname} {userData.lastname}</Text>
                     </View>
 
                     <View style={styles.datestar}>
@@ -43,18 +43,16 @@ const Review = ({ farmId }) => {
                                 <Image key={index} style={styles.star} source={require('../assets/icons/star.png')} />
                             ))}
                         </View>
-                        <Text style={globalStyles.bodyTextSmall}>{item.date}</Text>
+                        <Text style={globalStyles.bodyTextSmall}>{formatDate(item.date)}</Text>
                     </View>
 
                     <View style={styles.message}>
                         <Text style={globalStyles.bodyText}>{item.text}</Text>
                     </View>
                 </TouchableOpacity>
-            )}
-            ListEmptyComponent={<Text>No reviews available</Text>}
-        />
-    );
-};
+            )
+}
+
 
 const styles = StyleSheet.create({
     flex: {
