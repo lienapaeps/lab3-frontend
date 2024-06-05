@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from  'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, SafeAreaView, ActivityIndicator, Platform } from 'react-native';
 
 import { fetchMembersData, getUserIdAndToken, fetchFarmDataById, fetchSubscriptionData } from '../utils/fetchHelpers';
 
@@ -66,11 +66,23 @@ export default function FarmHeader ({ navigation, route }) {
     }
   
     if (loading) {
-      return <Text>Loading...</Text>;
+      return (
+          <SafeAreaView style={globalStyles.loadingContainer}>
+              {Platform.OS === "web" ? (
+                  <ActivityIndicator size="small" color={COLORS.offBlack} />
+              ) : (
+                  <ActivityIndicator size="medium" color={COLORS.offBlack} />
+              )}
+          </SafeAreaView>
+      );
     }
   
     if (error) {
-      return <Text>Error: {error.message}</Text>;
+      return (
+          <SafeAreaView style={globalStyles.container}>
+              <Text style={globalStyles.bodyText}>Error: {error.message}</Text>
+          </SafeAreaView>
+      );
     }
 
     return (
