@@ -108,17 +108,21 @@ const Explore = ({ navigation }) => {
             </View>
             <View style={styles.section}>
                 <Text style={globalStyles.headerTextSmall}>{searchTerm ? "Zoekresultaten" : "Nieuwste"}</Text>
-                <View style={styles.cards}>
-                    <ScrollView 
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ gap: 15}}
-                    >
-                        {filteredActivities.map((activity) => {
-                            return <AcitvityCard key={activity._id} activityData={activity} onPress={handleActivityCardPress}/>
-                        })}
-                    </ScrollView>
-                </View>
+                {filteredActivities.length === 0 ? (
+                    <Text style={styles.emptyState}>Er zijn geen activiteiten beschikbaar.</Text>
+                ) : (
+                    <View style={styles.cards}>
+                        <ScrollView 
+                            horizontal={true}
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={{ gap: 15}}
+                        >
+                            {filteredActivities.map((activity) => {
+                                return <AcitvityCard key={activity._id} activityData={activity} onPress={handleActivityCardPress}/>
+                            })}
+                        </ScrollView>
+                    </View>
+                )}
             </View>
         </SafeAreaView>
     );
