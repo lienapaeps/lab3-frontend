@@ -7,6 +7,7 @@ import { fetchUserDataById } from '../utils/fetchHelpers';
 
 const Review = ({ item }) => {
     const [userData, setUserData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -15,6 +16,8 @@ const Review = ({ item }) => {
                 setUserData(data.data.user);
             } catch (error) {
                 console.log("Error", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -28,6 +31,14 @@ const Review = ({ item }) => {
     const formatDate = (dateString) => {
         return dateString.slice(0, 10).replace('T', ' ');
     };
+
+    if (loading) {
+        return <Text>Loading...</Text>;
+    }
+
+    if (!userData) {
+        return <Text>Error loading user data</Text>;
+    }
 
     return (
                 <TouchableOpacity activeOpacity={1} style={styles.flex}>
