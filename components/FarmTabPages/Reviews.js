@@ -5,23 +5,50 @@ import { globalStyles } from '../../styles/global';
 import COLORS from '../../constants/color';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Review  from '../../components/Review';
+import { useState, useEffect } from 'react';
+
+import { fetchReviewsData } from '../../utils/fetchHelpers';
 
  
 const Reviews = ({ route }) => {
     const { data:farmId } = route.params;
+    const [reviewData, setReviewData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+        const fetchReviewData = async () => {
+            try {
+                const data = await fetchReviewsData(farmId);
+                setReviewData(data.data.reviews);
+            } catch (error) {
+                console.log("Error", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchReviewData();
+    }, [farmId]);
+
+    console.log(reviewData);
     return (
         <View style={styles.flex}>
                 <TouchableOpacity  activeOpacity={1} style={styles.flex}>
             <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>8 recensies</Text>
+                <Text style={styles.title}>{reviewData.length} recensies</Text>
                 <TouchableOpacity style={styles.filter}>
                     <Text style={globalStyles.headerTextSmaller}>Meest recent</Text>
                 </TouchableOpacity>
             </View>
             </View>
-            <Review farmId={farmId}/>
+            <FlatList
+                data={reviewData}
+                keyExtractor={(item) => item._id}
+                renderItem={({ item }) => (
+                    <Review item={item} />
+                )}
+            />
             </TouchableOpacity>    
         </View> 
     )
