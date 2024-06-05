@@ -33,7 +33,7 @@ const Review = ({ item }) => {
                 <TouchableOpacity activeOpacity={1} style={styles.flex}>
                     <View style={styles.line}></View>
                     <View style={[styles.container, styles.namesection]}>
-                        <Image style={styles.profileImage} source={require('../assets/kelvin.png')} />
+                        <Image style={styles.profileImage} source={{uri: userData.profilePicture}} />
                         <Text style={[globalStyles.headerTextSmaller, globalStyles.capitalize]}>{userData.firstname} {userData.lastname}</Text>
                     </View>
 
