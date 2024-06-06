@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 
+import { stringifyData } from '../../utils/utils';
 import { fetchActivityDataById } from '../../utils/fetchHelpers';
 
 import COLORS from '../../constants/color';
@@ -30,6 +31,7 @@ const ActivityDetail = ({ navigation, route }) => {
             try {
                 const data = await fetchActivityDataById(id);
                 setActivityData(data.data.activity);
+                // console.log(stringifyData(activityData));
             } catch (error) {
                 setError(error);
             } finally {

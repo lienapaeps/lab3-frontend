@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform, SafeAreaView, Image, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 
+import { stringifyData } from '../../../utils/utils';
 import { fetchPackagesData, getUserIdAndToken } from '../../../utils/fetchHelpers';
 
 import { globalStyles } from '../../../styles/global';
@@ -26,6 +27,7 @@ const SubscribePackage = ({ navigation, route }) => {
             try {
                 const response = await fetchPackagesData(farmId);
                 setPackages(response.data.packages);
+                // console.log("Aangeboden pakketten: " + stringifyData(packages));
             } catch (error) {
                 console.log(error);
             }
@@ -39,6 +41,7 @@ const SubscribePackage = ({ navigation, route }) => {
             try {
                 const { userId } = await getUserIdAndToken();
                 setUserId(userId);
+                // console.log("User ID: " + userId);
             } catch (error) {
                 console.log(error);
             }

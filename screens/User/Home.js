@@ -43,6 +43,7 @@ const HomeUser = ({ navigation, route }) => {
                 const userDataResponse = await fetchUserData(token, userId);
                 if (userDataResponse && userDataResponse.data && userDataResponse.data.user) {
                     setUserData(userDataResponse.data.user);
+                    // console.log('userData:', userData);
                 } else {
                     console.error('Invalid user data response');
                     return;
@@ -50,6 +51,7 @@ const HomeUser = ({ navigation, route }) => {
 
                 const subscriptionDataResponse = await fetchSubscriptionData(token, userId);
                 setSubscriptionData(subscriptionDataResponse.data);
+                // console.log('subscriptionData:', subscriptionData);
 
                 setLoading(false);
             } catch (error) {

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Platform }
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 
+import { stringifyData } from '../../utils/utils';
 import { fetchActivityData } from '../../utils/fetchHelpers';
 
 import { globalStyles } from '../../styles/global';
@@ -23,6 +24,7 @@ const Explore = ({ navigation }) => {
                 const data = await fetchActivityData();
                 const sortedActivities = data.data.activities.sort((a, b) => new Date(a.start.date) - new Date(b.start.date));
                 setActivityData(sortedActivities);
+                // console.log(activityData);
             } catch (error) {
                 setError(error);
             } finally {

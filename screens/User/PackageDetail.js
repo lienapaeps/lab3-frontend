@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, ActivityIndicator } from 'react-native'
 import { getISOWeek } from 'date-fns';
 
+import { stringifyData } from '../../utils/utils';
 import { fetchFarmDataById, fetchPackageDataById } from '../../utils/fetchHelpers';
 
 import { globalStyles } from '../../styles/global';
@@ -31,11 +32,14 @@ const PackageDetail = ({ navigation, route }) => {
             try {
                 const farmResponse = await fetchFarmDataById(farmId);
                 setFarmData(farmResponse.data.farm);
+                // console.log("farm data: " + stringifyData(farmData));
 
                 const packageResponse = await fetchPackageDataById(packageId, userId);
                 setPackageData(packageResponse.packageData);
+                // console.log("package data: " + stringifyData(packageData));
 
                 setSubscriptionDetails(packageResponse.subscriptionDetails);
+                // console.log("subscription details: " + stringifyData(subscriptionDetails));
             } catch (error) {
                 console.error('Error:', error);
             } finally {

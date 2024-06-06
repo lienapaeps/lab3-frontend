@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 
 import { fetchFarmData } from '../../utils/fetchHelpers';
-import { getCurrentLocation } from '../../utils/utils';
+import { getCurrentLocation, stringifyData } from '../../utils/utils';
 import loadGoogleMapsAPI from './webMap';
 
 import COLORS from '../../constants/color';
@@ -66,6 +66,7 @@ const Map = ({ navigation }) => {
             try {
                 const farmDataResponse = await fetchFarmData();
                 setFarmData(farmDataResponse.data.farms);
+                // console.log("Map farm data: " + stringifyData(farmData));
             } catch (error) {
                 setError(error);
             } finally {
@@ -103,7 +104,7 @@ const Map = ({ navigation }) => {
         }
 
         if (farmData.length > 0) {
-            console.log("First farm coordinates:  ", farmData[0].coordinates);
+            // console.log("First farm coordinates:  ", farmData[0].coordinates);
         }
     }, []);
     
@@ -123,7 +124,6 @@ const Map = ({ navigation }) => {
     if (error) {
         return <Text>Error: {error.message}</Text>;
     }
-
 
     return (
         <View style={styles.container}>

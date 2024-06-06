@@ -31,15 +31,15 @@ export default function FarmHeader ({ navigation, route }) {
 
           const farmDataResponse = await fetchFarmDataById(id);
           setFarmData(farmDataResponse.data.farm);
-          // console.log("Farm data: ", farmDataResponse);
+          // console.log("Farm data: ", farmData);
 
           const membersDataResponse = await fetchMembersData(id);
           setMembersData(membersDataResponse.data.members);
-          // console.log("Members data: ", membersDataResponse);
+          // console.log("Members data: ", membersData);
 
           try {
             const subscriptionDataResponse = await fetchSubscriptionData(token, userId);
-            console.log("er is subscription data: ", subscriptionDataResponse.data)
+            // console.log("er is subscription data: ", subscriptionDataResponse.data)
             if (subscriptionDataResponse.data) {
               setIsMember(true);
             } else {

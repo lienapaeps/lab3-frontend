@@ -55,3 +55,7 @@ export const getCurrentLocation = async () => {
     }
     return await Location.getCurrentPositionAsync({});
 };
+
+export const stringifyData = (data) => {
+    return JSON.stringify(data, null, 2);
+};
