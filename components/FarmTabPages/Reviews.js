@@ -30,7 +30,6 @@ const Reviews = ({ route }) => {
         fetchReviewData();
     }, [farmId]);
 
-    console.log(reviewData);
     return (
         <View style={styles.flex}>
                 <TouchableOpacity  activeOpacity={1} style={styles.flex}>
@@ -48,6 +47,7 @@ const Reviews = ({ route }) => {
                 renderItem={({ item }) => (
                     <Review item={item} />
                 )}
+                ListEmptyComponent={<Text style={styles.emptyState}>No reviews available 🍃</Text>}
             />
             </TouchableOpacity>    
         </View> 
@@ -61,6 +61,13 @@ const styles = StyleSheet.create({
     },
     container: {
         margin: 20
+    },
+    emptyState: {
+        textAlign: 'center',
+        marginTop: 20,
+        fontSize: 16,
+        color: COLORS.offBlack,
+        fontFamily: 'Baloo2_500Medium',
     },
     star: {
         width: 20,

@@ -24,12 +24,8 @@ const Review = ({ item }) => {
         fetchUserData();
     }, [item.user]);
 
-    console.log(userData);
-
-
-
     const formatDate = (dateString) => {
-        return dateString.slice(0, 10).replace('T', ' ');
+        return dateString.slice(0, 10).replace('T', ' '); 
     };
 
     if (loading) {
