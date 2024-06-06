@@ -60,7 +60,7 @@ const FarmTab = ({ route })  => {
         <Tab.Screen name="Agenda" component={Agenda} options={screenOptions}/>
         <Tab.Screen name="Leden" component={Members} options={screenOptions}/>
         <Tab.Screen name="Reviews" initialParams={{data: farmId}} component={Reviews} options={screenOptions}/>
-        <Tab.Screen name="Contact" component={Contact} options={screenOptions}/>
+        <Tab.Screen name="Contact" initialParams={{data: farmId}} component={Contact} options={screenOptions}/>
     </Tab.Navigator>
     );
 };
