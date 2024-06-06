@@ -26,8 +26,8 @@ const HomeUser = ({ navigation, route }) => {
         navigation.navigate('AppStack', { screen: 'Profile', params: { userData }});
     }; 
 
-    const goToPackageDetails = (packageId, farmId, userId) => {
-        navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId, userId }});
+    const goToPackageDetails = (packageId, farmId, userId, packageName) => {
+        navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId, userId, packageName }});
     };
 
     useEffect(() => {
@@ -95,7 +95,7 @@ const HomeUser = ({ navigation, route }) => {
                 subscriptionData ? (
                     subscriptionData.package ? (
                         // er is een pakket
-                        <TouchableOpacity onPress={() => goToPackageDetails(subscriptionData.package._id, subscriptionData.farm._id, userData._id)}>
+                        <TouchableOpacity onPress={() => goToPackageDetails(subscriptionData.package._id, subscriptionData.farm._id, userData._id, subscriptionData.package.name)}>
                             <View style={styles.packageCard}>
                                 <Text style={{...globalStyles.headerText, ...styles.packageFarm}}>{subscriptionData.farm.name}</Text>
                                 <Image style={styles.packageImage} source={{ uri: subscriptionData.farm.farmImage }}/>
