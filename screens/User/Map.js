@@ -139,6 +139,7 @@ const Map = ({ navigation }) => {
                     <MapView
                         style={styles.map}
                         initialRegion={region}
+                        region={region}
                         zoomEnabled={true}
                         zoomControlEnabled={true}
                     >
@@ -159,6 +160,7 @@ const Map = ({ navigation }) => {
                     <MapViewMob
                         style={styles.map}
                         initialRegion={region}
+                        region={region}
                         zoomEnabled={true}
                         zoomControlEnabled={true}
                     >
