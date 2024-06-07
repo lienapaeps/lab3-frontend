@@ -9,7 +9,17 @@ import { globalStyles } from '../../../styles/global';
 const MyAccount = ({ navigation, route }) => {
     const userData = route.params.userData;
 
-   
+    const handleGoToEmail = async () => {
+        navigation.navigate('AppStack', { screen: 'Email', params: { userData: userData }});
+    }
+
+    const handleGoToPhone = async () => {
+        navigation.navigate('AppStack', { screen: 'Phone', params: { userData: userData }});
+    }
+
+    const handleGoToPassword = async () => {
+        navigation.navigate('AppStack', { screen: 'Password', params: { userData: userData }});
+    }
 
    
 
@@ -23,15 +33,15 @@ const MyAccount = ({ navigation, route }) => {
           
                 <Text style={globalStyles.headerSmallerText}>My account informatie</Text>
                 <View style={styles.container}>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={handleGoToEmail}>
                         <Text style={styles.buttonText}>E-mail</Text>
                         <Text style={styles.buttonData}>{userData.email}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={handleGoToPhone}>
                         <Text style={styles.buttonText}>Telefoon</Text>
                         <Text style={styles.buttonData}>{userData.telefoon}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={handleGoToPassword}>
                         <Text style={styles.buttonText}>Wachtwoord</Text>
                     </TouchableOpacity>
                 </View>

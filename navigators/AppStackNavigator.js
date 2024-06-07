@@ -30,7 +30,7 @@ const AppStackNavigator = () => {
           headerShown: false,
         })}
       />
-      <Stack.Screen name="Calendar" component={Calendar} options={NavigationOptions}/>
+      <Stack.Screen name="Calendar" component={Calendar} options={NavigationOptions} />
       <Stack.Screen name="FarmUserDetails" component={FarmUserDetails}
         options={() => ({
           headerShown: false,
@@ -51,14 +51,23 @@ const AppStackNavigator = () => {
           headerShown: false,
         })}
       />
-      <Stack.Screen name="Profile" component={Profile} options={NavigationOptions}/>
-      <Stack.Screen name="MyAccount" component={MyAccount} options={NavigationOptions}/>
-      <Stack.Screen name="Settings" component={Settings} options={NavigationOptions}/>
-      <Stack.Screen name="FAQ" component={Faq} options={NavigationOptions}/>
+      <Stack.Screen name="Profile" component={Profile} options={NavigationOptions} />
+      <Stack.Screen name="MyAccount" component={MyAccount} options={NavigationOptions} />
+      <Stack.Screen name="Settings" component={Settings} options={NavigationOptions} />
+      <Stack.Screen name="FAQ" component={Faq} options={NavigationOptions} />
       <Stack.Screen name="SubscribePackage" component={SubscribePackage}
         options={() => ({
           headerShown: false,
         })}
+
+      />
+      
+      <Stack.Screen name="Email" component={Email} options={NavigationOptions} />
+      <Stack.Screen name="Phone" component={Phone} options={NavigationOptions} />
+      <Stack.Screen name="Password" component={Password} options={NavigationOptions} 
+     
+        
+
       />
     </Stack.Navigator>
   );
