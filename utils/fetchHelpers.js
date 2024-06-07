@@ -164,3 +164,14 @@ export const subscribeToPackage = async (userId, packageId) => {
     });
     return await response.json();
 };
+// update user email
+export const updateUserEmail = async (userId, newEmail) => {
+    const response = await fetch(`https://lab3-backend-w1yl.onrender.com/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: newEmail }),
+    });
+    return await response.json();
+};

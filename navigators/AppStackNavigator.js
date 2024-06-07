@@ -65,9 +65,6 @@ const AppStackNavigator = () => {
       <Stack.Screen name="Email" component={Email} options={NavigationOptions} />
       <Stack.Screen name="Phone" component={Phone} options={NavigationOptions} />
       <Stack.Screen name="Password" component={Password} options={NavigationOptions} 
-     
-        
-
       />
     </Stack.Navigator>
   );
