@@ -4,7 +4,9 @@ import COLORS from '../constants/color';
 export const globalStyles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 30,
+        // padding: 25,
+        marginLeft: 20,
+        marginRight: 20,
         paddingBottom: -30,
         backgroundColor: COLORS.offWhite,
     },
@@ -21,7 +23,12 @@ export const globalStyles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 20,
         color: COLORS.offBlack,
-        
+    },
+    bodyTextSemiBold: {
+        fontFamily: 'Quicksand_600SemiBold',
+        fontSize: 16,
+        lineHeight: 20,
+        color: COLORS.offBlack,
     },
     bodyTextBold: {
         fontFamily: 'Quicksand_700Bold',
@@ -51,6 +58,11 @@ export const globalStyles = StyleSheet.create({
         fontSize: 20,
         color: COLORS.offBlack,
     },
+    headerTextMedium: {
+        fontFamily: 'Baloo2_600SemiBold',
+        fontSize: 18,
+        color: COLORS.offBlack,
+    },
     headerTextSmaller: {
         fontFamily: 'Baloo2_600SemiBold',
         fontSize: 16,
@@ -75,4 +87,24 @@ export const globalStyles = StyleSheet.create({
         color: COLORS.offBlack,
         fontWeight: '500',
     },
+    errorText: {
+        fontFamily: 'Quicksand_400Regular',
+        fontSize: 16,
+        lineHeight: 20,
+        color: COLORS.alert,
+    },
+    successText: {
+        color: '#155724',
+        fontFamily: 'Quicksand_400Regular',
+        fontSize: 16,
+        lineHeight: 20,
+    },
+    capitalize: {
+        textTransform: 'capitalize',
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 });

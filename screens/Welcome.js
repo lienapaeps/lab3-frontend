@@ -25,7 +25,7 @@ const Welcome = ({navigation}) => {
 
 const styles = StyleSheet.create({
     header: {
-        marginTop: 50,
+        marginTop: 90,
         alignItems: 'center',
         justifyContent: 'space-between',
     },

@@ -1,5 +1,4 @@
 import React from 'react';
-import COLORS from '../constants/color';
 import CustomBackButton from './CustomBackButton';
 
 const navigationOptions = ({ navigation }) => ({
@@ -8,6 +7,7 @@ const navigationOptions = ({ navigation }) => ({
           elevation: 0,
           shadowOpacity: 0,
           backgroundColor: 'transparent',
+          height: 60,
         },
         headerTitleStyle: {
           display: 'none',

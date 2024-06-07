@@ -1,18 +1,23 @@
-import React, { useState } from 'react';
-import { TouchableOpacity, Text, Image, StyleSheet, View, Modal, TouchableWithoutFeedback } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { TouchableOpacity, Text, Image, StyleSheet, View, Modal, TouchableWithoutFeedback, Animated } from 'react-native';
 import Slider from '@react-native-community/slider';
 
 import { globalStyles } from '../styles/global';
 import COLORS from '../constants/color';
 
-const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }) => {
+const Filter = ({ onFilterChange, onDistanceFilterChange }) => {
     const [showModal, setShowModal] = useState(false);
     const [selectedOption, setSelectedOption] = useState('All');
-    const [selectedRating, setSelectedRating] = useState(0);
     const [distance, setDistance] = useState(0);
+    const translateY = useRef(new Animated.Value(600)).current;
 
     const handleFilterPress = () => {
         setShowModal(true);
+        Animated.timing(translateY, {
+          toValue: 0,
+          duration: 250,
+          useNativeDriver: true,
+        }).start();
     };
 
     const handleOptionPress = (status) => {
@@ -22,26 +27,23 @@ const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }
 
     const handleClearFilter = () => {
         setSelectedOption('All');
-        setSelectedRating(0);
-        setDistance(0); // Reset distance to 0
+        setDistance(0);
         onFilterChange('All');
-        onRatingFilterChange(0);
-        onDistanceFilterChange(0); // Reset distance to 0
-        setShowModal(false);
+        onDistanceFilterChange(0);
+        handleModalClose();
     };
 
     const handleApplyFilter = () => {
         onDistanceFilterChange(distance);
-        setShowModal(false);
+        handleModalClose();
     };
 
     const handleModalClose = () => {
-        setShowModal(false);
-    };
-
-    const handleRatingPress = (rating) => {
-        setSelectedRating(rating);
-        onRatingFilterChange(rating);
+        Animated.timing(translateY, {
+          toValue: 600,
+          duration: 250,
+          useNativeDriver: true,
+      }).start(() => setShowModal(false));
     };
 
     const handleDistanceChange = (value) => {
@@ -51,15 +53,16 @@ const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }
     return (
         <View>
             <TouchableOpacity style={styles.filter} onPress={handleFilterPress}>
-                <Image source={require('../assets/icons/filters.png')} />
+                <Image style={styles.iconImg} source={require('../assets/icons/filters.png')} />
             </TouchableOpacity>
 
-            <Modal visible={showModal} transparent={true}>
+            <Modal visible={showModal} transparent={true} animationType="none">
                 <TouchableWithoutFeedback onPress={handleModalClose}>
                     <View style={styles.modalOverlay} />
                 </TouchableWithoutFeedback>
 
-                <View style={styles.modalContent}>
+                <Animated.View style={[styles.modalContent, { transform: [{ translateY }] }]}>
+
                   <View style={styles.modalHeader}>
                     <Text style={globalStyles.headerText}>Filters</Text>
                   </View>
@@ -74,26 +77,6 @@ const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }
                       </TouchableOpacity>
                     </View>
                   </View>
-                  {/* sorteren op beoordeling */}
-                  <View style={styles.modalSection}>
-                    <Text style={[globalStyles.headerTextSmall, styles.modalSectionHeader]}>Beoordeling</Text>
-                    <View style={styles.modalSectionContent}>
-                      {[1, 2, 3, 4, 5].map((rating) => (
-                        <TouchableOpacity
-                          key={rating}
-                          style={[
-                            styles.modalOption,
-                            selectedRating === rating && styles.selectedOption
-                          ]}
-                          onPress={() => handleRatingPress(rating)}
-                        >
-                          <Text style={[styles.modelOptionText, selectedRating === rating && styles.selectedOptionText]}>
-                            {rating}+
-                          </Text>
-                        </TouchableOpacity>
-                      ))}
-                    </View>
-                  </View>
                   {/* sorteren op afstand in km */}
                   <View style={styles.modalSection}>
                     <Text style={[globalStyles.headerTextSmall, styles.modalSectionHeader]}>Afstand in km</Text>
@@ -103,12 +86,12 @@ const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }
                       maximumTrackTintColor={COLORS.veryLightOffBlack}
                       thumbTintColor={COLORS.green}
                       minimumValue={0}
-                      maximumValue={10}
+                      maximumValue={20}
                       step={1}
                       value={distance}
                       onValueChange={handleDistanceChange}
                     />
-                    <Text>{distance}km</Text>
+                    <Text>{distance} km</Text>
                   </View>
                   {/* footer met buttons om filters te wissen of resultaten te tonen */}
                   <View style={styles.modalFooter}>
@@ -117,7 +100,7 @@ const Filter = ({ onFilterChange, onRatingFilterChange, onDistanceFilterChange }
                       <Text style={styles.modalButtonText}>Toon resultaten</Text>
                     </TouchableOpacity>
                   </View>
-                </View>
+                </Animated.View>
             </Modal>
         </View>
     );
@@ -133,7 +116,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         gap: 10,
-        shadowColor: 'rgba(0,0,0, .4)',
+        shadowColor: 'rgba(0,0,0, .1)',
         shadowOffset: { height: 1, width: 1 }, 
         shadowOpacity: 1,
         shadowRadius: 1,
@@ -141,7 +124,7 @@ const styles = StyleSheet.create({
     },
     modalOverlay: {
         flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
     },
     modalContent: {
         backgroundColor: COLORS.white,
@@ -161,7 +144,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         borderBottomWidth: 1,
         borderBottomColor: COLORS.veryLightOffBlack,
-        paddingBottom: 20,
+        paddingBottom: 10,
     },
     modalSection: {
         marginBottom: 20,
@@ -199,6 +182,7 @@ const styles = StyleSheet.create({
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
+      paddingBottom: 10
     },
     modalButton: {
       backgroundColor: COLORS.green,
@@ -227,6 +211,10 @@ const styles = StyleSheet.create({
       width: '100%',
       height: 40,
       color: COLORS.green,
+    },
+    iconImg: {
+        width: 30,
+        height: 30,
     }
 });
 

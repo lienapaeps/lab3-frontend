@@ -4,12 +4,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as SplashScreen from 'expo-splash-screen';
 
-import AuthNavigator from './AuthNavigator';
-import AppTabNavigator from './AppTabNavigator';
-import AppStackNavigator from './AppStackNavigator';
+import AuthNavigator from './navigators/AuthNavigator';
+import AppTabNavigator from './navigators/AppTabNavigator';
+import AppStackNavigator from './navigators/AppStackNavigator';
 
-// sub navigator
-import SubNavigator from './SubNavigator';
+import AppTabNavigatorFarmer from './navigators/AppTabNavigatorFarmer';
+import AppStackNavigatorFarmer from './navigators/AppStackNavigatorFarmer';
 
 import useCustomFonts from './constants/loadFonts';
 
@@ -59,8 +59,10 @@ export default function App() {
                 <Stack.Screen name="App" component={AppTabNavigator} options={{ headerShown: false }} />
                 {/* Voeg de AppStackNavigator toe als een scherm binnen de Stack.Navigator */}
                 <Stack.Screen name="AppStack" component={AppStackNavigator} options={{ headerShown: false }} />
-                {/* Voeg de SubNavigator toe als een scherm binnen de Stack.Navigator */}
-                <Stack.Screen name="Sub" component={SubNavigator} options={{ headerShown: false }} />
+                {/* Voeg de AppTabNavigatorFarmer toe als een scherm binnen de Stack.Navigator */}
+                <Stack.Screen name="AppFarmer" component={AppTabNavigatorFarmer} options={{ headerShown: false }} />
+                {/* Voeg de AppStackNavigatorFarmer toe als een scherm binnen de Stack.Navigator */}
+                <Stack.Screen name="AppStackFarmer" component={AppStackNavigatorFarmer} options={{ headerShown: false }} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>

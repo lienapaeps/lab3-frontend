@@ -1,0 +1,40 @@
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
+import * as Linking from 'expo-linking';
+
+// alle schermen ivm inloggen en registreren
+import Welcome from '../screens/Welcome';
+import LoginScreen from '../screens/Login';
+import RegisterScreen from '../screens/Register';
+import RegisterUserScreen from '../screens/User/Register/Register';
+import RegisterFarmerScreen from '../screens/Farmer/Register/Register';
+import OnBoarding from '../screens/User/Register/OnBoarding';
+import RegistrationSucces from '../screens/Farmer/Register/RegistrationSucces';
+import AddFarm from '../screens/Farmer/Register/addFarmForm/AddScreen';
+import AddPackages from '../screens/Farmer/Register/addFarmForm/AddPackages';
+import ForgotPassword from '../screens/ForgotPassword';
+import ResetPassword from '../screens/ResetPassword';
+
+import NavigationOptions from '../components/NavigationOptions';
+
+const Stack = createStackNavigator();
+
+const AuthNavigator = () => {
+  return (
+    <Stack.Navigator>
+        <Stack.Screen name="Welcome" component={Welcome} options={{headerShown:false}}/>
+        <Stack.Screen name="Login" component={LoginScreen} options={NavigationOptions}/>
+        <Stack.Screen name="Register" component={RegisterScreen} options={NavigationOptions}/>
+        <Stack.Screen name="registerUser" component={RegisterUserScreen} options={{headerShown:false}}/>
+        <Stack.Screen name="registerFarmer" component={RegisterFarmerScreen} options={{headerShown:false}}/>
+        <Stack.Screen name="OnBoarding" component={OnBoarding} options={{headerShown:false}}/>
+        <Stack.Screen name="RegistrationSucces" component={RegistrationSucces} options={{headerShown:false}}/>
+        <Stack.Screen name="AddFarm" component={AddFarm} options={{headerShown:false}}/>
+        <Stack.Screen name="AddPackages" component={AddPackages} options={{headerShown:false}}/>
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={NavigationOptions}/>
+        <Stack.Screen name="ResetPassword" component={ResetPassword} options={NavigationOptions}/>
+    </Stack.Navigator>
+  );
+};
+
+export default AuthNavigator;

@@ -3,10 +3,22 @@ import { View, Text, StyleSheet, TextInput } from 'react-native';
 import COLORS from '../constants/color';
 
 const InputField = (props) => {
+    const { fullWidth, multiline } = props;
+
     return (
         <View style={styles.inputField}>
             <Text style={styles.label}>{props.label}</Text>
-            <TextInput placeholder={props.placeholder} style={styles.input} {...props} />
+            <TextInput
+                placeholder={props.placeholder}
+                style={[
+                    styles.input,
+                    fullWidth ? styles.fullWidth : null,
+                    multiline ? styles.multiline : null
+                ]}
+                autoCapitalize='none'
+                multiline={multiline} 
+                {...props}
+            />
         </View>
     );
 }
@@ -17,16 +29,22 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: COLORS.offBlack,
         marginBottom: 10,
-        marginTop: 20,
+        marginTop: 15,
+    },
+    fullWidth: {
+        width: '100%',
     },
     input: {
-        paddingVertical: 16,
-        paddingHorizontal: 16,
+        padding: 18,
         borderColor: COLORS.veryLightOffBlack,
         backgroundColor: COLORS.white,
         borderWidth: 1,
         borderRadius: 10,
         fontSize: 16,
+    },
+    multiline: {
+        textAlignVertical: 'top',
+        height: 100,
     }
 })
 

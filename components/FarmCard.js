@@ -1,47 +1,120 @@
-import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
 
+import { calculateDistance, getUserLocation } from '../utils/utils';
 
-const FarmCard = (props) => {
+const FarmCard = ({ farmData, onPress }) => {
+    const [currentTime, setCurrentTime] = useState(new Date());
+    const [location, setLocation] = useState();
+    const [distance, setDistance] = useState(0);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const getLocationAndDistance = async () => {
+            const userLocation = await getUserLocation();
+            setLocation(userLocation);
+
+            const calculatedDistance = calculateDistance(
+                userLocation.coords.latitude,
+                userLocation.coords.longitude,
+                farmData.coordinates.latitude,
+                farmData.coordinates.longitude
+            );
+            setDistance(calculatedDistance);
+            setLoading(false);
+        };
+        getLocationAndDistance();
+    }, []);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentTime(new Date());
+        }, 60000); // update elke minuut
+        return () => clearInterval(interval);
+    }, []);
+
     const handlePress = () => {
-        props.onPress(props.farmData);
+        onPress(farmData._id);
+        // console.log(farmData._id);
     }
 
+    const checkStatus = (openingHours) => {
+        const dayNames = ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'];
+        const currentDayIndex = currentTime.getDay();
+        const currentDay = dayNames[currentDayIndex];
+
+        const todayOpeningHours = openingHours.find((hours) => hours.day === currentDay);
+
+        if (!todayOpeningHours || !todayOpeningHours.openinghour || !todayOpeningHours.closinghour) {
+            return "Gesloten";
+        }
+
+        const [openingHour, openingMinute] = todayOpeningHours.openinghour.split(':').map(Number);
+        const [closingHour, closingMinute] = todayOpeningHours.closinghour.split(':').map(Number);
+
+        if (isNaN(openingHour) || isNaN(openingMinute) || isNaN(closingHour) || isNaN(closingMinute)) {
+            return "Gesloten";
+        }
+
+        const openingTime = new Date(currentTime);
+        openingTime.setHours(openingHour, openingMinute, 0, 0);
+
+        const closingTime = new Date(currentTime);
+        closingTime.setHours(closingHour, closingMinute, 0, 0);
+
+        if (currentTime >= openingTime && currentTime <= closingTime) {
+            return "Open";
+        } else {
+            return "Gesloten";
+        }
+    };
+
+    const status = checkStatus(farmData.openinghours, currentTime);
+    const textColor = status === "Open" ? COLORS.green : COLORS.alert;
+    const imageSource = status === "Open" ? require('../assets/icons/clock.png') : require('../assets/icons/clock-inactive.png');
+
     return (
-        <TouchableOpacity onPress={handlePress} style={styles.card}>
-            <View>
-                <Image style={styles.cardImage} source={{uri: props.farmData.image }} />
-            </View>
-            <View>
-                <View style={styles.header}>
-                    <Text style={globalStyles.headerTextSmaller}>{props.farmData.title}</Text>
-                    <View style={styles.adress}>
-                        <Text style={globalStyles.bodyText}>{props.farmData.street}</Text>
-                        <Text style={globalStyles.bodyText}>{props.farmData.streetnumber}</Text>
+        <View style={{flex: 1}}>
+            <TouchableOpacity onPress={handlePress} style={styles.card}>
+                <View>
+                    <Image style={styles.cardImage} source={{uri: farmData.farmImage }} />
+                </View>
+                <View>
+                    <View style={styles.header}>
+                        <Text style={globalStyles.headerTextSmaller}>{farmData.name}</Text>
+                        <View style={styles.adress}>
+                            <Text style={{...globalStyles.bodyText, ...globalStyles.capitalize}}>{farmData.adress.street}</Text>
+                            <Text style={globalStyles.bodyText}>{farmData.adress.number}</Text>
+                        </View>
+                        <View style={styles.adress}>
+                            <Text style={{...globalStyles.bodyText, ...globalStyles.capitalize}}>{farmData.adress.zipcode}</Text>
+                            <Text style={globalStyles.bodyText}>{farmData.adress.city}</Text>
+                        </View>
                     </View>
-                    <View style={styles.adress}>
-                        <Text style={globalStyles.bodyText}>{props.farmData.city}</Text>
-                        <Text style={globalStyles.bodyText}>{props.farmData.postalcode}</Text>
+                    <View style={styles.info}>
+                        {/* <View style={styles.infoItem}>
+                            <Image source={require('../assets/icons/star.png')} />
+                            <Text style={{...globalStyles.bodyText, ...styles.label}}>{props.farmData.rating}</Text>
+                        </View> */}
+                        <View style={styles.infoItem}>
+                            <Image style={styles.imgLocation} source={require('../assets/icons/locatie.png')} />
+                            {loading ? (
+                                <Text>Laden...</Text>
+                            ) : (
+                                <Text style={{...globalStyles.bodyText, ...styles.label, ... {color:COLORS.orange}}}>{distance.toFixed(1) + " km"}</Text>
+                            )}
+                        </View>
+                        <View style={styles.infoItem}>
+                            <Image style={styles.imgClock} source={imageSource} />
+                            <Text style={{...globalStyles.bodyText, ...styles.label, ... {color: textColor}}}>{status}</Text>
+                        </View>
                     </View>
                 </View>
-                <View style={styles.info}>
-                    <View style={styles.infoItem}>
-                        <Image source={require('../assets/icons/star.png')} />
-                        <Text style={{...globalStyles.bodyText, ...styles.label}}>{props.farmData.rating}</Text>
-                    </View>
-                    <View style={styles.infoItem}>
-                        <Image source={require('../assets/icons/locatie.png')} />
-                        <Text style={{...globalStyles.bodyText, ...styles.label, ... {color:COLORS.orange}}}>{props.farmData.kilometer}</Text>
-                    </View>
-                    <View style={styles.infoItem}>
-                        <Image source={require('../assets/icons/clock.png')} />
-                        <Text style={{...globalStyles.bodyText, ...styles.label, ... {color:COLORS.green}}}>{props.farmData.status}</Text>
-                    </View>
-                </View>
-            </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
+        </View>
     );
 }
 
@@ -50,12 +123,13 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
         borderRadius: 10,
         paddingHorizontal: 20,
-        height: 150,
-        shadowColor: 'rgba(0,0,0, .4)',
+        paddingVertical: 20,
+        shadowColor: 'rgba(0,0,0, .1)',
         shadowOffset: { height: 1, width: 1 }, 
         shadowOpacity: 1,
         shadowRadius: 1,
         elevation: 2, 
+        flex: 1,
         display: 'flex',
         flexDirection: 'row',
         gap: 20,
@@ -92,6 +166,14 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         gap: 5,
+    },
+    imgClock: {
+        width: 16,
+        height: 16,
+    },
+    imgLocation: {
+        width: 13,
+        height: 16,
     }
 })
 

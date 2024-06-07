@@ -1,37 +1,66 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { StyleSheet } from 'react-native';
-import COLORS from '../constants/color';
 
-import ChatUser from '../screens/ChatUser';
-import FarmPackage from '../components/FarmPackage';
+import Services from './FarmTabPages/Services';
+import Agenda from './FarmTabPages/Agenda';
+import Members from './FarmTabPages/Members';
+import Reviews from './FarmTabPages/Reviews';
+import Contact from './FarmTabPages/Contact';
+
+import COLORS from '../constants/color';
 
 const Tab = createMaterialTopTabNavigator();
 
 const screenOptions = {
+    tabBarOptions: {
+        scrollEnabled: true,
+        swipeEnabled: false,
+        animationEnabled: true,
+        tabBarPosition: 'top',
+    },
     tabBarStyle: {
         backgroundColor: COLORS.white,
         elevation: 0,
+        padding: 0,
+        margin: 0,
         shadowOpacity: 0,
-        paddingTop: 20,
         backgroundColor: 'transparent',
-    },
-    tabBarLabelStyle: {
-        color: COLORS.offBlack,
-        fontWeight: 'bold',
+        borderBottomWidth: 1,
+        borderColor: COLORS.lightOffBlack,
     },
     tabBarIndicatorStyle: {
-        backgroundColor: COLORS.orange,
+        backgroundColor: COLORS.offBlack,
+        margin: 0,
+        padding: 0,
     },
-
-
+    tabBarItemStyle: {
+        padding: 0,
+        margin: 0,
+    },
+    tabBarIndicatorStyle: {
+        backgroundColor: COLORS.offBlack,
+        height: 3,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+    },
+    tabBarLabelStyle: {
+        fontFamily: 'Quicksand_600SemiBold',
+        textTransform: 'capitalize',
+        fontSize: 15,
+    },
 }
 
-const FarmTab = ()  => {
+const FarmTab = ({ route })  => {
+    const farmId = route.params.id;
+
     return (
-    <Tab.Navigator>
-        <Tab.Screen name="Info" component={FarmPackage} options={screenOptions}/>
-        <Tab.Screen name="Chat" component={ChatUser} options={screenOptions}/>
+    <Tab.Navigator style={styles.navigation}>
+        <Tab.Screen name="Services" component={Services} options={screenOptions}/>
+        <Tab.Screen name="Agenda" component={Agenda} options={screenOptions}/>
+        <Tab.Screen name="Leden" component={Members} options={screenOptions}/>
+        <Tab.Screen name="Reviews" initialParams={{data: farmId}} component={Reviews} options={screenOptions}/>
+        <Tab.Screen name="Contact" initialParams={{data: farmId}} component={Contact} options={screenOptions}/>
     </Tab.Navigator>
     );
 };
@@ -42,7 +71,6 @@ const styles = StyleSheet.create({
         color: 'white',
         elevation: 0,
         shadowOpacity: 0,
-        paddingTop: 20,
     },
 });
 

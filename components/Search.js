@@ -2,13 +2,15 @@ import React from 'react';
 import { View, Image, StyleSheet, TextInput } from 'react-native';
 import COLORS from '../constants/color';
 
-const InputField = ({ searchTerm, onSearchTermChange}) => {
+const Search = ({ searchTerm, onSearchTermChange, placeholder, width}) => {
+    const sectionStyle = width ? { ...styles.sectionStyle, width: '100%' } : styles.sectionStyle;
+
     return (
-        <View style={styles.sectionStyle}>
+        <View style={sectionStyle}>
             <Image style={styles.icon} source={require('../assets/icons/zoek.png')} />
             <TextInput
                 style={styles.searchBar} 
-                placeholder="Zoek een boerderij"
+                placeholder={placeholder}
                 onChangeText={onSearchTermChange}
                 value={searchTerm}
                 />
@@ -21,6 +23,8 @@ const styles = StyleSheet.create({
         padding: 10,
         margin: 10,
         alignItems: 'center',
+        width: 32,
+        height: 32,
     },
     sectionStyle: {
         width: '80%',
@@ -28,7 +32,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: COLORS.white,
-        shadowColor: 'rgba(0,0,0, .4)',
+        shadowColor: 'rgba(0,0,0, .1)',
         shadowOffset: { height: 1, width: 1 }, 
         shadowOpacity: 1,
         shadowRadius: 1,
@@ -38,8 +42,8 @@ const styles = StyleSheet.create({
     },
     searchBar: {
         flex: 1,
-        padding: 10,
+        // padding: 10,
     },
 })
 
-export default InputField;
+export default Search;
