@@ -12,6 +12,9 @@ import Profile from '../screens/User/Profile';
 import MyAccount from '../screens/User/Profile/MyAccount';
 import Settings from '../screens/User/Profile/Settings';
 import Faq from '../screens/User/Profile/Faq';
+import Email from '../screens/User/Profile/Account/Email';
+import Phone from '../screens/User/Profile/Account/Phone';
+import Password from '../screens/User/Profile/Account/Password';
 import SubscribePackage from '../screens/User/subscribePackage/SubscribePackage';
 import FarmHeader from '../components/FarmHeader';
 
