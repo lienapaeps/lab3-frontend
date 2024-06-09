@@ -39,7 +39,7 @@ const MyAccount = ({ navigation, route }) => {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} onPress={handleGoToPhone}>
                         <Text style={styles.buttonText}>Telefoon</Text>
-                        <Text style={styles.buttonData}>{userData.telefoon}</Text>
+                        <Text style={styles.buttonData}>{userData.telephone}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} onPress={handleGoToPassword}>
                         <Text style={styles.buttonText}>Wachtwoord</Text>
