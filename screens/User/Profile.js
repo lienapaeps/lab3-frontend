@@ -26,6 +26,10 @@ const Profile = ({ navigation, route }) => {
         navigation.navigate('AppStack', { screen: 'Settings', params: { userData: userData }});
     }
 
+    const handleGoToMySubscription = async () => {
+        navigation.navigate('AppStack', { screen: 'MySubscription', params: { userData: userData }});
+    }
+
     const handleGoToFaq = async () => {
         navigation.navigate('AppStack', { screen: 'FAQ', params: { userData: userData }});
     }
@@ -39,6 +43,7 @@ const Profile = ({ navigation, route }) => {
             <View style={styles.profileSection}>
                 <ProfileItem title="Mijn account" onPress={handleGoToAccount} icon={require('../../assets/icons/user-green.png')}/>
                 <ProfileItem title="Instellingen" onPress={handleGoToSettings} icon={require('../../assets/icons/settings-green.png')}/>
+                <ProfileItem title="Mijn abbonement" onPress={handleGoToMySubscription} icon={require('../../assets/icons/settings-green.png')}/>
                 <ProfileItem title="FAQ" onPress={handleGoToFaq} icon={require('../../assets/icons/faq-green.png')}/>
             </View>
             <View style={styles.logout}>

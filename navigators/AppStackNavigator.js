@@ -11,6 +11,7 @@ import PackageDetail from '../screens/User/PackageDetail';
 import Profile from '../screens/User/Profile';
 import MyAccount from '../screens/User/Profile/MyAccount';
 import Settings from '../screens/User/Profile/Settings';
+import MySubscription from '../screens/User/Profile/MySubscription';
 import Faq from '../screens/User/Profile/Faq';
 import Email from '../screens/User/Profile/Account/Email';
 import Phone from '../screens/User/Profile/Account/Phone';
@@ -54,6 +55,7 @@ const AppStackNavigator = () => {
       <Stack.Screen name="Profile" component={Profile} options={NavigationOptions} />
       <Stack.Screen name="MyAccount" component={MyAccount} options={NavigationOptions} />
       <Stack.Screen name="Settings" component={Settings} options={NavigationOptions} />
+      <Stack.Screen name="MySubscription" component={MySubscription} options={NavigationOptions} />
       <Stack.Screen name="FAQ" component={Faq} options={NavigationOptions} />
       <Stack.Screen name="SubscribePackage" component={SubscribePackage}
         options={() => ({
