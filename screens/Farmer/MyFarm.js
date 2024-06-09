@@ -37,11 +37,15 @@ const FarmFarmer = ({ navigation }) => {
 
                 const farmDataResponse = await fetchFarmDataByOwner(token, userId);
                 setFarmData(farmDataResponse.data.farm);
-                console.log('Farm:', farmData);
+                console.log('Farm:', stringifyData(farmData));
+
+                 // Tel het aantal leden
+                 const memberCount = farmDataResponse.data.farm.members ? farmDataResponse.data.farm.members.length : 0;
+                 console.log('Number of Members:', memberCount);
 
                 const packagesDataResponse = await fetchPackagesData(farmDataResponse.data.farm._id);
                 setPackagesData(packagesDataResponse.data.packages);
-                console.log('Packages:', stringifyData(packagesData));
+                // console.log('Packages:', stringifyData(packagesData));
 
                 setLoading(false);
 
@@ -74,17 +78,18 @@ const FarmFarmer = ({ navigation }) => {
                             <Text style={{...globalStyles.bodyText, ...globalStyles.capitalize}}>{farmData.adress.street} {farmData.adress.number}, {farmData.adress.zipcode} {farmData.adress.city}</Text>
                             <Text style={globalStyles.bodyText}>{farmData.farmLocation}</Text>
                         </View>
-                    </View>
-                    <View> 
                         <View style={{ flexDirection: 'row', gap: 5, marginBottom: 15 }}>
-                            <Text style={globalStyles.bodyTextSemiBold}>50</Text>
+                            <Text style={globalStyles.bodyTextSemiBold}>{farmData?.members?.length ?? 0}</Text>
                             <Text style={globalStyles.bodyText}>leden</Text>
                         </View>
+                    </View>
+                    <View> 
+                        
                     </View>
                 </View>
                 
                 <View style={{ marginTop: 10 }}>
-                    <Text style={{...globalStyles.headerTextSmall, marginBottom: 15}}>Pakketten</Text>
+                    <Text style={{...globalStyles.headerTextSmall, marginBottom: 10}}>Pakketten</Text>
                     
                     <ScrollView
                         horizontal={true}

@@ -48,12 +48,12 @@ const HomeUser = ({ navigation, route }) => {
 
                 const userDataResponse = await fetchUserData(token, userId);
                 if (userDataResponse && userDataResponse.data && userDataResponse.data.user) {
-                    setUserData(userDataResponse.data.user);
-                    // console.log('user data:', stringifyData(userData));
+                    const user = userDataResponse.data.user;
+                    setUserData(user);
 
-                    if (userDataResponse.data.user.agenda) {
-                        setAgendaData(userData.agenda);
-                        console.log('agendaData:', stringifyData(agendaData));
+                    if (user.agenda) {
+                        setAgendaData(user.agenda);
+                        console.log('agendaData:', stringifyData(user.agenda));
                     }
 
                 } else {
