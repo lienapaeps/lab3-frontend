@@ -7,7 +7,7 @@ import { updateUserPhone } from '../../../../utils/fetchHelpers';
 
 const Phone = ({ navigation, route }) => {
     const userData = route.params.userData;
-    const [phone, setPhone] = useState(userData.phone);
+    const [phone, setPhone] = useState(userData.telephone);
     const [showSuccess, setShowSuccess] = useState(false);
     const [phoneError, setPhoneError] = useState('');
 

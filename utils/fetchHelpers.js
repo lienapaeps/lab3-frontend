@@ -183,7 +183,7 @@ export const updateUserPhone = async (userId, newPhone) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ telefoon: newPhone }),
+        body: JSON.stringify({ telephone: newPhone }),
     });
     return await response.json();
 };
