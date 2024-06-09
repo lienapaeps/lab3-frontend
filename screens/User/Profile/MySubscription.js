@@ -9,8 +9,15 @@ import COLORS from '../../../constants/color';
 const MySubscription = ({ navigation, route }) => {
 
     const subscriptionData = route.params.subscriptionData;
-
-    console.log('subscriptionData:', subscriptionData);
+   
+// navigate to package details screen og home screen?
+    const goToHome = () => {
+        navigation.navigate('App', { screen: 'HomeUser' });
+    }
+// navigate to package searching screen
+    const goToFarm = () => {
+        navigation.navigate('App', { screen: 'FarmUser' });
+    };   
 
     return (
         <SafeAreaView style={globalStyles.container}>
@@ -58,7 +65,7 @@ const MySubscription = ({ navigation, route }) => {
                         </View>
                         
                     </View>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={goToHome}>
                         <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
                     </TouchableOpacity>
                 </View>
@@ -67,7 +74,7 @@ const MySubscription = ({ navigation, route }) => {
                 <View style={styles.packageEmpty}>
                     <Image style={styles.iconImage} source={require('../../../assets/icons/package-empty.png')} />
                     <Text style={{ ...globalStyles.bodyText, ...styles.emptyText }}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button } onPress={goToFarm}>
                         <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
                     </TouchableOpacity>
                 </View>
