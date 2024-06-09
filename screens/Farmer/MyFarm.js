@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Image, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { stringifyData } from '../../utils/utils';
 import { fetchUserData, fetchFarmDataByOwner, fetchPackagesData, getUserIdAndToken } from '../../utils/fetchHelpers';
 
 import COLORS from '../../constants/color';
@@ -19,6 +20,8 @@ const FarmFarmer = ({ navigation }) => {
             try {
                 const { token, userId } = await getUserIdAndToken();
 
+                console.log('UserId:', userId)
+
                 if (!token) {
                     navigation.navigate('Login');
                     return;
@@ -34,9 +37,11 @@ const FarmFarmer = ({ navigation }) => {
 
                 const farmDataResponse = await fetchFarmDataByOwner(token, userId);
                 setFarmData(farmDataResponse.data.farm);
+                console.log('Farm:', farmData);
 
-                const packagesDataResponse = await fetchPackagesData(token, farmDataResponse.data.farm._id);
+                const packagesDataResponse = await fetchPackagesData(farmDataResponse.data.farm._id);
                 setPackagesData(packagesDataResponse.data.packages);
+                console.log('Packages:', stringifyData(packagesData));
 
                 setLoading(false);
 
