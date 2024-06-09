@@ -8,6 +8,7 @@ import ProfileItem from '../../components/ProfileItem';
 
 const Profile = ({ navigation, route }) => {
     const userData = route.params.userData;
+    const subscriptionData = route.params.subscriptionData;
 
     const handleLogout = async () => {
         try {
@@ -27,7 +28,7 @@ const Profile = ({ navigation, route }) => {
     }
 
     const handleGoToMySubscription = async () => {
-        navigation.navigate('AppStack', { screen: 'MySubscription', params: { userData: userData }});
+        navigation.navigate('AppStack', { screen: 'MySubscription', params: { userData: userData, subscriptionData }});
     }
 
     const handleGoToFaq = async () => {

@@ -23,7 +23,7 @@ const HomeUser = ({ navigation, route }) => {
     };    
 
     const goToProfile = () => {
-        navigation.navigate('AppStack', { screen: 'Profile', params: { userData }});
+        navigation.navigate('AppStack', { screen: 'Profile', params: { userData, subscriptionData }});
     }; 
 
     const goToPackageDetails = (packageId, farmId, userId, packageName) => {
