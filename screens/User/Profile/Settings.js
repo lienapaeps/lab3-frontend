@@ -18,14 +18,16 @@ const Settings = ({ navigation, route }) => {
                 <Text style={globalStyles.headerSmallerText}>My account informatie</Text>
                 <View style={styles.container}>
                     <TouchableOpacity style={styles.button} >
-                        <Text style={styles.buttonText}>Toegankelijkheid</Text>
+                        <Text style={globalStyles.headerTextSmaller}>Toegankelijkheid</Text>
+                        <Image style={styles.icon} source={require('../../../assets/arrow-right.png')}/>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} >
-                        <Text style={styles.buttonText}>Taal</Text>
+                        <Text style={globalStyles.headerTextSmaller}>Taal</Text>
                         <Text style={styles.buttonData}>{userData.taal}</Text>
+                        <Image style={styles.icon} source={require('../../../assets/arrow-right.png')}/>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Meldingen</Text>
+                        <Text style={globalStyles.headerTextSmaller}>Meldingen</Text>
                     </TouchableOpacity>
                 </View>
         </SafeAreaView>
@@ -49,15 +51,25 @@ const styles = StyleSheet.create({
         alignItems: 'center',
        flexDirection: 'row',
         margin: 10,
-       
-       
+        justifyContent: 'space-between',
         left: 0,
         height: 40,
+        paddingLeft: 20,
+    },
+    buttonText: {
+        fontWeight: '300',
+        marginLeft: 20,
+        fontSize: 16,
     },
     buttonData: {
     fontWeight: '300',
         marginLeft: 20,
        
+    },
+    icon: {
+        width: 20,
+        height: 20,
+        marginRight: 20,
     },
 });
 

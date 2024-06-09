@@ -5,7 +5,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import COLORS from '../../../constants/color';
 import { globalStyles } from '../../../styles/global';
 
-
 const MyAccount = ({ navigation, route }) => {
     const userData = route.params.userData;
 
@@ -21,8 +20,6 @@ const MyAccount = ({ navigation, route }) => {
         navigation.navigate('AppStack', { screen: 'Password', params: { userData: userData }});
     }
 
-   
-
     return (
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.header}>
@@ -34,15 +31,18 @@ const MyAccount = ({ navigation, route }) => {
                 <Text style={globalStyles.headerSmallerText}>My account informatie</Text>
                 <View style={styles.container}>
                     <TouchableOpacity style={styles.button} onPress={handleGoToEmail}>
-                        <Text style={styles.buttonText}>E-mail</Text>
+                        <Text style={globalStyles.headerTextSmaller}>E-mail</Text>
                         <Text style={styles.buttonData}>{userData.email}</Text>
+                        <Image style={styles.icon} source={require('../../../assets/arrow-right.png')}/>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} onPress={handleGoToPhone}>
-                        <Text style={styles.buttonText}>Telefoon</Text>
+                        <Text style={globalStyles.headerTextSmaller}>Telefoon</Text>
                         <Text style={styles.buttonData}>{userData.telephone}</Text>
+                        <Image style={styles.icon} source={require('../../../assets/arrow-right.png')}/>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} onPress={handleGoToPassword}>
-                        <Text style={styles.buttonText}>Wachtwoord</Text>
+                        <Text style={globalStyles.headerTextSmaller}>Wachtwoord</Text>
+                        <Image style={styles.icon} source={require('../../../assets/arrow-right.png')}/>
                     </TouchableOpacity>
                 </View>
         
@@ -51,10 +51,10 @@ const MyAccount = ({ navigation, route }) => {
                 <Text style={globalStyles.headerSmallerText}>Accountmanagement</Text>
                 <View style={styles.container}>
                     <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Account uitschakelen</Text>
+                        <Text style={globalStyles.headerTextSmaller}>Account uitschakelen</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button}>
-                        <Text style={styles.buttonText}>Account verwijderen</Text>
+                        <Text style={globalStyles.headerTextSmaller}>Account verwijderen</Text>
                     </TouchableOpacity>
                 </View>
          
@@ -79,7 +79,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
        flexDirection: 'row',
         margin: 10,
-       
+        justifyContent: 'space-between',
+        paddingLeft: 20,
        
         left: 0,
         height: 40,
@@ -88,6 +89,11 @@ const styles = StyleSheet.create({
     fontWeight: '300',
         marginLeft: 20,
        
+    },
+    icon: {
+        width: 20,
+        height: 20,
+        marginRight: 20,
     },
 });
 
