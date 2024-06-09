@@ -9,7 +9,7 @@ const Password = ({ navigation, route }) => {
     return (
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.header}>
-                <Text style={globalStyles.headerText}>FAQ</Text>
+                <Text style={globalStyles.headerText}>Password</Text>
             </View>
         </SafeAreaView>
     );

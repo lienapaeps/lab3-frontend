@@ -7,7 +7,6 @@ import { updateUserEmail } from '../../../../utils/fetchHelpers';
 
 const Email = ({ navigation, route }) => {
     const userData = route.params.userData;
-
     const [email, setEmail] = useState(userData.email);
     const [showSuccess, setShowSuccess] = useState(false);
     const [emailError, setEmailError] = useState('');

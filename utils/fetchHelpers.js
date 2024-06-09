@@ -175,3 +175,15 @@ export const updateUserEmail = async (userId, newEmail) => {
     });
     return await response.json();
 };
+
+// update user phone
+export const updateUserPhone = async (userId, newPhone) => {
+    const response = await fetch(`https://lab3-backend-w1yl.onrender.com/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ telefoon: newPhone }),
+    });
+    return await response.json();
+};
