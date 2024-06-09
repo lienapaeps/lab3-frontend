@@ -103,7 +103,7 @@ const HomeUser = ({ navigation, route }) => {
                 <View style={styles.profile}>
                     <TouchableOpacity style={styles.profileBtn} onPress={goToProfile}>
                         <Image style={styles.profileImage} source={{ uri: userData.profilePicture }}/>
-                        <Text style={globalStyles.headerTextSmaller}>{userData.firstname}</Text>
+                        <Text style={{...globalStyles.headerTextSmaller, ...globalStyles.capitalize}}>{userData.firstname}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.notification}>
                         <Image style={styles.notificationImage} source={require('../../assets/icons/notification.png')} />

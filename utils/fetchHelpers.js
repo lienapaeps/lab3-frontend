@@ -153,6 +153,30 @@ export const fetchActivityDataById = async (id) => {
     return await response.json();
 };
 
+// enroll in an activity
+export const enrollInActivity = async (userId, activityId) => {
+    const response = await fetch(`https://lab3-backend-w1yl.onrender.com/users/${userId}/enroll/${activityId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, activityId }),
+    });
+    return await response.json();
+};
+
+// unenroll from an activity
+export const unenrollFromActivity = async (userId, activityId) => {
+    const response = await fetch(`https://lab3-backend-w1yl.onrender.com/users/${userId}/unenroll/${activityId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, activityId }),
+    });
+    return await response.json();
+};
+
 // subscribe to a package
 export const subscribeToPackage = async (userId, packageId) => {
     const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/subscription/subscribe`, {
