@@ -87,43 +87,32 @@ const PackageDetail = ({ navigation, route }) => {
                     <View style={styles.container}>
                         <View>
                             <Text style={globalStyles.headerText}>Inhoud van je pakket</Text>
-                            {/* <View style={styles.packageContainer}> */}
-                                {/* <Text style={globalStyles.headerTextSmaller}>{packageData.name}</Text> */}
-                                {/* <Text style={globalStyles.bodyText}>{packageData.description}</Text> */}
-                                {/* <Text style={globalStyles.bodyText}>{packageData.price} euro</Text>  */}
-                                {/* <View style={styles.dates}> */}
-                                    {/* <Text style={globalStyles.bodyTextSmall}>Prijs: €{packageData.price}</Text> */}
-                                    {/* <Text style={globalStyles.bodyTextSmall}>Start: {new Date(subscriptionDetails.startDate).toLocaleDateString()}</Text> */}
-                                    {/* <Text style={globalStyles.bodyTextSmall}>Verloopt op: {new Date(subscriptionDetails.expirationDate).toLocaleDateString()}</Text>  */}
-                                {/* </View>    */}
-                            {/* </View> */}
                         </View>
-                        <View style={styles.detailsContainer}>
-                            <View style={styles.dateContainer}>
-                                <Text style={globalStyles.bodyTextSemiBold}>{getWeek(packageData.pickUpDate)}</Text>
-                            </View>
-                            {/* <Text style={globalStyles.headerTextSmall}>Inhoud van het pakket</Text> */}
-                            <View style={styles.contentContainer}>
-                            {packageData.contents && packageData.contents.length > 0 ? (
-                                    packageData.contents.map(product => (
+                        {packageData.contents && packageData.contents.length > 0 ? (
+                            <View>
+                                <View style={styles.dateContainer}>
+                                    <Text style={globalStyles.bodyTextSemiBold}>{getWeek(packageData.pickUpDate)}</Text>
+                                </View>
+                                <View style={styles.contentContainer}>
+                                    {packageData.contents.map(product => (
                                         <View style={styles.content} key={product._id}>
                                             <View style={styles.productImage}>
                                                 <Image source={{ uri: product.imageUrl }} style={{ flex: 1, resizeMode: 'contain' }} />
                                             </View>
                                             <Text style={globalStyles.bodyTextSemiBold}>{product.item} ({product.quantity} {product.unit})</Text>
                                         </View>
-                                    ))
-                                ) : (
-                                    <Text style={globalStyles.bodyText}>Geen inhoud beschikbaar</Text>
-                                )}
+                                    ))}
+                                </View>
                             </View>
-                        </View>
+                        ) : (
+                            <Text style={globalStyles.bodyText}>Geen inhoud beschikbaar</Text>
+                        )}
                     </View>
                 </TouchableOpacity>
             </ScrollView>
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
