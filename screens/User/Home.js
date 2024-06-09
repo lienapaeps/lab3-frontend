@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Pressable, Image, ActivityIndicator, TouchableO
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useIsFocused } from '@react-navigation/native';
 
+import { stringifyData } from '../../utils/utils';
 import { fetchUserData, fetchSubscriptionData, getUserIdAndToken } from '../../utils/fetchHelpers';
 
 import COLORS from '../../constants/color';
@@ -10,6 +11,7 @@ import { globalStyles } from '../../styles/global';
 
 const HomeUser = ({ navigation, route }) => {
     const [userData, setUserData] = useState(null);
+    const [agendaData, setAgendaData] = useState(null); 
     const [subscriptionData, setSubscriptionData] = useState(null);
     const [loading, setLoading] = useState(true);
     const isFocused = useIsFocused();
@@ -25,6 +27,10 @@ const HomeUser = ({ navigation, route }) => {
     const goToProfile = () => {
         navigation.navigate('AppStack', { screen: 'Profile', params: { userData }});
     }; 
+
+    const goToExplore = () => {
+        navigation.navigate('App', { screen: 'Explore' });
+    }
 
     const goToPackageDetails = (packageId, farmId, userId, packageName) => {
         navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId, userId, packageName }});
@@ -43,7 +49,13 @@ const HomeUser = ({ navigation, route }) => {
                 const userDataResponse = await fetchUserData(token, userId);
                 if (userDataResponse && userDataResponse.data && userDataResponse.data.user) {
                     setUserData(userDataResponse.data.user);
-                    // console.log('userData:', userData);
+                    // console.log('user data:', stringifyData(userData));
+
+                    if (userDataResponse.data.user.agenda) {
+                        setAgendaData(userData.agenda);
+                        console.log('agendaData:', stringifyData(agendaData));
+                    }
+
                 } else {
                     console.error('Invalid user data response');
                     return;
@@ -122,27 +134,43 @@ const HomeUser = ({ navigation, route }) => {
                     <View style={styles.packageEmpty}>
                         <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')}/>
                         <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
-                        <TouchableOpacity style={styles.button} onPress={goToFarm}>
+                        <TouchableOpacity style={styles.button} onPress={goToExplore}>
                             <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
                         </TouchableOpacity>
                     </View>
                 )
             )}
-            {/* weergave van kalender */}
+            {/* Weergave van kalender */}
             <View>
-                <Text style={globalStyles.headerTextSmaller}>Kalender</Text>
+                <Text style={globalStyles.headerTextSmall}>Kalender</Text>
             </View>
-            <View style={globalStyles.Header}>
-                <Pressable style={styles.button} onPress={goToCalendar}>
-                    <Text style={styles.text}>Kalender</Text>
-                </Pressable>
-            </View>
-            <View>
-            </View>
+            {userData && userData.agenda && userData.agenda.length > 0 ? (
+                // er zijn activiteiten in de kalender
+                <View>
+                    <View>
+                        <TouchableOpacity>
+                            <Text style={globalStyles.bodyText}>titel</Text>
+                            <Text style={globalStyles.bodyText}>datum + uur - uur</Text>
+                            <Text style={globalStyles.bodyText}>boerderij</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {/* Voeg hier de weergave van de activiteiten in de kalender toe */}
+                </View>
+            ) : (
+                // er zijn geen activiteiten in de kalender
+                <View style={styles.calendarEmpty}>
+                    <Image style={styles.iconImage} source={require('../../assets/icons/date-black.png')}/>
+                    <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je kalender is nog leeg want je hebt geen activiteiten.</Text>
+                    <TouchableOpacity style={styles.button} onPress={goToExplore}>
+                        <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek een activiteit</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
+
             {/* weergave van activiteiten */}
-            <View>
+            {/* <View>
                 <Text style={globalStyles.headerTextSmaller}>Activiteiten</Text>
-            </View>
+            </View> */}
         </SafeAreaView>
     );
 }
@@ -199,6 +227,13 @@ const styles = StyleSheet.create({
         paddingVertical: 40,
         marginHorizontal: 20,
         marginBottom: 20,
+        alignItems: 'center',
+    },
+    calendarEmpty: {
+        paddingVertical: 20,
+        marginHorizontal: 20,
+        marginBottom: 20,
+        marginTop: 20,
         alignItems: 'center',
     },
     packageCard: {
