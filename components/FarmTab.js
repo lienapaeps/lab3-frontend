@@ -58,7 +58,7 @@ const FarmTab = ({ route })  => {
     <Tab.Navigator style={styles.navigation}>
         <Tab.Screen name="Services" component={Services} options={screenOptions}/>
         <Tab.Screen name="Agenda" component={Agenda} options={screenOptions}/>
-        <Tab.Screen name="Leden" component={Members} options={screenOptions}/>
+        <Tab.Screen name="Leden" initialParams={{data: farmId}} component={Members} options={screenOptions}/>
         <Tab.Screen name="Reviews" initialParams={{data: farmId}} component={Reviews} options={screenOptions}/>
         <Tab.Screen name="Contact" initialParams={{data: farmId}} component={Contact} options={screenOptions}/>
     </Tab.Navigator>
