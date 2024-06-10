@@ -65,7 +65,7 @@ const Contact = ({ route }) => {
             <TouchableOpacity activeOpacity={1} style={styles.flex}>
                 <View style={styles.container}>
                     <View>
-                        <Text style={globalStyles.headerText}>Contact</Text>
+                        <Text style={globalStyles.headerTextSmall}>Contact</Text>
                         <View style={styles.layout}>
                             <Text style={[globalStyles.bodyTextSemiBold, styles.text]}>Telefoon </Text>
                             <Text style={[globalStyles.bodyText, styles.text]}>{contactData.data?.farm?.contact?.number}</Text>
@@ -78,7 +78,7 @@ const Contact = ({ route }) => {
                             <Text style={[globalStyles.bodyTextSemiBold, styles.text]}>Website </Text>
                             <Text style={[globalStyles.bodyText, styles.text]}>{contactData.data?.farm?.contact?.website}</Text>
                         </View>
-                        <Text style={[globalStyles.headerText, styles.header]}>Openingsuren</Text>
+                        <Text style={[globalStyles.headerTextSmall, styles.header]}>Openingsuren</Text>
                         {contactData.data?.farm?.openinghours && daysOfWeek.map((day, index) => (
                             <View key={day} style={styles.layout}>
                                 <Text style={[globalStyles.bodyTextSemiBold, styles.text]}>{day} </Text>

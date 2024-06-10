@@ -31,7 +31,7 @@ const Members = ({ route }) => {
   
   return (
       <View style={styles.container}>
-        <Text style={[globalStyles.headerText, styles.title]}>Leden</Text>
+        <Text style={[globalStyles.headerTextSmall, styles.title]}>Leden</Text>
         <FlatList
                 data={ledenData}
                 keyExtractor={(item) => item._id}

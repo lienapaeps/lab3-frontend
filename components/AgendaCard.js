@@ -5,12 +5,24 @@ import { fetchFarmDataById } from '../utils/fetchHelpers';
 
 import { globalStyles } from '../styles/global';
 import COLORS from './../constants/color';
-import { formatDate } from '../utils/utils';
 
 const AgendaCard = ({ activity }) => {
     const [farmName, setFarmName] = useState('');
 
     console.log(activity.farm);
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+    
+        const day = date.getDate();
+        const monthNames = [
+            "januari", "februari", "maart", "april", "mei", "juni",
+            "juli", "augustus", "september", "oktober", "november", "december"
+        ];
+        const month = monthNames[date.getMonth()];
+    
+        return `${day} ${month}`;
+    };
 
     useEffect(() => {
         // Functie om boerderijgegevens op te halen en de naam in te stellen
@@ -34,9 +46,9 @@ const AgendaCard = ({ activity }) => {
             <View style={styles.flow}>
             <View style={styles.line}></View>
             <View>
-            <Text style={{...globalStyles.headerTextMedium, marginLeft: 15, marginBottom: 5, fontSize: 20}}>{activity.title}</Text>
+            <Text style={{...globalStyles.headerTextMedium, marginLeft: 15}}>{activity.title}</Text>
             <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.lightOffBlack, marginLeft: 15}}>{formatDate(activity.start.date)} - {activity.start.time} - {activity.end.time}</Text>
-            <Text style={{...globalStyles.bodyTextSemiBold, marginLeft: 15, marginTop: 5}}>{farmName}</Text>
+            <Text style={{...globalStyles.bodyTextSemiBold, marginLeft: 15, marginTop: 10}}>{farmName}</Text>
             </View>
             </View>
         </TouchableOpacity>

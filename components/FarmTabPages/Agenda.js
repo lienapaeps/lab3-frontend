@@ -43,7 +43,7 @@ const Agenda = ({ route }) => {
                         Er zijn geen activiteiten gepland 🍃
                     </Text>
                 }
-                ListHeaderComponent={<Text style={globalStyles.headerText}>Aankomende activiteiten</Text>}
+                ListHeaderComponent={<Text style={globalStyles.headerTextSmall}>Aankomende activiteiten</Text>}
             />
         </View>
     );

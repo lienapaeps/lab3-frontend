@@ -38,7 +38,7 @@ const Services = ({ route }) => {
                         Er zijn geen pakketten beschikbaar 🍃
                     </Text>
                 }
-                ListHeaderComponent={<Text style={globalStyles.headerText}>Alle pakketten</Text>}
+                ListHeaderComponent={<Text style={globalStyles.headerTextSmall}>Alle pakketten</Text>}
             />
         </View>
     );
