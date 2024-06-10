@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Image, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
+import { StyleSheet, View, Text, Image, ActivityIndicator, TouchableOpacity, Platform, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -162,9 +162,13 @@ const HomeUser = ({ navigation, route }) => {
             {activitiesData && activitiesData.length > 0 ? (
                     // Er zijn activiteiten in de kalender
                     <View>
-                        {activitiesData.map((activity, index) => (
-                            <AgendaCard key={index} activity={activity} />
-                        ))}
+                        <FlatList
+                            style={styles.flow}
+                            showsVerticalScrollIndicator={false}
+                            data={activitiesData}
+                            keyExtractor={(item) => item._id}
+                            renderItem={({ item }) => <AgendaCard activity={item} />}
+                        />
                     </View>
                 ) : (
                     // Er zijn geen activiteiten in de kalender

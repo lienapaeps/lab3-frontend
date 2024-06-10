@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { TouchableOpacity, Text, View, Span, Image, StyleSheet } from 'react-native';
 
 import { fetchFarmDataById } from '../utils/fetchHelpers';
 
 import { globalStyles } from '../styles/global';
 import COLORS from './../constants/color';
+import { justify } from '@cloudinary/url-gen/qualifiers/textAlignment';
+import { FontWeight } from '@cloudinary/url-gen/qualifiers';
 
 const AgendaCard = ({ activity }) => {
     const [farmName, setFarmName] = useState('');
+    const [farmPicture, setFarmPicture] = useState('');
 
     console.log(activity.farm);
 
@@ -26,36 +29,56 @@ const AgendaCard = ({ activity }) => {
 
     useEffect(() => {
         // Functie om boerderijgegevens op te halen en de naam in te stellen
-        const fetchFarmName = async () => {
+        const fetchFarmData = async () => {
             try {
                 const farmDataResponse = await fetchFarmDataById(activity.farm);
                 if (farmDataResponse && farmDataResponse.data && farmDataResponse.data.farm) {
-                    const farmName = farmDataResponse.data.farm.name;
-                    setFarmName(farmName);
+                    const farm = farmDataResponse.data.farm;
+                    setFarmName(farm.name);
+                    setFarmPicture(farm.farmImage)
                 }
             } catch (error) {
                 console.log('Error fetching farm data:', error);
             }
         };
 
-        fetchFarmName();
+        fetchFarmData();
     }, [activity.farm]);
 
     return (
         <TouchableOpacity style={styles.activityContainer}>
-            <View style={styles.flow}>
-            <View style={styles.line}></View>
-            <View>
-            <Text style={{...globalStyles.headerTextMedium, marginLeft: 15}}>{activity.title}</Text>
-            <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.lightOffBlack, marginLeft: 15}}>{formatDate(activity.start.date)} - {activity.start.time} - {activity.end.time}</Text>
-            <Text style={{...globalStyles.bodyTextSemiBold, marginLeft: 15, marginTop: 10}}>{farmName}</Text>
-            </View>
+            <View style={styles.container}>
+                <View style={styles.line}></View>
+                <View style={styles.contentContainer}>
+                    <View style={styles.headerContainer}>
+                        <Text style={{ ...globalStyles.headerTextMedium, marginLeft: 15 }}>{activity.title}</Text>
+                        <Text style={[globalStyles.bodyTextBold, styles.number]}>{activity.enrolledUsers.length}/20</Text>
+                    </View>
+
+                    <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.lightOffBlack, marginLeft: 15 }}>
+                        {formatDate(activity.start.date)} - {activity.start.time} - {activity.end.time}
+                    </Text>
+
+                    <View style={styles.attendees}>
+                        <View style={styles.profileContainer}>
+                            {farmPicture ? (
+                            <Image style={styles.profileImage} source={{ uri: farmPicture }} />
+                        ) : null}
+                            <Text style={{ ...globalStyles.bodyTextSemiBold, marginLeft: 10 }}>{farmName}</Text>
+                        </View>
+                    </View>
+                </View>
             </View>
         </TouchableOpacity>
     );
 };
 
-const styles = {
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        height: '100%',
+        flexDirection: 'row',
+    },
     activityContainer: {
         padding: 20,
         marginBottom: 10,
@@ -70,14 +93,37 @@ const styles = {
     },
     line: {
         width: 5,
-        height: "100%",
+        height: '100%',
         backgroundColor: COLORS.orange,
         borderRadius: 5,
     },
-    flow: {
+    contentContainer: {
+        flex: 1,
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    profileContainer: {
         flexDirection: 'row',
         alignItems: 'center',
     },
-};
+    profileImage: {
+        width: 30,
+        height: 30,
+        borderRadius: 50,
+        marginLeft: 15,
+    },
+    attendees: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+        marginBottom: 5,
+    },
+    number: {
+        color: COLORS.orange,
+    },
+});
 
 export default AgendaCard;
