@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { TouchableOpacity, Text, View, Span, Image, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, View, Image, StyleSheet } from 'react-native';
 
 import { fetchFarmDataById } from '../utils/fetchHelpers';
 
 import { globalStyles } from '../styles/global';
 import COLORS from './../constants/color';
-import { justify } from '@cloudinary/url-gen/qualifiers/textAlignment';
-import { FontWeight } from '@cloudinary/url-gen/qualifiers';
 
 const AgendaCard = ({ activity, onPress }) => {
     const [farmName, setFarmName] = useState('');
     const [farmPicture, setFarmPicture] = useState('');
 
-    console.log(activity.farm);
+    // console.log(activity.farm);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);

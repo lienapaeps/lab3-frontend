@@ -33,18 +33,18 @@ const ActivityDetail = ({ navigation, route }) => {
             const { token, userId } = await getUserIdAndToken();
             const data = await fetchActivityDataById(id);
             const activity = data?.data?.activity || {};
-            console.log("Activity data:", activity);
+            // console.log("Activity data:", activity);
     
             const enrolled = activity?.enrolledUsers?.some(user => user.user === userId);
-            console.log("User enrolled:", enrolled);
+            // console.log("User enrolled:", enrolled);
             setIsEnrolled(enrolled);
     
             const users = await Promise.all(activity?.enrolledUsers?.map(async user => {
                 const userResponse = await fetchUserDataById(user?.user);
-                console.log("User response:", userResponse);
+                // console.log("User response:", userResponse);
                 return userResponse?.data?.user || {};
             }));
-            console.log("Enrolled users:", users);
+            // console.log("Enrolled users:", users);
             setEnrolledUsers(users);
     
             setActivityData(activity); // Zorg ervoor dat activityData correct wordt ingesteld

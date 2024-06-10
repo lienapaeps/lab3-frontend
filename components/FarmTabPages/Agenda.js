@@ -28,7 +28,7 @@ const Agenda = ({ route, navigation }) => {
         fetchActivity();
     }, [farmId]);
 
-    console.log(activityData);
+    // console.log(activityData);
 
     const handleAgendaCardPress = (activityId, farmName) => {
         navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmName }});

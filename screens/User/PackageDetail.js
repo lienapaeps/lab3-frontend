@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, ActivityIndicator } from 'react-native'
 import { getISOWeek } from 'date-fns';
 
-import { stringifyData } from '../../utils/utils';
 import { fetchFarmDataById, fetchPackageDataById } from '../../utils/fetchHelpers';
 
 import { globalStyles } from '../../styles/global';

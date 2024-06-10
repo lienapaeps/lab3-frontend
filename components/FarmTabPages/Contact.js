@@ -6,9 +6,6 @@ import { globalStyles } from '../../styles/global';
 import COLORS from '../../constants/color';
 
 import { fetchFarmDataById } from '../../utils/fetchHelpers';
-import { text } from '@cloudinary/url-gen/qualifiers/source';
-
-
 
 const Contact = ({ route }) => {
     const { data:id } = route.params;
@@ -21,7 +18,7 @@ const Contact = ({ route }) => {
             try {
                 const data = await fetchFarmDataById(id);
                 setContactData(data);
-                console.log(data);
+                // console.log(data);
             } catch (error) {
                 setError(error);
             } finally {

@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Platform }
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 
-import { stringifyData } from '../../utils/utils';
 import { fetchActivityData } from '../../utils/fetchHelpers';
 
 import { globalStyles } from '../../styles/global';

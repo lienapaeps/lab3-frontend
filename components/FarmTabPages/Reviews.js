@@ -1,9 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, FlatList} from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native'
 
 import { globalStyles } from '../../styles/global';
 import COLORS from '../../constants/color';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Review  from '../../components/Review';
 import { useState, useEffect } from 'react';
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
 
 import { fetchFarmData } from '../../utils/fetchHelpers';
-import { getCurrentLocation, stringifyData } from '../../utils/utils';
+import { getCurrentLocation } from '../../utils/utils';
 import loadGoogleMapsAPI from './webMap';
 
 import COLORS from '../../constants/color';

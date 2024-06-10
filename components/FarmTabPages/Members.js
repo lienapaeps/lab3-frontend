@@ -53,7 +53,7 @@ const Members = ({ route }) => {
             try {
                 const data = await fetchUserDataById(ownerData);
                 setOwnerDataId(data.data.user);
-                console.log(data.data.user);
+                // console.log(data.data.user);
             } catch (error) {
                 console.log("Error", error);
             } finally {
