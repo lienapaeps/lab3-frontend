@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Pressable, Image, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
+import { StyleSheet, View, Text, Image, ActivityIndicator, TouchableOpacity, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useIsFocused } from '@react-navigation/native';
 
-import { fetchUserData, fetchSubscriptionData, getUserIdAndToken } from '../../utils/fetchHelpers';
+import { fetchUserData, fetchSubscriptionData, getUserIdAndToken, fetchActivityDataById } from '../../utils/fetchHelpers';
 
 import COLORS from '../../constants/color';
 import { globalStyles } from '../../styles/global';
+import AgendaCard from '../../components/AgendaCard';
 
 const HomeUser = ({ navigation, route }) => {
     const [userData, setUserData] = useState(null);
+    const [agendaData, setAgendaData] = useState(null); 
     const [subscriptionData, setSubscriptionData] = useState(null);
     const [loading, setLoading] = useState(true);
     const isFocused = useIsFocused();
+    const [activitiesData, setActivitiesData] = useState(null);
 
     const goToCalendar = () => {
         navigation.navigate('AppStack', { screen: 'Calendar' });
@@ -25,6 +28,10 @@ const HomeUser = ({ navigation, route }) => {
     const goToProfile = () => {
         navigation.navigate('AppStack', { screen: 'Profile', params: { userData, subscriptionData }});
     }; 
+
+    const goToExplore = () => {
+        navigation.navigate('App', { screen: 'Explore' });
+    }
 
     const goToPackageDetails = (packageId, farmId, userId, packageName) => {
         navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId, userId, packageName }});
@@ -42,8 +49,21 @@ const HomeUser = ({ navigation, route }) => {
 
                 const userDataResponse = await fetchUserData(token, userId);
                 if (userDataResponse && userDataResponse.data && userDataResponse.data.user) {
-                    setUserData(userDataResponse.data.user);
-                    // console.log('userData:', userData);
+                    const user = userDataResponse.data.user;
+                    setUserData(user);
+
+                    if (user.agenda) {
+                        setAgendaData(user.agenda);
+                        // console.log('agendaData:', stringifyData(user.agenda));
+
+                        // fetch activities by id in user agenda
+                        const activities = await Promise.all(user.agenda.map(async (agendaItem) => {
+                            const activityDataResponse = await fetchActivityDataById(agendaItem._id);
+                            return activityDataResponse.data.activity;
+                        }));
+                        setActivitiesData(activities);
+                    }
+
                 } else {
                     console.error('Invalid user data response');
                     return;
@@ -52,10 +72,10 @@ const HomeUser = ({ navigation, route }) => {
                 const subscriptionDataResponse = await fetchSubscriptionData(token, userId);
                 setSubscriptionData(subscriptionDataResponse.data);
                 // console.log('subscriptionData:', subscriptionData);
-
-                setLoading(false);
             } catch (error) {
                 console.error('Error:', error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -65,26 +85,38 @@ const HomeUser = ({ navigation, route }) => {
     useEffect(() => {
         // console.log('userData:', userData);
         // console.log('subscriptionData:', subscriptionData);
-    }, [userData, subscriptionData]);
+        // console.log('activitiesData:', activitiesData);
+    }, [userData, subscriptionData, activitiesData]);
+
+    if (loading) {
+        return (
+            <View style={globalStyles.loadingContainer}>
+                <ActivityIndicator size="medium" color={COLORS.offBlack} />
+            </View>
+        );
+    }
 
     return (
         <SafeAreaView style={globalStyles.container}>
-            {/* header with profile pic and notification bell */}
+            {/* Header met profielfoto en meldingsbel */}
             {userData && (
                 <View style={styles.profile}>
                     <TouchableOpacity style={styles.profileBtn} onPress={goToProfile}>
                         <Image style={styles.profileImage} source={{ uri: userData.profilePicture }}/>
-                        <Text style={globalStyles.headerTextSmaller}>{userData.firstname}</Text>
+                        <Text style={{...globalStyles.headerTextSmaller, ...globalStyles.capitalize}}>{userData.firstname}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.notification}>
                         <Image style={styles.notificationImage} source={require('../../assets/icons/notification.png')} />
                     </TouchableOpacity>
                 </View>
             )}
-            {/* weergave van huidig pakket */}
+    
+            {/* Weergave van huidig pakket */}
             <View>
                 <Text style={globalStyles.headerTextSmall}>Huidig Pakket</Text>
             </View>
+    
+            {/* Laadinidicator */}
             {loading ? (
                 <View style={styles.loadingContainer}>
                     {Platform.OS === "web" ? (
@@ -94,9 +126,10 @@ const HomeUser = ({ navigation, route }) => {
                     )}
                 </View>
             ) : (
-                subscriptionData ? (
-                    subscriptionData.package ? (
-                        // er is een pakket
+                // Pakketweergave
+                <View>
+                    {subscriptionData && subscriptionData.package ? (
+                        // Er is een pakket
                         <TouchableOpacity onPress={() => goToPackageDetails(subscriptionData.package._id, subscriptionData.farm._id, userData._id, subscriptionData.package.name)}>
                             <View style={styles.packageCard}>
                                 <Text style={{...globalStyles.headerText, ...styles.packageFarm}}>{subscriptionData.farm.name}</Text>
@@ -108,7 +141,7 @@ const HomeUser = ({ navigation, route }) => {
                             </View>
                         </TouchableOpacity>
                     ) : (
-                        // er is nog geen pakket
+                        // Er is geen pakket
                         <View style={styles.packageEmpty}>
                             <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')}/>
                             <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
@@ -116,36 +149,37 @@ const HomeUser = ({ navigation, route }) => {
                                 <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
                             </TouchableOpacity>
                         </View>
-                    )
+                    )}
+                </View>
+            )}
+    
+            {/* Weergave van kalender */}
+            <View>
+                <Text style={{...globalStyles.headerTextSmall, marginBottom: 10}}>Kalender</Text>
+            </View>
+    
+            {/* Activiteiten weergave */}
+            {activitiesData && activitiesData.length > 0 ? (
+                    // Er zijn activiteiten in de kalender
+                    <View>
+                        {activitiesData.map((activity, index) => (
+                            <AgendaCard key={index} activity={activity} />
+                        ))}
+                    </View>
                 ) : (
-                    // er is nog geen abonnement data beschikbaar
-                    <View style={styles.packageEmpty}>
-                        <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')}/>
-                        <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
-                        <TouchableOpacity style={styles.button} onPress={goToFarm}>
-                            <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
+                    // Er zijn geen activiteiten in de kalender
+                    <View style={styles.calendarEmpty}>
+                        <Image style={styles.iconImage} source={require('../../assets/icons/date-black.png')}/>
+                        <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je kalender is nog leeg want je hebt geen activiteiten.</Text>
+                        <TouchableOpacity style={styles.button} onPress={goToExplore}>
+                            <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek een activiteit</Text>
                         </TouchableOpacity>
                     </View>
                 )
-            )}
-            {/* weergave van kalender */}
-            <View>
-                <Text style={globalStyles.headerTextSmaller}>Kalender</Text>
-            </View>
-            <View style={globalStyles.Header}>
-                <Pressable style={styles.button} onPress={goToCalendar}>
-                    <Text style={styles.text}>Kalender</Text>
-                </Pressable>
-            </View>
-            <View>
-            </View>
-            {/* weergave van activiteiten */}
-            <View>
-                <Text style={globalStyles.headerTextSmaller}>Activiteiten</Text>
-            </View>
+            }
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     button: {
@@ -201,6 +235,13 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         alignItems: 'center',
     },
+    calendarEmpty: {
+        paddingVertical: 20,
+        marginHorizontal: 20,
+        marginBottom: 20,
+        marginTop: 20,
+        alignItems: 'center',
+    },
     packageCard: {
         marginTop: 15,
     },
@@ -237,7 +278,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: 150
-      }
+    },
 });
 
 export default HomeUser;
