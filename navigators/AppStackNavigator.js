@@ -11,8 +11,14 @@ import PackageDetail from '../screens/User/PackageDetail';
 import Profile from '../screens/User/Profile';
 import MyAccount from '../screens/User/Profile/MyAccount';
 import Settings from '../screens/User/Profile/Settings';
+import MySubscription from '../screens/User/Profile/MySubscription';
 import Faq from '../screens/User/Profile/Faq';
+import Email from '../screens/User/Profile/Account/Email';
+import Phone from '../screens/User/Profile/Account/Phone';
+import Password from '../screens/User/Profile/Account/Password';
 import SubscribePackage from '../screens/User/subscribePackage/SubscribePackage';
+import Access from '../screens/User/Profile/Settings/Access';
+import Langauge from '../screens/User/Profile/Settings/Language';
 import FarmHeader from '../components/FarmHeader';
 
 import NavigationOptions from '../components/NavigationOptions';
@@ -27,7 +33,7 @@ const AppStackNavigator = () => {
           headerShown: false,
         })}
       />
-      <Stack.Screen name="Calendar" component={Calendar} options={NavigationOptions}/>
+      <Stack.Screen name="Calendar" component={Calendar} options={NavigationOptions} />
       <Stack.Screen name="FarmUserDetails" component={FarmUserDetails}
         options={() => ({
           headerShown: false,
@@ -48,15 +54,22 @@ const AppStackNavigator = () => {
           headerShown: false,
         })}
       />
-      <Stack.Screen name="Profile" component={Profile} options={NavigationOptions}/>
-      <Stack.Screen name="MyAccount" component={MyAccount} options={NavigationOptions}/>
-      <Stack.Screen name="Settings" component={Settings} options={NavigationOptions}/>
-      <Stack.Screen name="FAQ" component={Faq} options={NavigationOptions}/>
+      <Stack.Screen name="Profile" component={Profile} options={NavigationOptions} />
+      <Stack.Screen name="MyAccount" component={MyAccount} options={NavigationOptions} />
+      <Stack.Screen name="Settings" component={Settings} options={NavigationOptions} />
+      <Stack.Screen name="MySubscription" component={MySubscription} options={NavigationOptions} />
+      <Stack.Screen name="FAQ" component={Faq} options={NavigationOptions} />
       <Stack.Screen name="SubscribePackage" component={SubscribePackage}
         options={() => ({
           headerShown: false,
         })}
+
       />
+      <Stack.Screen name="Email" component={Email} options={NavigationOptions} />
+      <Stack.Screen name="Phone" component={Phone} options={NavigationOptions} />
+      <Stack.Screen name="Password" component={Password} options={NavigationOptions} />
+      <Stack.Screen name="Access" component={Access} options={NavigationOptions} />
+      <Stack.Screen name="Language" component={Langauge} options={NavigationOptions} />
     </Stack.Navigator>
   );
 };
