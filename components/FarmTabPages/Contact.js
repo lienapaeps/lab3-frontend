@@ -49,7 +49,13 @@ const Contact = ({ route }) => {
 
     const renderOpeningHours = (day) => {
         const { openinghour, closinghour } = day;
-        return openinghour === "00:00" ? "Gesloten" : `${openinghour} - ${closinghour}`;
+        if (openinghour === "00:00" && closinghour === "00:00") {
+            return "Gesloten";
+        } else if (openinghour === "00:00" && closinghour === "23:59") {
+            return "24 uur geopend";
+        } else {
+            return `${openinghour} - ${closinghour}`;
+        }
     };
 
     const daysOfWeek = ["Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag", "Zondag"];

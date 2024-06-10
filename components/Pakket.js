@@ -26,7 +26,7 @@ const Pakket = ({ item }) => {
         <View>
             <TouchableOpacity activeOpacity={1} style={styles.flex}>
             <View style={[styles.flex, styles.card]}>
-                <Image style={styles.profileImage} source={require('../assets/InformationIcon.png')} />
+                <Image style={styles.iconImage} source={require('../assets/InformationIcon.png')} />
                 <Text style={globalStyles.headerTextMedium}>{item.name}</Text>
                 <Text style={globalStyles.bodyText}>{item.description}</Text>
             </View>
@@ -58,10 +58,12 @@ const styles = StyleSheet.create({
         marginRight: 20,
         marginBottom: 20,
     },
-    profileImage: {
+    iconImage: {
         position: 'absolute',
         top: 20,
         right: 20,
+        width: 22,
+        height: 23,
     },
 });
 
