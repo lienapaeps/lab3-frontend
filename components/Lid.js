@@ -22,12 +22,22 @@ const Lid = ({ item }) => {
         fetchLidData();
     }, [item]);
 
+    if (loading) {
+        return <Text>Loading...</Text>;
+    }
+
+    if (!lidData) {
+        return <Text>Error loading user data</Text>;
+    }
+
     return (
         <View>
+            <TouchableOpacity activeOpacity={1} style={styles.flex}>
             <View style={[styles.container, styles.namesection]}>
                 <Image style={styles.profileImage} source={{uri: item.profilePicture}} />
                 <Text style={[globalStyles.headerTextMedium, globalStyles.capitalize]}>{item.firstname} {item.lastname}</Text>
             </View>
+            </TouchableOpacity>
         </View>
     )
 }
