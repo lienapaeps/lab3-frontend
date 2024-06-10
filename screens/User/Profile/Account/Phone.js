@@ -78,11 +78,10 @@ const Phone = ({ navigation, route }) => {
                 {phoneError !== '' && (
                     <Text style={globalStyles.errorText}>{phoneError}</Text>
                 )}
-
+                
                 <TouchableOpacity style={styles.button} onPress={updatePhone}>
                     <Text style={styles.buttonText}>Update telefoon</Text>
                 </TouchableOpacity>
-
             </View>
         </SafeAreaView>
     );
@@ -99,7 +98,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-
         borderRadius: 10,
         backgroundColor: COLORS.white,
         borderWidth: 1,

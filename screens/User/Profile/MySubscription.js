@@ -25,24 +25,13 @@ const MySubscription = ({ navigation, route }) => {
             <View style={styles.header}>
                 <Text style={globalStyles.headerText}>Mijn account</Text>
             </View>
-
             {/* update account information */}
-
             <Text style={globalStyles.headerSmallerText}>My account informatie</Text>
-
-
             {subscriptionData ? (
-
-
                 // if there is a package show this
-
-
                 <View style={styles.container}>
                     <View style={styles.packageCard}>
-
-
                         <Image style={styles.packageImage} source={{ uri: subscriptionData.farm.farmImage }} />
-
                         <View style={styles.packageLabel}>
                             <Text style={globalStyles.bodyTextSemiBold}>{subscriptionData.package.name}</Text>
                             <Text style={globalStyles.bodyTextSmall}>{subscriptionData.farm.name}</Text>
@@ -63,10 +52,9 @@ const MySubscription = ({ navigation, route }) => {
                             <Image style={styles.icon} source={require('../../../assets/arrow-down.png')} />
                             <Text style={globalStyles.bodyTextSmall}>{subscriptionData.farm.name}</Text>
                         </View>
-                        
                     </View>
                     <TouchableOpacity style={styles.button} onPress={goToHome}>
-                        <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
+                        <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Bekijk mijn abbonement</Text>
                     </TouchableOpacity>
                 </View>
             ) : (
@@ -79,8 +67,6 @@ const MySubscription = ({ navigation, route }) => {
                     </TouchableOpacity>
                 </View>
             )}
-            
-
         </SafeAreaView>
     );
 }
@@ -136,7 +122,6 @@ const styles = StyleSheet.create({
         height: 20,
         marginRight: 20,
     },
-
     button: {
         marginTop: 20,
         alignItems: 'center',
@@ -146,8 +131,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: COLORS.orange,
     },
-
-
 });
 
 export default MySubscription;

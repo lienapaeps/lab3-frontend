@@ -44,7 +44,7 @@ const Profile = ({ navigation, route }) => {
             <View style={styles.profileSection}>
                 <ProfileItem title="Mijn account" onPress={handleGoToAccount} icon={require('../../assets/icons/user-green.png')}/>
                 <ProfileItem title="Instellingen" onPress={handleGoToSettings} icon={require('../../assets/icons/settings-green.png')}/>
-                <ProfileItem title="Mijn abbonement" onPress={handleGoToMySubscription} icon={require('../../assets/icons/farm-icon-active.png')}/>
+                <ProfileItem title="Mijn abonnement" onPress={handleGoToMySubscription} icon={require('../../assets/icons/farm-icon-active.png')}/>
                 <ProfileItem title="FAQ" onPress={handleGoToFaq} icon={require('../../assets/icons/faq-green.png')}/>
             </View>
             <View style={styles.logout}>
