@@ -82,13 +82,13 @@ const Members = ({ route }) => {
                     <Lid item={item} />
                 )}
                 ListEmptyComponent={<Text style={styles.emptyState}>Deze boerderij heeft geen leden 🤷</Text>}
-                ListHeaderComponent={<View><Text style={[globalStyles.headerText, styles.title]}>Eigenaar</Text>
+                ListHeaderComponent={<View><Text style={[globalStyles.headerTextSmall, styles.title]}>Eigenaar</Text>
                 <View style={styles.owner}>
                     <Image style={styles.profileImage} source={{uri: ownerDataId.profilePicture}} />
                     <Text style={[globalStyles.headerTextMedium, globalStyles.capitalize]}>{ownerDataId.firstname} {ownerDataId.lastname}</Text>
                 </View>
         
-                <Text style={[globalStyles.headerText, styles.title]}>Leden</Text></View>}
+                <Text style={[globalStyles.headerTextSmall, styles.title]}>Leden</Text></View>}
             />
       </View>
   )

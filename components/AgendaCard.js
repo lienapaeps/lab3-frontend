@@ -8,7 +8,7 @@ import COLORS from './../constants/color';
 import { justify } from '@cloudinary/url-gen/qualifiers/textAlignment';
 import { FontWeight } from '@cloudinary/url-gen/qualifiers';
 
-const AgendaCard = ({ activity }) => {
+const AgendaCard = ({ activity, onPress }) => {
     const [farmName, setFarmName] = useState('');
     const [farmPicture, setFarmPicture] = useState('');
 
@@ -45,8 +45,12 @@ const AgendaCard = ({ activity }) => {
         fetchFarmData();
     }, [activity.farm]);
 
+    const handlePress = () => {
+        onPress(activity._id, farmName);
+    }
+
     return (
-        <TouchableOpacity style={styles.activityContainer}>
+        <TouchableOpacity onPress={handlePress} style={styles.activityContainer}>
             <View style={styles.container}>
                 <View style={styles.line}></View>
                 <View style={styles.contentContainer}>

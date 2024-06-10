@@ -88,6 +88,10 @@ const HomeUser = ({ navigation, route }) => {
         // console.log('activitiesData:', activitiesData);
     }, [userData, subscriptionData, activitiesData]);
 
+    const handleAgendaCardPress = (activityId, farmName) => {
+        navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmName }});
+    }
+
     if (loading) {
         return (
             <View style={globalStyles.loadingContainer}>
@@ -167,7 +171,7 @@ const HomeUser = ({ navigation, route }) => {
                             showsVerticalScrollIndicator={false}
                             data={activitiesData}
                             keyExtractor={(item) => item._id}
-                            renderItem={({ item }) => <AgendaCard activity={item} />}
+                            renderItem={({ item }) => <AgendaCard activity={item} onPress={handleAgendaCardPress} />}
                         />
                     </View>
                 ) : (

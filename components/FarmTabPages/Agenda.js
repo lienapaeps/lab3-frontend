@@ -7,7 +7,7 @@ import COLORS from '../../constants/color';
 
 import { fetchActivityDataFarm } from '../../utils/fetchHelpers';
 
-const Agenda = ({ route }) => {
+const Agenda = ({ route, navigation }) => {
     const { data: farmId } = route.params;
     const [activityData, setActivityData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -30,6 +30,10 @@ const Agenda = ({ route }) => {
 
     console.log(activityData);
 
+    const handleAgendaCardPress = (activityId, farmName) => {
+        navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmName }});
+    }
+
     return(
         <View style={styles.container}>
             <FlatList
@@ -37,7 +41,7 @@ const Agenda = ({ route }) => {
                 showsVerticalScrollIndicator={false}
                 data={activityData}
                 keyExtractor={(item) => item._id}
-                renderItem={({ item }) => <AgendaCard activity={item} />}
+                renderItem={({ item }) => <AgendaCard activity={item} onPress={handleAgendaCardPress}/>}
                 ListEmptyComponent={
                     <Text style={styles.emptyState}>
                         Er zijn geen activiteiten gepland 🍃
