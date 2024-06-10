@@ -17,6 +17,8 @@ import Email from '../screens/User/Profile/Account/Email';
 import Phone from '../screens/User/Profile/Account/Phone';
 import Password from '../screens/User/Profile/Account/Password';
 import SubscribePackage from '../screens/User/subscribePackage/SubscribePackage';
+import Access from '../screens/User/Profile/Settings/Access';
+import Langauge from '../screens/User/Profile/Settings/Language';
 import FarmHeader from '../components/FarmHeader';
 
 import NavigationOptions from '../components/NavigationOptions';
@@ -63,11 +65,11 @@ const AppStackNavigator = () => {
         })}
 
       />
-      
       <Stack.Screen name="Email" component={Email} options={NavigationOptions} />
       <Stack.Screen name="Phone" component={Phone} options={NavigationOptions} />
-      <Stack.Screen name="Password" component={Password} options={NavigationOptions} 
-      />
+      <Stack.Screen name="Password" component={Password} options={NavigationOptions} />
+      <Stack.Screen name="Access" component={Access} options={NavigationOptions} />
+      <Stack.Screen name="Language" component={Langauge} options={NavigationOptions} />
     </Stack.Navigator>
   );
 };
