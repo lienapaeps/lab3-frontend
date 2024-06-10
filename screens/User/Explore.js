@@ -110,7 +110,7 @@ const Explore = ({ navigation }) => {
             <View style={styles.section}>
                 <Text style={globalStyles.headerTextSmall}>{searchTerm ? "Zoekresultaten" : "Nieuwste"}</Text>
                 {filteredActivities.length === 0 ? (
-                    <Text style={styles.emptyState}>Er zijn geen activiteiten beschikbaar.</Text>
+                    <Text style={globalStyles.bodyText}>Er zijn geen items beschikbaar.</Text>
                 ) : (
                     <View style={styles.cards}>
                         <ScrollView 

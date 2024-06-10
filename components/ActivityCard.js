@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Platform, SafeAreaView } from 'react-native';
 
 import COLORS from '../constants/color';
 import { globalStyles } from '../styles/global';
@@ -40,8 +40,16 @@ const AcitvityCard = ({ activityData, onPress }) => {
       }, []);
     
       if (loading) {
-        return <Text>Laden...</Text>;
-      }
+        return (
+            <SafeAreaView style={styles.loading}>
+                {Platform.OS === "web" ? (
+                    <ActivityIndicator size="small" color={COLORS.offBlack} />
+                ) : (
+                    <ActivityIndicator size="medium" color={COLORS.offBlack} />
+                )}
+            </SafeAreaView>
+        );
+    }
     
       if (error) {
         return <Text>Error: {error.message}</Text>;
@@ -76,7 +84,7 @@ const AcitvityCard = ({ activityData, onPress }) => {
                 )}
                 <View style={styles.cardFarm}>
                     <Image style={styles.imgLocation} source={require('../assets/icons/locatie-black.png')} />
-                    <Text style={{...globalStyles.bodyText, color: COLORS.OffBlack}}>{farmData.name}</Text>
+                    <Text style={{...globalStyles.bodyText, color: COLORS.offBlack}}>{farmData.name}</Text>
                 </View>
         </TouchableOpacity>
     );
@@ -112,7 +120,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 5,
         borderRadius: 10,
-        // backgroundColor: COLORS.orange,
         position: 'absolute',
         top: 15,
         left: 15,
@@ -144,6 +151,12 @@ const styles = StyleSheet.create({
     imgLocation: {
         width: 13,
         height: 16,
+    },
+    loading: {
+        width: 210,
+        height: 250,
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })
 

@@ -13,6 +13,7 @@ const Services = ({ route }) => {
     useEffect(() => {
         const fetchPackages = async () => {
             try {
+                setLoading(true);
                 const data = await fetchPackagesData(farmId);
                 setPackagesData(data.data.packages);
             } catch (error) {

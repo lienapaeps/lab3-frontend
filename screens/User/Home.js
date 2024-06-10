@@ -37,6 +37,10 @@ const HomeUser = ({ navigation, route }) => {
         navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId, userId, packageName }});
     };
 
+    const handleAgendaCardPress = (activityId, farmName) => {
+        navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmName }});
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -87,10 +91,6 @@ const HomeUser = ({ navigation, route }) => {
         // console.log('subscriptionData:', subscriptionData);
         // console.log('activitiesData:', activitiesData);
     }, [userData, subscriptionData, activitiesData]);
-
-    const handleAgendaCardPress = (activityId, farmName) => {
-        navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmName }});
-    }
 
     if (loading) {
         return (

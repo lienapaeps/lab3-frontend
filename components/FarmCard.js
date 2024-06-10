@@ -77,7 +77,7 @@ const FarmCard = ({ farmData, onPress }) => {
     const imageSource = status === "Open" ? require('../assets/icons/clock.png') : require('../assets/icons/clock-inactive.png');
 
     return (
-        <View style={{flex: 1}}>
+        <View>
             <TouchableOpacity onPress={handlePress} style={styles.card}>
                 <View>
                     <Image style={styles.cardImage} source={{uri: farmData.farmImage }} />
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     imgLocation: {
         width: 13,
         height: 16,
-    }
+    },
 })
 
 export default FarmCard;
