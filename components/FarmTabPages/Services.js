@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { globalStyles } from '../../styles/global';
 import { fetchPackagesData } from '../../utils/fetchHelpers';
 import Pakket from '../../components/Pakket';
-import { ScrollView } from 'react-native-gesture-handler';
+import COLORS from '../../constants/color';
 
 const Services = ({ route }) => {
     const { data: farmId } = route.params;
@@ -26,9 +26,7 @@ const Services = ({ route }) => {
     }, [farmId]);
 
     return (
-        <ScrollView>
         <View style={styles.container}>
-            <Text style={globalStyles.headerText}>Alle pakketten</Text>
             <FlatList
                 style={styles.flow}
                 showsVerticalScrollIndicator={false}
@@ -40,9 +38,9 @@ const Services = ({ route }) => {
                         Er zijn geen pakketten beschikbaar 🍃
                     </Text>
                 }
+                ListHeaderComponent={<Text style={globalStyles.headerText}>Alle pakketten</Text>}
             />
         </View>
-        </ScrollView>
     );
 };
 
@@ -57,9 +55,10 @@ const styles = StyleSheet.create({
     },
     emptyState: {
         textAlign: 'center',
-        marginVertical: 20,
+        marginTop: 20,
         fontSize: 16,
-        color: 'gray',
+        color: COLORS.offBlack,
+        fontFamily: 'Baloo2_500Medium',
     },
 });
 

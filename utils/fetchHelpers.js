@@ -115,6 +115,17 @@ export const fetchReviewsData = async (farmId) => {
     return await response.json();
 };
 
+// fetch all activity data
+export const fetchActivityDataFarm = async (farmId) => {
+    const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/farms/${farmId}/activities`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return await response.json();
+};
+
 // fetch package data by id
 export const fetchPackageDataById = async (packageId, userId) => {
     const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/packages/${packageId}`, {

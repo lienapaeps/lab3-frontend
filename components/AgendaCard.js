@@ -31,10 +31,14 @@ const AgendaCard = ({ activity }) => {
 
     return (
         <TouchableOpacity style={styles.activityContainer}>
+            <View style={styles.flow}>
             <View style={styles.line}></View>
-            <Text style={{...globalStyles.headerTextSmaller, marginLeft: 10}}>{activity.title}</Text>
-            <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.lightOffBlack, marginLeft: 10}}>{formatDate(activity.start.date)} - {activity.start.time} - {activity.end.time}</Text>
-            <Text style={{...globalStyles.bodyTextSemiBold, marginLeft: 10, marginTop: 10}}>{farmName}</Text>
+            <View>
+            <Text style={{...globalStyles.headerTextMedium, marginLeft: 15, marginBottom: 5, fontSize: 20}}>{activity.title}</Text>
+            <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.lightOffBlack, marginLeft: 15}}>{formatDate(activity.start.date)} - {activity.start.time} - {activity.end.time}</Text>
+            <Text style={{...globalStyles.bodyTextSemiBold, marginLeft: 15, marginTop: 5}}>{farmName}</Text>
+            </View>
+            </View>
         </TouchableOpacity>
     );
 };
@@ -54,13 +58,14 @@ const styles = {
     },
     line: {
         width: 5,
-        height: 80,
-        backgroundColor: COLORS.green,
-        position: 'absolute',
-        left: 15,
-        top: 15,
+        height: "100%",
+        backgroundColor: COLORS.orange,
         borderRadius: 5,
-    }
+    },
+    flow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
 };
 
 export default AgendaCard;
