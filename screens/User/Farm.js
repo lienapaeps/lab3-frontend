@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Text, ActivityIndicator, Platform } from 'react-native';
+import { View, StyleSheet, FlatList, Text, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { checkStatus, calculateDistance, getUserLocation } from '../../utils/utils';
@@ -74,11 +74,7 @@ const FarmUser = ({ navigation }) => {
     if (loading) {
         return (
             <SafeAreaView style={globalStyles.loadingContainer}>
-                {Platform.OS === "web" ? (
-                    <ActivityIndicator size="small" color={COLORS.offBlack} />
-                ) : (
-                    <ActivityIndicator size="medium" color={COLORS.offBlack} />
-                )}
+                <ActivityIndicator size="medium" color={COLORS.offBlack} />
             </SafeAreaView>
         );
     }

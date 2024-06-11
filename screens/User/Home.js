@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Image, ActivityIndicator, TouchableOpacity, Platform, FlatList } from 'react-native';
+import { StyleSheet, View, Text, Image, ActivityIndicator, TouchableOpacity, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useIsFocused } from '@react-navigation/native';
 
@@ -123,11 +123,7 @@ const HomeUser = ({ navigation, route }) => {
             {/* Laadinidicator */}
             {loading ? (
                 <View style={styles.loadingContainer}>
-                    {Platform.OS === "web" ? (
-                        <ActivityIndicator size="small" color={COLORS.offBlack} />
-                    ) : (
-                        <ActivityIndicator size="medium" color={COLORS.offBlack} />
-                    )}
+                    <ActivityIndicator size="medium" color={COLORS.offBlack} />
                 </View>
             ) : (
                 // Pakketweergave

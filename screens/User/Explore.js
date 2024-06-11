@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -54,11 +54,7 @@ const Explore = ({ navigation }) => {
     if (loading) {
         return (
             <SafeAreaView style={globalStyles.loadingContainer}>
-                {Platform.OS === "web" ? (
-                    <ActivityIndicator size="small" color={COLORS.offBlack} />
-                ) : (
-                    <ActivityIndicator size="medium" color={COLORS.offBlack} />
-                )}
+                <ActivityIndicator size="medium" color={COLORS.offBlack} />
             </SafeAreaView>
         );
     }
