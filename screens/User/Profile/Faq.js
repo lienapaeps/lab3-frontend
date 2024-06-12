@@ -50,11 +50,14 @@ const Faq = ({ navigation, route }) => {
             {questions.map((question, index) => (
                 <View key={index} style={styles.questionContainer}>
                     <TouchableOpacity style={styles.questionHeader} onPress = {() => questionClicked(index) }>
-                        <Text style={styles.questionTitle}>{question.title}</Text>
+                        <Text style={globalStyles.headerTextSmallerMedium}>{question.title}</Text>
                         <Image source={require('../../../assets/arrow-down.png')} style={styles.questionIcon} />
                     </TouchableOpacity>
                     {selectedQuestionIndex === index && (
-                        <Text style={styles.answer}>{question.answer}</Text>
+                        <View style={styles.answer}> 
+                         <Text style={globalStyles.bodyTextSmall}>{question.answer}</Text>
+                        </View>
+                       
                     )}
 
                 </View>
@@ -67,27 +70,28 @@ const Faq = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     header: {
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 20,
         paddingBottom: 20,
+     
     },
     questionContainer: {
-        marginTop: 20,
+        marginTop: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: COLORS.veryLightOffBlack,
     },
     questionHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: 10,
-        margin: 10,
+        marginLeft: 10,
+        marginRight: 10,
         backgroundColor: COLORS.lightGray,
         borderRadius: 10,
     },
-    questionTitle: {
-        fontWeight: 'bold',
-    },
     questionIcon: {
-        width: 15,
-        height: 15,
+        width: 25,
+        height: 25,
     },
     answer: {
         paddingLeft: 10,
@@ -96,6 +100,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
         backgroundColor: COLORS.lightGray,
         borderRadius: 10,
+        marginBottom: 10,
     },
 });
 

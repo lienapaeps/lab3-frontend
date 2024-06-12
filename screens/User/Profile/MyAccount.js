@@ -52,31 +52,31 @@ const MyAccount = ({ navigation, route }) => {
                 <Text style={globalStyles.headerText}>Mijn account</Text>
             </View>
             {/* update account information */}
-            <Text style={globalStyles.bodyTextRegular}>Accountinformatie</Text>
+            <Text style={globalStyles.headerTextSmallerRegular}>Accountinformatie</Text>
             <View style={styles.container}>
                 <TouchableOpacity style={styles.button} onPress={handleGoToEmail}>
-                    <Text style={globalStyles.headerTextSmaller}>E-mail</Text>
+                    <Text style={globalStyles.headerTextSmallerMedium}>E-mail</Text>
                     <Text style={styles.buttonData}>{userData.email}</Text>
                     <Image style={styles.icon} source={require('../../../assets/arrow-right.png')} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={handleGoToPhone}>
-                    <Text style={globalStyles.headerTextSmaller}>Telefoon</Text>
+                    <Text style={globalStyles.headerTextSmallerMedium}>Telefoon</Text>
                     <Text style={styles.buttonData}>{userData.telephone}</Text>
                     <Image style={styles.icon} source={require('../../../assets/arrow-right.png')} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={handleGoToPassword}>
-                    <Text style={globalStyles.headerTextSmaller}>Wachtwoord</Text>
+                    <Text style={globalStyles.headerTextSmallerMedium}>Wachtwoord</Text>
                     <Image style={styles.icon} source={require('../../../assets/arrow-right.png')} />
                 </TouchableOpacity>
             </View>
             {/* account management */}
-            <Text style={globalStyles.headerSmallerText}>Accountmanagement</Text>
+            <Text style={globalStyles.headerTextSmallerRegular}>Accountmanagement</Text>
             <View style={styles.container}>
                 <TouchableOpacity style={styles.button}>
-                    <Text style={globalStyles.headerTextSmaller}>Account uitschakelen</Text>
+                    <Text style={globalStyles.headerTextSmallerMedium}>Account uitschakelen</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button}>
-                    <Text style={globalStyles.headerTextSmaller}>Account verwijderen</Text>
+                    <Text style={{...globalStyles.headerTextSmallerMedium, color: COLORS.alert}}>Account verwijderen</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -86,7 +86,7 @@ const MyAccount = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     header: {
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 20,
         paddingBottom: 20,
     },
 
@@ -102,14 +102,16 @@ const styles = StyleSheet.create({
         margin: 10,
         justifyContent: 'space-between',
         paddingLeft: 20,
-
         left: 0,
         height: 40,
     },
     buttonData: {
         fontWeight: '300',
-        marginLeft: 20,
-
+        color: COLORS.offBlack,
+        flex: 1,
+        marginRight: 20,
+        textAlign: 'right',
+        
     },
     icon: {
         width: 20,

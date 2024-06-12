@@ -23,10 +23,10 @@ const MySubscription = ({ navigation, route }) => {
         <SafeAreaView style={globalStyles.container}>
             {/* weergave van huidig pakket */}
             <View style={styles.header}>
-                <Text style={globalStyles.headerText}>Mijn account</Text>
+                <Text style={globalStyles.headerText}>Mijn abonnement</Text>
             </View>
             {/* update account information */}
-            <Text style={globalStyles.headerSmallerText}>My account informatie</Text>
+            <Text style={globalStyles.headerTextSmallerRegular}>Overzicht abonnement</Text>
             {subscriptionData ? (
                 // if there is a package show this
                 <View style={styles.container}>
@@ -39,7 +39,7 @@ const MySubscription = ({ navigation, route }) => {
                         </View>
                     </View>
                     <View style={styles.packageContent}>
-                        <Text style={globalStyles.bodyTextSmall}>abbonement bevat</Text>
+                        <Text style={globalStyles.headerTextSmallerMedium}>Abbonement omvat</Text>
                         <View style={styles.packageItem}>
                             <Image style={styles.icon} source={require('../../../assets/arrow-down.png')} />
                             <Text style={globalStyles.bodyTextSmall}>{subscriptionData.farm.name}</Text>
@@ -54,7 +54,7 @@ const MySubscription = ({ navigation, route }) => {
                         </View>
                     </View>
                     <TouchableOpacity style={styles.button} onPress={goToHome}>
-                        <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Bekijk mijn abbonement</Text>
+                        <Text style={{ ...globalStyles.buttonText, color: COLORS.white }}>Bekijk mijn pakket</Text>
                     </TouchableOpacity>
                 </View>
             ) : (
@@ -63,7 +63,7 @@ const MySubscription = ({ navigation, route }) => {
                     <Image style={styles.iconImage} source={require('../../../assets/icons/package-empty.png')} />
                     <Text style={{ ...globalStyles.bodyText, ...styles.emptyText }}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
                     <TouchableOpacity style={styles.button } onPress={goToFarm}>
-                        <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
+                        <Text style={{ ...globalStyles.buttonText, color: COLORS.white }}>Zoek Boerderij</Text>
                     </TouchableOpacity>
                 </View>
             )}
@@ -74,7 +74,7 @@ const MySubscription = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     header: {
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 20,
         paddingBottom: 20,
     },
     packageEmpty: {
@@ -126,10 +126,10 @@ const styles = StyleSheet.create({
         marginTop: 20,
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 15,
-        paddingHorizontal: 20,
+        padding: 20,
         borderRadius: 10,
-        backgroundColor: COLORS.orange,
+        backgroundColor: COLORS.green,
+       
     },
 });
 

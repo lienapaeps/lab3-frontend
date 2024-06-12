@@ -74,6 +74,16 @@ export const globalStyles = StyleSheet.create({
         fontSize: 16,
         color: COLORS.offBlack,
     },
+    headerTextSmallerMedium: {
+        fontFamily: 'Baloo2_500Medium',
+        fontSize: 18,
+        color: COLORS.offBlack,
+    },
+    headerTextSmallerRegular: {
+        fontFamily: 'Baloo2_400Regular',
+        fontSize: 16,
+        color: COLORS.offBlack,
+    },
     buttonText: {
         fontFamily: 'Baloo2_600SemiBold',
         fontSize: 18,

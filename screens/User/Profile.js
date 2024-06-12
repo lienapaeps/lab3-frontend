@@ -170,11 +170,21 @@ const styles = StyleSheet.create({
         transform: [{ translateX: -25 }, { translateY: -25 }],
     },
     logout: {
-        position: 'absolute',
-        bottom: 150,
-        width: '100%',
+        marginTop: 40,
+        marginLeft: 50,
+        marginRight: 50,
         alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: COLORS.white,
+        borderRadius: 10,
+        padding: 10,
+        shadowColor: COLORS.offBlack,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+       
+
     },
     plusBtn: {
         position: 'absolute',
