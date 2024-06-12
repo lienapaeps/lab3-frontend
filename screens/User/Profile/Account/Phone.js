@@ -62,7 +62,7 @@ const Phone = ({ navigation, route }) => {
                 {showSuccess && (
                     <Text style={styles.successMessage}>Telefoon changed successfully</Text>
                 )}
-                <Text style={styles.label}>Telefoon</Text>
+                <Text style={globalStyles.headerTextSmallerMedium}>Telefoon</Text>
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
@@ -80,7 +80,7 @@ const Phone = ({ navigation, route }) => {
                 )}
                 
                 <TouchableOpacity style={styles.button} onPress={updatePhone}>
-                    <Text style={styles.buttonText}>Update telefoon</Text>
+                    <Text style={globalStyles.buttonText}>Opslaan</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -90,7 +90,7 @@ const Phone = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     header: {
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 20,
         paddingBottom: 20,
     },
     inputContainer: {
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: COLORS.white,
         borderWidth: 1,
-        borderColor: COLORS.grey,
+        borderColor: COLORS.veryLightOffBlack,
     },
     input: {
         flex: 1,
@@ -110,13 +110,12 @@ const styles = StyleSheet.create({
 
     },
     button: {
-        marginTop: 20,
+        marginTop: 30,
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 15,
-        paddingHorizontal: 20,
+       padding: 20,
         borderRadius: 10,
-        backgroundColor: COLORS.orange,
+        backgroundColor: COLORS.green,
     },
     buttonText: {
         color: COLORS.white,

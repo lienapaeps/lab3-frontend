@@ -48,6 +48,12 @@ export const globalStyles = StyleSheet.create({
         lineHeight: 20,
         color: COLORS.offBlack,
     },
+    bodyTextRegular: {
+        fontFamily: 'Quicksand_400Regular',
+        fontSize: 16,
+        lineHeight: 20,
+        color: COLORS.offBlack,
+    },
     headerText: {
         fontFamily: 'Baloo2_600SemiBold',
         fontSize: 24,
@@ -65,6 +71,16 @@ export const globalStyles = StyleSheet.create({
     },
     headerTextSmaller: {
         fontFamily: 'Baloo2_600SemiBold',
+        fontSize: 16,
+        color: COLORS.offBlack,
+    },
+    headerTextSmallerMedium: {
+        fontFamily: 'Baloo2_500Medium',
+        fontSize: 18,
+        color: COLORS.offBlack,
+    },
+    headerTextSmallerRegular: {
+        fontFamily: 'Baloo2_400Regular',
         fontSize: 16,
         color: COLORS.offBlack,
     },

@@ -8,7 +8,8 @@ const COLORS = {
     lightGreen: '#D7EAD2',
     orange: '#EE7E1B',
     lightOrange: '#F1DCC9',
-    alert: '#DF1111'
+    alert: '#DF1111',
+    red: '#E52727',
 }
 
 export default COLORS;

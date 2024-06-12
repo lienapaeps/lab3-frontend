@@ -31,18 +31,18 @@ const Password = ({ navigation, route }) => {
     return (
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.header}>
-                <Text style={globalStyles.headerText}>Password</Text>
+                <Text style={globalStyles.headerText}>Wachtwoord</Text>
             </View>
             <View style={styles.content}>
                 {showSuccess && (
                     <Text style={styles.successMessage}>Password changed successfully</Text>
                 )}
-                <Text style={styles.label}>Password</Text>
+                <Text style={globalStyles.headerTextSmallerMedium}>Huidig wachtwoord</Text>
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
                         value={password}
-                        placeholder="password"
+                        placeholder="wachtwoord"
                     />
 
                     {newPasswordError !== '' && (
@@ -50,12 +50,12 @@ const Password = ({ navigation, route }) => {
                     )}
 
                 </View>
-                <Text style={styles.label}>New Password</Text>
+                <Text style={globalStyles.headerTextSmallerMedium}>Nieuw wachtwoord</Text>
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
                         value={newPassword}
-                        placeholder="New password"
+                        placeholder="wachtwoord"
                     />
                 </View>
 
@@ -64,7 +64,7 @@ const Password = ({ navigation, route }) => {
                 )}
 
                 <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Update Password</Text>
+                    <Text style={globalStyles.buttonText}>Wachtwoord veranderen</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -74,7 +74,7 @@ const Password = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     header: {
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 20,
         paddingBottom: 20,
     },
     inputContainer: {
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: COLORS.white,
         borderWidth: 1,
-        borderColor: COLORS.grey,
+        borderColor: COLORS.veryLightOffBlack,
     },
     input: {
         flex: 1,
@@ -98,10 +98,10 @@ const styles = StyleSheet.create({
         marginTop: 20,
         alignItems: 'center',
         justifyContent: 'center',
-        paddingVertical: 15,
-        paddingHorizontal: 20,
+       
         borderRadius: 10,
-        backgroundColor: COLORS.orange,
+        backgroundColor: COLORS.green,
+        padding: 20,
     },
     buttonText: {
         color: COLORS.white,

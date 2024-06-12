@@ -23,19 +23,19 @@ const Settings = ({ navigation, route }) => {
 
             {/* update account information */}
           
-                <Text style={globalStyles.headerSmallerText}>My account informatie</Text>
+                <Text style={globalStyles.headerTextSmallerRegular}>App-instellingen</Text>
                 <View style={styles.container}>
                     <TouchableOpacity style={styles.button} onPress={handleGoToAccess}>
-                        <Text style={globalStyles.headerTextSmaller}>Toegankelijkheid</Text>
+                        <Text style={globalStyles.headerTextSmallerMedium}>Toegankelijkheid</Text>
                         <Image style={styles.icon} source={require('../../../assets/arrow-right.png')}/>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button } onPress={handleGoToLanguage}>
-                        <Text style={globalStyles.headerTextSmaller}>Taal</Text>
+                        <Text style={globalStyles.headerTextSmallerMedium}>Taal</Text>
                         <Text style={styles.buttonData}>{userData.taal}</Text>
                         <Image style={styles.icon} source={require('../../../assets/arrow-right.png')}/>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button}>
-                        <Text style={globalStyles.headerTextSmaller}>Meldingen</Text>
+                        <Text style={globalStyles.headerTextSmallerMedium}>Meldingen</Text>
                     </TouchableOpacity>
                 </View>
         </SafeAreaView>
@@ -45,7 +45,7 @@ const Settings = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     header: {
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 20,
         paddingBottom: 20,
     },
    
