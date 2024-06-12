@@ -52,7 +52,7 @@ const MyAccount = ({ navigation, route }) => {
                 <Text style={globalStyles.headerText}>Mijn account</Text>
             </View>
             {/* update account information */}
-            <Text style={globalStyles.headerSmallerText}>My account informatie</Text>
+            <Text style={globalStyles.bodyTextRegular}>Accountinformatie</Text>
             <View style={styles.container}>
                 <TouchableOpacity style={styles.button} onPress={handleGoToEmail}>
                     <Text style={globalStyles.headerTextSmaller}>E-mail</Text>

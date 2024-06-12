@@ -48,6 +48,12 @@ export const globalStyles = StyleSheet.create({
         lineHeight: 20,
         color: COLORS.offBlack,
     },
+    bodyTextRegular: {
+        fontFamily: 'Quicksand_400Regular',
+        fontSize: 16,
+        lineHeight: 20,
+        color: COLORS.offBlack,
+    },
     headerText: {
         fontFamily: 'Baloo2_600SemiBold',
         fontSize: 24,
