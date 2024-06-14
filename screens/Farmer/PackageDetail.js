@@ -12,6 +12,7 @@ const PackageDetail = ({ navigation, route }) => {
     const [packageData, setPackageData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [tempPrice, setTempPrice] = useState(null);
 
     const { id } = route.params;
 
@@ -19,6 +20,7 @@ const PackageDetail = ({ navigation, route }) => {
         try {
             const packageDataResponse = await fetchPackageData(id);
             setPackageData(packageDataResponse.data.package);
+            setTempPrice(packageDataResponse.data.package.price.toString());
             setLoading(false);
         } catch (error) {
             console.error('Error:', error);
@@ -36,18 +38,34 @@ const PackageDetail = ({ navigation, route }) => {
         }, [])
     );
 
-    const handlePriceChange = (newPrice) => {
-        setPackageData((prevData) => ({
-            ...prevData,
-            price: newPrice,
-        }));
+    const handlePriceChange = (text) => {
+        setTempPrice(text);
+    };
+
+    const handleConfirmPriceChange = async () => {
+        try {
+            const updatedPackageData = {
+                price: parseFloat(tempPrice),
+                contents: packageData.contents,
+                pickUpDate: packageData.pickUpDate,
+            };
+    
+            const response = await updatePackage(id, updatedPackageData);
+    
+            setPackageData(response.data.package);
+    
+            Alert.alert('Prijs bijgewerkt', 'De prijs van het pakket is succesvol bijgewerkt.');
+        } catch (error) {
+            console.error('Error bij het bijwerken van de prijs:', error);
+            Alert.alert('Fout bij bijwerken', 'Er is een fout opgetreden bij het bijwerken van de prijs.');
+            setTempPrice(packageData.price.toString());
+        }
     };
 
     const handleRemoveItem = async (productId) => {
         try {
             setPackageData((prevData) => {
                 const updatedContents = prevData.contents.filter(item => item._id !== productId);
-                console.log('Updated package data:', updatedContents);
                 return {
                     ...prevData,
                     contents: updatedContents
@@ -56,17 +74,19 @@ const PackageDetail = ({ navigation, route }) => {
     
             Alert.alert('Product verwijderd', 'Het product is verwijderd uit het pakket.', [{ text: 'OK' }]);
     
-            const updatedPackageData = packageData.contents.filter(item => item._id !== productId);
+            const updatedPackageData = {
+                ...packageData,
+                contents: packageData.contents.filter(item => item._id !== productId)
+            };
 
-            await updatePackage(id, updatedPackageData);
+            const response = await updatePackage(id, updatedPackageData);
     
-            fetchData();
+            setPackageData(response.data.package);
         } catch (error) {
             console.error('Error bij het verwijderen van het product:', error);
             Alert.alert('Fout bij verwijderen', 'Er is een fout opgetreden bij het verwijderen van het product.');
         }
     };
-    
 
     const handleAddProducts = () => {
         navigation.navigate('UpdatePackage', { 
@@ -101,19 +121,25 @@ const PackageDetail = ({ navigation, route }) => {
                         </TouchableOpacity>
                     </View>
                     
-                    <Text style={{...globalStyles.headerTextMedium, marginBottom: 15 }}>Prijs pakket</Text>
-                    <TextInput 
-                        placeholder='Prijs' 
-                        style={styles.input} 
-                        value={packageData.price.toString()} 
-                        onChangeText={handlePriceChange} 
-                        keyboardType="numeric"
-                    />
+                    {/* Prijs updaten */}
+                    <Text style={{ ...globalStyles.headerTextMedium, marginBottom: 15 }}>Prijs pakket</Text>
+                    <View style={styles.priceInputContainer}>
+                        <TextInput
+                            placeholder='Prijs'
+                            style={styles.input}
+                            value={tempPrice}
+                            onChangeText={handlePriceChange}
+                            keyboardType="numeric"
+                        />
+                        <TouchableOpacity style={styles.confirmButton} onPress={handleConfirmPriceChange}>
+                            <Text style={styles.confirmButtonText}>Opslaan</Text>
+                        </TouchableOpacity>
+                    </View>
                     
                     <Text style={{...globalStyles.headerTextMedium, marginBottom: 5 }}>Inhoud pakket</Text>
                     {packageData.contents.length === 0 ? (
                         <View style={styles.emptyStateContainer}>
-                            <Text style={globalStyles.bodyTextRegular}>Er zit nog geen inhoud in dit pakket.</Text>
+                            <Text style={{...globalStyles.bodyText, marginBottom: 25 }}>Er zit nog geen inhoud in dit pakket.</Text>
                             <Button 
                                 filled={true} 
                                 title="Voeg producten toe" 
@@ -162,13 +188,14 @@ const styles = StyleSheet.create({
         height: 30,
     },
     input: {
+        flex: 1,
         padding: 18,
         borderColor: COLORS.veryLightOffBlack,
         backgroundColor: COLORS.white,
         borderWidth: 1,
         borderRadius: 10,
         fontSize: 16,
-        marginBottom: 20
+        marginRight: 15
     },
     packageName: {
         textAlign: 'center',
@@ -194,15 +221,31 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: 15,
     },
-    addButton: {
-        marginTop: 25,
+    confirmButton: {
+        backgroundColor: COLORS.green,
+        padding: 18,
+        borderRadius: 10,
     },
-    add: {
+    confirmButtonText: {
+        color: COLORS.white,
+        textAlign: 'center',
+        fontSize: 16,
+        fontFamily: 'Poppins_500Medium',
+    },
+    priceInputContainer: {
         flexDirection: 'row',
-        justifyContent: 'center',
         alignItems: 'center',
+        marginBottom: 15,
+    },
+    priceInput: {
+        padding: 18,
+        borderColor: COLORS.veryLightOffBlack,
+        backgroundColor: COLORS.white,
+        borderWidth: 1,
+        borderRadius: 10,
+        fontSize: 16,
         marginBottom: 20,
-    }
+    },
 });
 
 export default PackageDetail;

@@ -248,17 +248,14 @@ export const fetchProducts = async () => {
 };
 
 // update package farmer
-export const updatePackage = async (packageId, updatedContents) => {
+export const updatePackage = async (packageId, updatedPackageData) => {
     try {
         const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/packages/${packageId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                pickUpDate: new Date().toISOString(),
-                contents: updatedContents
-            }),
+            body: JSON.stringify(updatedPackageData),
         });
 
         if (!response.ok) {

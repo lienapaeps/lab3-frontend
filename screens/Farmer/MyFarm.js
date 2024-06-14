@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Image, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 
-import { stringifyData } from '../../utils/utils';
 import { fetchUserData, fetchFarmDataByOwner, fetchPackagesData, getUserIdAndToken } from '../../utils/fetchHelpers';
 
 import COLORS from '../../constants/color';
@@ -16,51 +16,58 @@ const FarmFarmer = ({ navigation }) => {
     const [loading, setLoading] = useState(true);
     const [userId, setUserId] = useState(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const { token, userId } = await getUserIdAndToken();
-
-                setUserId(userId);
-
-                console.log('UserId:', userId)
-
-                if (!token) {
-                    navigation.navigate('Login');
-                    return;
-                }
-
-                const userDataResponse = await fetchUserData(token, userId);
-                if (userDataResponse && userDataResponse.data && userDataResponse.data.user) {
-                    setUserData(userDataResponse.data.user);
-                } else {
-                    console.error('Invalid user data response');
-                    return;
-                }
-
-                const farmDataResponse = await fetchFarmDataByOwner(token, userId);
-                if (farmDataResponse && farmDataResponse.data && farmDataResponse.data.farm) {
-                    setFarmData(farmDataResponse.data.farm);
-
-                    const packagesDataResponse = await fetchPackagesData(farmDataResponse.data.farm._id);
-                    setPackagesData(packagesDataResponse.data.packages);
-                } else {
-                    setFarmData(null);
-                }
-
-                setLoading(false);
-
-            } catch (error) {
-                console.error('Error:', error);
+    const fetchData = async (setUserData, setFarmData, setPackagesData, setLoading, navigation) => {
+        try {
+            const { token, userId } = await getUserIdAndToken();
+    
+            if (!token) {
+                navigation.navigate('Login');
+                return;
             }
+    
+            const userDataResponse = await fetchUserData(token, userId);
+            if (userDataResponse && userDataResponse.data && userDataResponse.data.user) {
+                setUserData(userDataResponse.data.user);
+            } else {
+                console.error('Invalid user data response');
+                return;
+            }
+    
+            const farmDataResponse = await fetchFarmDataByOwner(token, userId);
+            if (farmDataResponse && farmDataResponse.data && farmDataResponse.data.farm) {
+                setFarmData(farmDataResponse.data.farm);
+    
+                const packagesDataResponse = await fetchPackagesData(farmDataResponse.data.farm._id);
+                setPackagesData(packagesDataResponse.data.packages);
+            } else {
+                setFarmData(null);
+            }
+    
+            setLoading(false);
+        } catch (error) {
+            console.error('Error:', error);
         }
+    };
+    
+    useFocusEffect(
+        React.useCallback(() => {
+            const loadData = async () => {
+                setLoading(true);
+                await fetchData(setUserData, setFarmData, setPackagesData, setLoading, navigation);
+            };
 
-        fetchData();
-    }, []);
+            loadData();
+        }, [])
+    );
 
     const handlePackageCardPress = (packageId) => {
         console.log('Pressed packageId:', packageId);
         navigation.navigate('AppStackFarmer', { screen: 'PackageDetail', params: { id: packageId } });
+    }
+
+    const handleAddPackage = () => {
+        // Implementeer navigatie of logica voor het toevoegen van een nieuw pakket
+        console.log('Add package pressed');
     }
 
     if (loading) {
@@ -80,17 +87,13 @@ const FarmFarmer = ({ navigation }) => {
                 <View style={styles.headerContainer}>
                     <View>
                         <View>
-                            <Text style={globalStyles.headerTextSmall}>{farmData.name}</Text>
+                            <Text style={{...globalStyles.headerTextSmall, ...globalStyles.capitalize}}>{farmData.name}</Text>
                             <Text style={{...globalStyles.bodyText, ...globalStyles.capitalize}}>{farmData.adress.street} {farmData.adress.number}, {farmData.adress.zipcode} {farmData.adress.city}</Text>
-                            <Text style={globalStyles.bodyText}>{farmData.farmLocation}</Text>
                         </View>
-                        <View style={{ flexDirection: 'row', gap: 5, marginBottom: 15 }}>
+                        <View style={{ flexDirection: 'row', gap: 5, marginBottom: 15, marginTop: 10 }}>
                             <Text style={globalStyles.bodyTextSemiBold}>{farmData?.members?.length ?? 0}</Text>
                             <Text style={globalStyles.bodyText}>leden</Text>
                         </View>
-                    </View>
-                    <View> 
-                        
                     </View>
                 </View>
                 
@@ -113,9 +116,11 @@ const FarmFarmer = ({ navigation }) => {
                         ))}
                     </ScrollView>
 
-                    <TouchableOpacity style={styles.btn}>
-                        <Text style={{...globalStyles.bodyTextMedium, color: COLORS.orange}}>Pakket toevoegen +</Text>
-                    </TouchableOpacity>
+                    {packagesData.length < 3 && (
+                        <TouchableOpacity style={styles.btn} onPress={handleAddPackage}>
+                            <Text style={{ ...globalStyles.bodyTextMedium, color: COLORS.orange }}>Pakket toevoegen +</Text>
+                        </TouchableOpacity>
+                    )}
                 </View>
             </View>
         </View>

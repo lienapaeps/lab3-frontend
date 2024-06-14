@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, View, Text, TextInput, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { fetchProducts, updatePackage } from '../../../utils/fetchHelpers';
+import { fetchProducts, updatePackage, fetchPackageData } from '../../../utils/fetchHelpers';
 
 import { globalStyles } from '../../../styles/global';
 import COLORS from '../../../constants/color';
@@ -77,26 +77,37 @@ const UpdatePackage = ({ navigation, route }) => {
 
     const handleSaveProducts = async () => {
         const allProductsHaveQuantity = selectedProducts.every(productName => quantities[productName] > 0);
-
+    
         if (!allProductsHaveQuantity) {
             setError('Fout bij opslaan');
             setErrorMessage('Vul voor alle geselecteerde producten een hoeveelheid in.');
             return;
         }
-
+    
         const productsToUpdate = selectedProducts.map(productName => {
-            const selectedProduct = filteredProducts.find(product => product.name === productName);
+            const selectedProduct = products.find(product => product.name === productName);
             return {
                 item: selectedProduct.name,
                 unit: selectedProduct.unit,
                 quantity: quantities[productName]
             };
         });
-
+    
         console.log('Products to update:', productsToUpdate);
-
+    
         try {
-            const response = await updatePackage(id, productsToUpdate);
+            // Fetch the current package data to preserve price and pickUpDate
+            const packageResponse = await fetchPackageData(id);
+            const currentPackageData = packageResponse.data.package;
+    
+            // Update the package with the new contents
+            const updatedPackageData = {
+                price: currentPackageData.price,
+                pickUpDate: new Date().toISOString(),
+                contents: productsToUpdate
+            };
+    
+            const response = await updatePackage(id, updatedPackageData);
             console.log('Response from backend:', response);
             navigation.goBack();
         } catch (error) {
@@ -105,6 +116,7 @@ const UpdatePackage = ({ navigation, route }) => {
             console.error('Error saving products:', error);
         }
     };
+    
 
     const handleAddProduct = (productName) => {
         toggleSelection(productName);
