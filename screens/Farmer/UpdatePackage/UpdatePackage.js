@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, View, Text, TextInput, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -10,6 +10,10 @@ import Search from '../../../components/Search';
 import Button from '../../../components/Button';
 
 const UpdatePackage = ({ navigation, route }) => {
+    const { id, selectedProducts: initialSelectedProducts } = route.params;
+
+    // console.log('Initial selected products:', initialSelectedProducts)
+
     const [products, setProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedProducts, setSelectedProducts] = useState([]);
@@ -17,32 +21,44 @@ const UpdatePackage = ({ navigation, route }) => {
     const [error, setError] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const { id } = route.params;
-    console.log('update package ID:', id);
+    const scrollViewRef = useRef(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const productsResponse = await fetchProducts();
                 setProducts(productsResponse.data.products);
+
+                const selectedProductNames = initialSelectedProducts.map(product => product.item);
+                setSelectedProducts(selectedProductNames);
+
+                const initialQuantities = {};
+                initialSelectedProducts.forEach(product => {
+                    initialQuantities[product.item] = product.quantity;
+                });
+                setQuantities(initialQuantities);
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Error fetching products:', error);
             }
         };
 
         fetchData();
-    }, []);
+    }, [initialSelectedProducts]);
 
     const handleSearch = (term) => {
         setSearchTerm(term);
     };
 
-    const toggleSelection = (productId) => {
+    const toggleSelection = (productName) => {
         setSelectedProducts(prevSelected => {
-            if (prevSelected.includes(productId)) {
-                return prevSelected.filter(id => id !== productId);
+            if (prevSelected.includes(productName)) {
+                const updatedSelected = prevSelected.filter(name => name !== productName);
+                const updatedQuantities = { ...quantities };
+                delete updatedQuantities[productName]; 
+                setQuantities(updatedQuantities);
+                return updatedSelected;
             } else {
-                return [...prevSelected, productId];
+                return [...prevSelected, productName];
             }
         });
     };
@@ -51,16 +67,16 @@ const UpdatePackage = ({ navigation, route }) => {
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const handleQuantityChange = (productId, quantity) => {
+    const handleQuantityChange = (productName, quantity) => {
         const parsedQuantity = parseInt(quantity, 10);
         setQuantities(prevQuantities => ({
             ...prevQuantities,
-            [productId]: parsedQuantity
+            [productName]: parsedQuantity
         }));
     };
 
     const handleSaveProducts = async () => {
-        const allProductsHaveQuantity = selectedProducts.every(productId => quantities[productId] > 0);
+        const allProductsHaveQuantity = selectedProducts.every(productName => quantities[productName] > 0);
 
         if (!allProductsHaveQuantity) {
             setError('Fout bij opslaan');
@@ -68,12 +84,12 @@ const UpdatePackage = ({ navigation, route }) => {
             return;
         }
 
-        const productsToUpdate = selectedProducts.map(productId => {
-            const selectedProduct = filteredProducts.find(product => product.id === productId);
+        const productsToUpdate = selectedProducts.map(productName => {
+            const selectedProduct = filteredProducts.find(product => product.name === productName);
             return {
                 item: selectedProduct.name,
                 unit: selectedProduct.unit,
-                quantity: quantities[productId]
+                quantity: quantities[productName]
             };
         });
 
@@ -88,6 +104,15 @@ const UpdatePackage = ({ navigation, route }) => {
             setErrorMessage('Er is een fout opgetreden bij het opslaan van het pakket.');
             console.error('Error saving products:', error);
         }
+    };
+
+    const handleAddProduct = (productName) => {
+        toggleSelection(productName);
+        scrollToListTop();
+    };
+
+    const scrollToListTop = () => {
+        scrollViewRef.current.scrollTo({ y: 0, animated: true });
     };
     
     return (
@@ -109,51 +134,61 @@ const UpdatePackage = ({ navigation, route }) => {
                 />
             </View>
 
-            <ScrollView style={globalStyles.productContainer}>
+            <ScrollView ref={scrollViewRef} style={globalStyles.productContainer}>
                 {/* Product list */}
-                <TouchableOpacity activeOpacity={1} style={{ marginBottom: 40 }}>
-                    {filteredProducts.map((product) => (
-                        <View style={styles.product} key={product.id}>
-                            <View style={styles.productInfo}>
-                                <Text style={globalStyles.bodyTextSemiBold}>{product.name}</Text>
-                                {/* Render minus icon if product is selected */}
-                                {selectedProducts.includes(product.id) && (
-                                    <TouchableOpacity
-                                        style={styles.selectButton}
-                                        onPress={() => toggleSelection(product.id)}
-                                    >
-                                        <Image
-                                            source={require('../../../assets/icons/minus-border.png')}
-                                            style={{ width: 32, height: 32 }}
+                <TouchableOpacity activeOpacity={1}>
+                    <View style={styles.productList}>
+                        {/* Render geselecteerde producten eerst */}
+                        {selectedProducts.map(productName => {
+                            const product = filteredProducts.find(p => p.name === productName);
+                            return (
+                                <View style={styles.product} key={product.id}>
+                                    <Text style={globalStyles.bodyTextSemiBold}>{product.name}</Text>
+                                    <View style={styles.quantityContainer}>
+                                        <TextInput
+                                            style={styles.quantityInput}
+                                            placeholder="Aantal"
+                                            keyboardType="numeric"
+                                            value={quantities[productName] ? quantities[productName].toString() : ''}
+                                            onChangeText={(text) => handleQuantityChange(productName, text)}
                                         />
-                                    </TouchableOpacity>
-                                )}
-                            </View>
-                            {/* Render quantity input if product is selected */}
-                            {selectedProducts.includes(product.id) && (
-                                <View style={styles.quantityContainer}>
-                                    <TextInput
-                                        style={styles.quantityInput}
-                                        placeholder="Aantal"
-                                        keyboardType="numeric"
-                                        onChangeText={(text) => handleQuantityChange(product.id, text)}
-                                    />
-                                    <Text style={globalStyles.bodyTextRegular}>{product.unit}</Text>
+                                        <Text style={globalStyles.bodyTextRegular}>{product.unit}</Text>
+                                    </View>
+                                    <View style={styles.minusContainer}>
+                                        <TouchableOpacity
+                                            style={styles.selectButton}
+                                            onPress={() => toggleSelection(productName)}
+                                        >
+                                            <Image
+                                                source={require('../../../assets/icons/minus-border.png')}
+                                                style={styles.minusIcon}
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
-                            )}
-                            {/* Render plus icon if product is not selected */}
-                            {!selectedProducts.includes(product.id) && (
-                                <TouchableOpacity
-                                    onPress={() => toggleSelection(product.id)}
-                                >
-                                    <Image
-                                        source={require('../../../assets/icons/plus-orange.png')}
-                                        style={{ width: 32, height: 32 }}
-                                    />
-                                </TouchableOpacity>
-                            )}
-                        </View>
-                    ))}
+                            );
+                        })}
+
+                        {/* Render andere producten daarna */}
+                        {filteredProducts.map((product) => {
+                            if (!selectedProducts.includes(product.name)) {
+                                return (
+                                    <View style={{...styles.product, justifyContent: 'space-between'}} key={product.id}>
+                                        <Text style={globalStyles.bodyTextSemiBold}>{product.name}</Text>
+                                        <TouchableOpacity
+                                            onPress={() => handleAddProduct(product.name)}
+                                        >
+                                            <Image
+                                                source={require('../../../assets/icons/plus-orange.png')}
+                                                style={styles.plusIcon}
+                                            />
+                                        </TouchableOpacity>
+                                    </View>
+                                );
+                            }
+                            return null;
+                        })}
+                    </View>
                 </TouchableOpacity>
             </ScrollView>
 
@@ -172,7 +207,7 @@ const UpdatePackage = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     product: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         padding: 20,
         marginVertical: 10,
@@ -191,6 +226,8 @@ const styles = StyleSheet.create({
     quantityContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        marginLeft: 'auto',
+        marginRight: 15,
     },
     quantityInput: {
         width: 80,
@@ -201,8 +238,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginRight: 10,
     },
-    selectButton: {
-        marginLeft: 10,
+    minusIcon: {
+        width: 32,
+        height: 32,
+        tintColor: COLORS.lightOffBlack,
+    },
+    plusIcon: {
+        width: 32,
+        height: 32,
     },
     errorMessageContainer: {
         backgroundColor: '#f8d7da',

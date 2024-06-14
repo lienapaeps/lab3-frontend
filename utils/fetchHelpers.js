@@ -256,7 +256,7 @@ export const updatePackage = async (packageId, updatedContents) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                pickUpDate: "2024-06-10",
+                pickUpDate: new Date().toISOString(),
                 contents: updatedContents
             }),
         });

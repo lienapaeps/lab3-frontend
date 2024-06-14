@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert, ActivityIndicator, TextInput } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native';
 
-import { fetchPackageData } from '../../utils/fetchHelpers';
+import { fetchPackageData, updatePackage } from '../../utils/fetchHelpers';
 
 import COLORS from '../../constants/color';
 import { globalStyles } from '../../styles/global';
@@ -36,46 +36,6 @@ const PackageDetail = ({ navigation, route }) => {
         }, [])
     );
 
-    const handleIncreaseQuantity = (productId) => {
-        setPackageData((prevData) => ({
-            ...prevData,
-            contents: prevData.contents.map((product) =>
-                product._id === productId
-                    ? {
-                        ...product,
-                        quantity: product.unit === 'stuk'
-                            ? product.quantity + 1
-                            : product.quantity + 50,
-                    }
-                    : product
-            ),
-        }));
-    };
-
-    const handleDecreaseQuantity = (productId) => {
-        setPackageData((prevData) => ({
-            ...prevData,
-            contents: prevData.contents.map((product) =>
-                product._id === productId && product.quantity > (product.unit === 'stuk' ? 1 : 50)
-                    ? {
-                        ...product,
-                        quantity: product.unit === 'stuk'
-                            ? product.quantity - 1
-                            : product.quantity - 50,
-                    }
-                    : product
-            ),
-        }));
-    };
-
-    const isMinusInactive = (product) => {
-        if (product.unit === 'stuk') {
-            return product.quantity === 1;
-        } else {
-            return product.quantity === 50;
-        }
-    };
-
     const handlePriceChange = (newPrice) => {
         setPackageData((prevData) => ({
             ...prevData,
@@ -83,17 +43,35 @@ const PackageDetail = ({ navigation, route }) => {
         }));
     };
 
-    const handleRemoveItem = (productId) => {
-        setPackageData((prevData) => ({
-            ...prevData,
-            contents: prevData.contents.filter(item => item._id !== productId)
-        }));
+    const handleRemoveItem = async (productId) => {
+        try {
+            setPackageData((prevData) => {
+                const updatedContents = prevData.contents.filter(item => item._id !== productId);
+                console.log('Updated package data:', updatedContents);
+                return {
+                    ...prevData,
+                    contents: updatedContents
+                };
+            });
+    
+            Alert.alert('Product verwijderd', 'Het product is verwijderd uit het pakket.', [{ text: 'OK' }]);
+    
+            const updatedPackageData = packageData.contents.filter(item => item._id !== productId);
+
+            await updatePackage(id, updatedPackageData);
+    
+            fetchData();
+        } catch (error) {
+            console.error('Error bij het verwijderen van het product:', error);
+            Alert.alert('Fout bij verwijderen', 'Er is een fout opgetreden bij het verwijderen van het product.');
+        }
     };
+    
 
     const handleAddProducts = () => {
         navigation.navigate('UpdatePackage', { 
             id: packageData._id,
-            selectedProducts: packageData.contents.map(product => product.id)
+            selectedProducts: packageData.contents,
         });
     };
 
@@ -135,7 +113,6 @@ const PackageDetail = ({ navigation, route }) => {
                     <Text style={{...globalStyles.headerTextMedium, marginBottom: 5 }}>Inhoud pakket</Text>
                     {packageData.contents.length === 0 ? (
                         <View style={styles.emptyStateContainer}>
-                            {/* <Image source={require('../../assets/icons/empty.png')} style={styles.emptyStateImage} /> */}
                             <Text style={globalStyles.bodyTextRegular}>Er zit nog geen inhoud in dit pakket.</Text>
                             <Button 
                                 filled={true} 
@@ -151,24 +128,10 @@ const PackageDetail = ({ navigation, route }) => {
                                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginRight: 15 }}>
                                     <Text style={globalStyles.bodyTextSemiBold}>{product.item}</Text>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <TouchableOpacity
-                                            onPress={() => handleDecreaseQuantity(product._id)}
-                                            disabled={isMinusInactive(product)}
-                                        >
-                                            <Image
-                                                source={isMinusInactive(product)
-                                                    ? require('../../assets/icons/minus-inactive.png')
-                                                    : require('../../assets/icons/minus.png')}
-                                                style={{ width: 30, height: 30, marginRight: 6 }}
-                                            />
-                                        </TouchableOpacity>
-                                        <View style={{ flexDirection: 'column', alignItems: 'center', marginHorizontal: 8 }}>
-                                            <Text style={globalStyles.bodyTextSemiBold}>{product.quantity}</Text>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                            <Text style={{...globalStyles.bodyTextSemiBold, marginRight: 5 }}>{product.quantity}</Text>
                                             <Text style={globalStyles.bodyTextRegular}>{product.unit}</Text>
                                         </View>
-                                        <TouchableOpacity onPress={() => handleIncreaseQuantity(product._id)}>
-                                            <Image source={require('../../assets/icons/plus.png')} style={{ width: 30, height: 30, marginLeft: 6 }} />
-                                        </TouchableOpacity>
                                     </View>
                                 </View>
                                 <TouchableOpacity onPress={() => handleRemoveItem(product._id)}>
@@ -179,13 +142,10 @@ const PackageDetail = ({ navigation, route }) => {
                     )}
                     {packageData.contents.length > 0 && (
                         <View style={{ marginTop: 20 }}>
-                            <TouchableOpacity style={styles.add} onPress={() => handleAddProducts(packageData._id)}>
-                                <Image source={require('../../assets/icons/plus-border.png')} style={{ width: 48, height: 48 }} />
-                            </TouchableOpacity>
                             <Button 
                                 filled={true} 
-                                title="Opslaan" 
-                                onPress={() => console.log('Button Pressed')} 
+                                title="Aanbod wijzigen" 
+                                onPress={() => handleAddProducts(packageData._id)}
                                 style={{ marginBottom: 50}}
                             />
                         </View>
