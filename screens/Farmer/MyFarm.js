@@ -16,15 +16,15 @@ const FarmFarmer = ({ navigation }) => {
     const [loading, setLoading] = useState(true);
     const [userId, setUserId] = useState(null);
 
-    const fetchData = async (setUserData, setFarmData, setPackagesData, setLoading, navigation) => {
+    const fetchData = async () => {
         try {
             const { token, userId } = await getUserIdAndToken();
-    
+
             if (!token) {
                 navigation.navigate('Login');
                 return;
             }
-    
+
             const userDataResponse = await fetchUserData(token, userId);
             if (userDataResponse && userDataResponse.data && userDataResponse.data.user) {
                 setUserData(userDataResponse.data.user);
@@ -32,42 +32,39 @@ const FarmFarmer = ({ navigation }) => {
                 console.error('Invalid user data response');
                 return;
             }
-    
+
             const farmDataResponse = await fetchFarmDataByOwner(token, userId);
             if (farmDataResponse && farmDataResponse.data && farmDataResponse.data.farm) {
                 setFarmData(farmDataResponse.data.farm);
-    
-                const packagesDataResponse = await fetchPackagesData(farmDataResponse.data.farm._id);
-                setPackagesData(packagesDataResponse.data.packages);
+
+                if (farmDataResponse.data.farm._id) {
+                    const packagesDataResponse = await fetchPackagesData(farmDataResponse.data.farm._id);
+                    setPackagesData(packagesDataResponse.data.packages);
+                }
             } else {
                 setFarmData(null);
             }
-    
+
             setLoading(false);
         } catch (error) {
             console.error('Error:', error);
+            setLoading(false); 
         }
     };
-    
+
     useFocusEffect(
         React.useCallback(() => {
-            const loadData = async () => {
-                setLoading(true);
-                await fetchData(setUserData, setFarmData, setPackagesData, setLoading, navigation);
-            };
-
-            loadData();
+            fetchData();
         }, [])
     );
 
     const handlePackageCardPress = (packageId) => {
-        console.log('Pressed packageId:', packageId);
         navigation.navigate('AppStackFarmer', { screen: 'PackageDetail', params: { id: packageId } });
     }
 
     const handleAddPackage = () => {
-        // Implementeer navigatie of logica voor het toevoegen van een nieuw pakket
-        console.log('Add package pressed');
+        const farmId = farmData._id;
+        console.log("add package", farmId)
     }
 
     if (loading) {

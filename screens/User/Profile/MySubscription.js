@@ -35,7 +35,6 @@ const MySubscription = ({ navigation, route }) => {
                         <View style={styles.packageLabel}>
                             <Text style={globalStyles.bodyTextSemiBold}>{subscriptionData.package.name}</Text>
                             <Text style={globalStyles.bodyTextSmall}>{subscriptionData.farm.name}</Text>
-                            <Text style={globalStyles.bodyTextSmall}>{subscriptionData.farm.name}</Text>
                         </View>
                     </View>
                     <View style={styles.packageContent}>
