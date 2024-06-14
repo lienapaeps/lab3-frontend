@@ -14,6 +14,8 @@ const Profile = ({ navigation, route }) => {
     const [showOverlay, setShowOverlay] = useState(false);
     const subscriptionData = route.params.subscriptionData;
 
+    console.log('userData:', userData.isFarmer);
+
     const handleLogout = async () => {
         try {
             await AsyncStorage.clear();
@@ -114,7 +116,7 @@ const Profile = ({ navigation, route }) => {
             <View style={styles.profileSection}>
                 <ProfileItem title="Mijn account" onPress={handleGoToAccount} icon={require('../../assets/icons/user-green.png')} />
                 <ProfileItem title="Instellingen" onPress={handleGoToSettings} icon={require('../../assets/icons/settings-green.png')} />
-                <ProfileItem title="Mijn abonnement" onPress={handleGoToMySubscription} icon={require('../../assets/icons/farm-icon-active.png')} />
+                {!userData.isFarmer && <ProfileItem title="Mijn abonnement" onPress={handleGoToMySubscription} icon={require('../../assets/icons/farm-icon-active.png')} />}
                 <ProfileItem title="FAQ" onPress={handleGoToFaq} icon={require('../../assets/icons/faq-green.png')} />
             </View>
             <View style={styles.logout}>
