@@ -35,7 +35,7 @@ const Password = ({ navigation, route }) => {
             </View>
             <View style={styles.content}>
                 {showSuccess && (
-                    <Text style={styles.successMessage}>Password changed successfully</Text>
+                    <Text style={styles.successMessage}>Wachtwoord is succesvol veranderd!</Text>
                 )}
                 <Text style={globalStyles.headerTextSmallerMedium}>Huidig wachtwoord</Text>
                 <View style={styles.inputContainer}>
@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         marginTop: 10,
+        padding: 5,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',

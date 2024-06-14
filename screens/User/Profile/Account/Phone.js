@@ -60,7 +60,7 @@ const Phone = ({ navigation, route }) => {
             </View>
             <View style={styles.content}>
                 {showSuccess && (
-                    <Text style={styles.successMessage}>Telefoon changed successfully</Text>
+                    <Text style={styles.successMessage}>Telefoonnummer is succesvol veranderd!</Text>
                 )}
                 <Text style={globalStyles.headerTextSmallerMedium}>Telefoon</Text>
                 <View style={styles.inputContainer}>
@@ -68,7 +68,7 @@ const Phone = ({ navigation, route }) => {
                         style={styles.input}
                         onChangeText={handlePhoneChange}
                         value={phone}
-                        placeholder="Enter new telefoon "
+                        placeholder="Telefoon"
                     />
                     <TouchableOpacity style={styles.buttonSmall} onPress={clearPhone}>
                         <Image style={styles.notificationImage} source={require('../../../../assets/icons/cross-black.png')} />
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
     },
     inputContainer: {
+        padding : 5,
         marginTop: 20,
         flexDirection: 'row',
         alignItems: 'center',

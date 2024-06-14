@@ -55,11 +55,11 @@ const Email = ({ navigation, route }) => {
     return (
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.header}>
-                <Text style={globalStyles.headerText}>Email</Text>
+                <Text style={globalStyles.headerText}>E-mail</Text>
             </View>
             <View style={styles.content}>
                 {showSuccess && (
-                    <Text style={styles.successMessage}>Email changed successfully</Text>
+                    <Text style={styles.successMessage}>E-mail adres is succesvol veranderd!</Text>
                 )}
                 <Text style={globalStyles.headerTextSmallerMedium}>E-mail</Text>
                 <View style={styles.inputContainer}>
@@ -67,7 +67,7 @@ const Email = ({ navigation, route }) => {
                         style={styles.input}
                         onChangeText={handleEmailChange}
                         value={email}
-                        placeholder="Enter new email"
+                        placeholder="E-mail"
                     />
                     <TouchableOpacity style={styles.buttonSmall} onPress={clearEmail}>
                         <Image style={styles.notificationImage} source={require('../../../../assets/icons/cross-black.png')} />
@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
     },
     inputContainer: {
+        padding : 5,
         marginTop: 20,
         flexDirection: 'row',
         alignItems: 'center',
