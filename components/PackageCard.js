@@ -17,12 +17,12 @@ const getImageForPackage = (name) => {
     }
 }
 
-const PackageCard = ({ name, description, price }) => {
+const PackageCard = ({ name, onPress, price }) => {
 
     const packageImage = getImageForPackage(name);
 
     return (
-        <TouchableOpacity style={styles.card}>
+        <TouchableOpacity style={styles.card} onPress={onPress}>
             <View style={styles.cardImage}>
                 <Image style={styles.image} source={packageImage} />
             </View>

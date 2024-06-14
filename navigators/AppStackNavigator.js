@@ -19,7 +19,6 @@ import Password from '../screens/User/Profile/Account/Password';
 import SubscribePackage from '../screens/User/subscribePackage/SubscribePackage';
 import Access from '../screens/User/Profile/Settings/Access';
 import Langauge from '../screens/User/Profile/Settings/Language';
-import FarmHeader from '../components/FarmHeader';
 
 import NavigationOptions from '../components/NavigationOptions';
 

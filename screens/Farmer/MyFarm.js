@@ -14,11 +14,14 @@ const FarmFarmer = ({ navigation }) => {
     const [farmData, setFarmData] = useState(null);
     const [packagesData, setPackagesData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const { token, userId } = await getUserIdAndToken();
+
+                setUserId(userId);
 
                 console.log('UserId:', userId)
 
@@ -36,16 +39,14 @@ const FarmFarmer = ({ navigation }) => {
                 }
 
                 const farmDataResponse = await fetchFarmDataByOwner(token, userId);
-                setFarmData(farmDataResponse.data.farm);
-                console.log('Farm:', stringifyData(farmData));
+                if (farmDataResponse && farmDataResponse.data && farmDataResponse.data.farm) {
+                    setFarmData(farmDataResponse.data.farm);
 
-                 // Tel het aantal leden
-                 const memberCount = farmDataResponse.data.farm.members ? farmDataResponse.data.farm.members.length : 0;
-                 console.log('Number of Members:', memberCount);
-
-                const packagesDataResponse = await fetchPackagesData(farmDataResponse.data.farm._id);
-                setPackagesData(packagesDataResponse.data.packages);
-                // console.log('Packages:', stringifyData(packagesData));
+                    const packagesDataResponse = await fetchPackagesData(farmDataResponse.data.farm._id);
+                    setPackagesData(packagesDataResponse.data.packages);
+                } else {
+                    setFarmData(null);
+                }
 
                 setLoading(false);
 
@@ -57,6 +58,15 @@ const FarmFarmer = ({ navigation }) => {
         fetchData();
     }, []);
 
+    const handlePackageCardPress = (packageId) => {
+        console.log('Pressed packageId:', packageId);
+        navigation.navigate('AppStackFarmer', { screen: 'PackageDetail', params: { id: packageId } });
+    }
+
+    const goToAddFarm = () => {
+        navigation.navigate('AddFarm', { params: { uid: userId } });
+    }
+
     if (loading) {
         return (
             <SafeAreaView style={globalStyles.loadingContainer}>
@@ -64,7 +74,7 @@ const FarmFarmer = ({ navigation }) => {
             </SafeAreaView>
         );
     }
-    
+
     return (
         <View >
             <View>
@@ -102,6 +112,7 @@ const FarmFarmer = ({ navigation }) => {
                                 description={item.description}
                                 price={item.price}
                                 packagesData={item}
+                                onPress={() => handlePackageCardPress(item._id)}
                             />
                         ))}
                     </ScrollView>
@@ -146,6 +157,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderWidth: 1,
         borderColor: COLORS.orange,
+    },
+    emptyState: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     }
 });
 
