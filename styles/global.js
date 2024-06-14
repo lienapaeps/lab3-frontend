@@ -42,6 +42,14 @@ export const globalStyles = StyleSheet.create({
         lineHeight: 20,
         color: COLORS.offBlack,
     },
+    bodyTextSmallUppercased: {
+        fontFamily: 'Quicksand_600SemiBold',
+        fontSize: 14,
+        lineHeight: 20,
+        color: COLORS.offBlack,
+        textTransform: 'uppercase',
+    },
+
     bodyTextMedium: {
         fontFamily: 'Quicksand_500Medium',
         fontSize: 18,
