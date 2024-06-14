@@ -44,12 +44,11 @@ const RegistrationSucces = ({ navigation }) => {
               Registratie voltooid
           </Text>
           <Text style={{...styles.successText, ...globalStyles.bodyText}}>
-              Je account is succesvol aangemaakt. Je kan nu een boerderij toevoegen, of je kan dit later ook nog doen!
+              Je account is succesvol aangemaakt. Laten we nu je boerderij toevoegen. 
           </Text>
       </View>
       <View style={styles.buttonContainer}>
           <Button title="Boerderij toevoegen" filled onPress={goToAddFarm}/>
-          <Button style={{marginTop: 15}} title="Stap overslaan" onPress={goToHomeFarmer}/>
       </View>
     </View>
   );

@@ -87,13 +87,13 @@ const FarmUser = ({ navigation }) => {
         );
     }
 
-    if (filteredFarmData.length === 0) {
-        return (
-            <SafeAreaView style={globalStyles.container}>
-                <Text style={globalStyles.bodyText}>Geen boerderijen gevonden</Text>
-            </SafeAreaView>
-        );
-    }
+    // if (filteredFarmData.length === 0) {
+    //     return (
+    //         <SafeAreaView style={globalStyles.container}>
+    //             <Text style={globalStyles.bodyText}>Geen boerderijen gevonden</Text>
+    //         </SafeAreaView>
+    //     );
+    // }
 
     return (
         <SafeAreaView style={globalStyles.container}>
@@ -101,6 +101,9 @@ const FarmUser = ({ navigation }) => {
                 <Search placeholder={"Zoek een boerderij"} searchTerm={searchTerm} onSearchTermChange={handleSearchTermChange} />
                 <Filter onFilterChange={handleFilterChange} onDistanceFilterChange={handleDistanceFilterChange} />
             </View>
+            { filteredFarmData.length === 0 ? (
+            <Text style={globalStyles.bodyText}>Geen boerderijen gevonden</Text>
+            ) : null }
             <View style={{ flex: 1 }}>
                 <FlatList
                     data={filteredFarmData}

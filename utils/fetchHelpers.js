@@ -127,7 +127,7 @@ export const fetchActivityDataFarm = async (farmId) => {
     return await response.json();
 };
 
-// fetch package data by id
+// fetch package data by id and user id
 export const fetchPackageDataById = async (packageId, userId) => {
     const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/packages/${packageId}`, {
         method: 'GET',
@@ -139,6 +139,18 @@ export const fetchPackageDataById = async (packageId, userId) => {
     const data = await response.json();
     const userSubscription = data.data.package.subscribedUsers.find(sub => sub.user === userId);
     return { packageData: data.data.package, subscriptionDetails: userSubscription };
+};
+
+// fetch package data by id
+export const fetchPackageData = async (packageId) => {
+    const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/packages/${packageId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        mode: 'cors'
+    });
+    return await response.json();
 };
 
 // fetch alle activity data
@@ -220,6 +232,17 @@ export const updateUserPhone = async (userId, newPhone) => {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ telephone: newPhone }),
+    });
+    return await response.json();
+};
+
+// get all products
+export const fetchProducts = async () => {
+    const response = await fetch('https://lab3-backend-w1yl.onrender.com/api/products', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
     });
     return await response.json();
 };
