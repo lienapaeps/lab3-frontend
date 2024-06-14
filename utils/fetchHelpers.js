@@ -246,3 +246,29 @@ export const fetchProducts = async () => {
     });
     return await response.json();
 };
+
+// update package farmer
+export const updatePackage = async (packageId, updatedContents) => {
+    try {
+        const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/packages/${packageId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                pickUpDate: "2024-06-10",
+                contents: updatedContents
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error updating package:', error);
+        throw error; // Verder doorgeven voor eventuele verdere foutafhandeling in de UI
+    }
+};
+

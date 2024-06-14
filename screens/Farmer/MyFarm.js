@@ -63,10 +63,6 @@ const FarmFarmer = ({ navigation }) => {
         navigation.navigate('AppStackFarmer', { screen: 'PackageDetail', params: { id: packageId } });
     }
 
-    const goToAddFarm = () => {
-        navigation.navigate('AddFarm', { params: { uid: userId } });
-    }
-
     if (loading) {
         return (
             <SafeAreaView style={globalStyles.loadingContainer}>

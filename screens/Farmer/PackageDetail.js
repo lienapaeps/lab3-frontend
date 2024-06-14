@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert, ActivityIndicator, TextInput } from 'react-native'
+import { useFocusEffect } from '@react-navigation/native';
 
 import { fetchPackageData } from '../../utils/fetchHelpers';
 
@@ -14,22 +15,26 @@ const PackageDetail = ({ navigation, route }) => {
 
     const { id } = route.params;
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const packageDataResponse = await fetchPackageData(id);
-                setPackageData(packageDataResponse.data.package);
-                console.log('Package:', packageDataResponse.data.package);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error:', error);
-                setError(error);
-            }
+    const fetchData = async () => {
+        try {
+            const packageDataResponse = await fetchPackageData(id);
+            setPackageData(packageDataResponse.data.package);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error:', error);
+            setError(error);
         }
+    };
 
+    useEffect(() => {
         fetchData();
-    }
-    , []);
+    }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchData();
+        }, [])
+    );
 
     const handleIncreaseQuantity = (productId) => {
         setPackageData((prevData) => ({
@@ -78,9 +83,18 @@ const PackageDetail = ({ navigation, route }) => {
         }));
     };
 
-    const handleAddProducts = (packageId) => {
-        console.log('Add packageId:', packageId);
-        navigation.navigate('AppStackFarmer', { screen: 'UpdatePackage', params: { id: packageId } });
+    const handleRemoveItem = (productId) => {
+        setPackageData((prevData) => ({
+            ...prevData,
+            contents: prevData.contents.filter(item => item._id !== productId)
+        }));
+    };
+
+    const handleAddProducts = () => {
+        navigation.navigate('UpdatePackage', { 
+            id: packageData._id,
+            selectedProducts: packageData.contents.map(product => product.id)
+        });
     };
 
     if (loading) {
@@ -157,7 +171,7 @@ const PackageDetail = ({ navigation, route }) => {
                                         </TouchableOpacity>
                                     </View>
                                 </View>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => handleRemoveItem(product._id)}>
                                     <Image source={require('../../assets/icons/delete.png')} style={{ width: 20, height: 20 }} />
                                 </TouchableOpacity>
                             </View>
@@ -165,6 +179,9 @@ const PackageDetail = ({ navigation, route }) => {
                     )}
                     {packageData.contents.length > 0 && (
                         <View style={{ marginTop: 20 }}>
+                            <TouchableOpacity style={styles.add} onPress={() => handleAddProducts(packageData._id)}>
+                                <Image source={require('../../assets/icons/plus-border.png')} style={{ width: 48, height: 48 }} />
+                            </TouchableOpacity>
                             <Button 
                                 filled={true} 
                                 title="Opslaan" 
@@ -220,6 +237,12 @@ const styles = StyleSheet.create({
     addButton: {
         marginTop: 25,
     },
+    add: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
+    }
 });
 
 export default PackageDetail;
