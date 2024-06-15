@@ -65,6 +65,7 @@ const FarmFarmer = ({ navigation }) => {
     const handleAddPackage = () => {
         const farmId = farmData._id;
         console.log("add package", farmId)
+        navigation.navigate('AppStackFarmer', { screen: 'EditPackages', params: { farmId } });
     }
 
     if (loading) {
@@ -89,7 +90,9 @@ const FarmFarmer = ({ navigation }) => {
                         </View>
                         <View style={{ flexDirection: 'row', gap: 5, marginBottom: 15, marginTop: 10 }}>
                             <Text style={globalStyles.bodyTextSemiBold}>{farmData?.members?.length ?? 0}</Text>
-                            <Text style={globalStyles.bodyText}>leden</Text>
+                            <Text style={globalStyles.bodyText}>
+                                {farmData?.members?.length === 1 ? 'lid' : 'leden'}
+                            </Text>
                         </View>
                     </View>
                 </View>

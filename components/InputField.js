@@ -2,28 +2,32 @@ import React from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import COLORS from '../constants/color';
 
-const InputField = (props) => {
-    const { fullWidth, multiline } = props;
-
+const InputField = ({ label, placeholder, value, onChangeText, fullWidth = false, multiline = false, secureTextEntry = false, keyboardType = 'default' }) => {
     return (
         <View style={styles.inputField}>
-            <Text style={styles.label}>{props.label}</Text>
+            <Text style={styles.label}>{label}</Text>
             <TextInput
-                placeholder={props.placeholder}
+                placeholder={placeholder}
+                value={value}
+                onChangeText={onChangeText}
                 style={[
                     styles.input,
-                    fullWidth ? styles.fullWidth : null,
-                    multiline ? styles.multiline : null
+                    fullWidth && styles.fullWidth,
+                    multiline && styles.multiline,
                 ]}
                 autoCapitalize='none'
-                multiline={multiline} 
-                {...props}
+                multiline={multiline}
+                secureTextEntry={secureTextEntry}
+                keyboardType={keyboardType}
             />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
+    inputField: {
+        // marginBottom: 20,
+    },
     label: {
         fontFamily: 'Baloo2_500Medium',
         fontSize: 16,
@@ -46,6 +50,6 @@ const styles = StyleSheet.create({
         textAlignVertical: 'top',
         height: 100,
     }
-})
+});
 
 export default InputField;

@@ -61,7 +61,7 @@ const AppTabNavigatorFarmer = () => {
           } else if (route.name === 'FarmFarmer') {
             labelText = 'Boerderij';
           } else if (route.name === 'CalendarFarmer') {
-            labelText = 'Kalender';
+            labelText = 'Agenda';
           } else if (route.name === 'ChatFarmer') {
             labelText = 'Chat';
           }

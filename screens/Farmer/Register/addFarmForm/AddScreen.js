@@ -67,7 +67,7 @@ const AddFarm = ({ navigation, route }) => {
       const address = `${formData.adress.street} ${formData.adress.number} ${formData.adress.zipcode} ${formData.adress.city}`;
 
       try {
-        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=AIzaSyA77msktu9JGTv3EpKeXIX-lwfjjYYoX_s`);
+        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=AIzaSyAC7ET4OFss_xdzmtOwBSTYZaMVSDsyftw`);
         const data = await response.json();
 
         if (data.results && data.results.length > 0) {

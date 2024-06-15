@@ -167,7 +167,7 @@ const HomeUser = ({ navigation, route }) => {
                             showsVerticalScrollIndicator={false}
                             data={activitiesData}
                             keyExtractor={(item) => item._id}
-                            renderItem={({ item }) => <AgendaCard activity={item} onPress={handleAgendaCardPress} />}
+                            renderItem={({ item }) => <AgendaCard activity={item} showFarmDetails={true} onPress={handleAgendaCardPress} />}
                         />
                     </View>
                 ) : (
