@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, Image, StyleSheet, TouchableOpacity, SafeAreaView, Button, TextInput } from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity, SafeAreaView, Button, TextInput, FlatList } from 'react-native'
 import { globalStyles } from '../../styles/global';
 import COLORS from '../../constants/color';
 
+import AgendaCard from '../../components/AgendaCard';
+
 const CalendarPage = ({ navigation, route }) => {
+  const activitiesData = route.params.activitiesData;
   //get current month and year
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
@@ -44,7 +47,7 @@ const CalendarPage = ({ navigation, route }) => {
 
   const combinedArray = [...emptyBlocks, ...daysArray, ...emptyBlocksEnd];
 
-  const weekdays = ['ma', 'di', 'wo', 'do', 'vr', 'za', 'zo'];
+  const weekdays = ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'];
 
   const currentMonthName = new Intl.DateTimeFormat('nl-NL', { month: 'long' }).format(new Date(currentYear, currentMonth - 1));
 
@@ -91,9 +94,32 @@ const CalendarPage = ({ navigation, route }) => {
           </View>
         </View>
 
-        <Text style={globalStyles.headerTextSmallerRegular}>aankomende activiteiten</Text>
+        <Text style={globalStyles.headerTextSmallerRegular}>Aankomende activiteiten</Text>
 
       </View>
+      {/* Activiteiten weergave */}
+      {activitiesData && activitiesData.length > 0 ? (
+                // Er zijn activiteiten in de kalender
+                <View>
+                    <FlatList
+                        style={styles.flow}
+                        showsVerticalScrollIndicator={false}
+                        data={activitiesData}
+                        keyExtractor={(item) => item._id}
+                        renderItem={({ item }) => <AgendaCard activity={item} />}
+                    />
+                </View>
+            ) : (
+                // Er zijn geen activiteiten in de kalender
+                <View style={styles.calendarEmpty}>
+                    <Image style={styles.iconImage} source={require('../../assets/icons/date-black.png')} />
+                    <Text style={{ ...globalStyles.bodyText, ...styles.emptyText }}>Je kalender is nog leeg want je hebt geen activiteiten.</Text>
+                    <TouchableOpacity style={styles.button}>
+                        <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek een activiteit</Text>
+                    </TouchableOpacity>
+                </View>
+            )
+            }
 
     </SafeAreaView>
   )
@@ -122,8 +148,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     flexWrap: 'wrap',
     paddingBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.veryLightOffBlack,
+ 
   },
   calendarBlock: {
     width: 40,
@@ -159,7 +184,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
   calendarText: {
-    margin: 10,
+   
     fontWeight: 'medium',
     width: 100,
     textAlign: 'center',
