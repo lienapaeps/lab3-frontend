@@ -19,6 +19,7 @@ import Password from '../screens/User/Profile/Account/Password';
 import SubscribePackage from '../screens/User/subscribePackage/SubscribePackage';
 import Access from '../screens/User/Profile/Settings/Access';
 import Langauge from '../screens/User/Profile/Settings/Language';
+import AddReview from '../screens/User/AddReview/AddReview';
 
 import NavigationOptions from '../components/NavigationOptions';
 
@@ -69,6 +70,11 @@ const AppStackNavigator = () => {
       <Stack.Screen name="Password" component={Password} options={NavigationOptions} />
       <Stack.Screen name="Access" component={Access} options={NavigationOptions} />
       <Stack.Screen name="Language" component={Langauge} options={NavigationOptions} />
+      <Stack.Screen name="AddReview" component={AddReview}
+        options={() => ({
+          headerShown: false,
+        })}
+      />
     </Stack.Navigator>
   );
 };
