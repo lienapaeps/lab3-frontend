@@ -83,6 +83,16 @@ export const fetchFarmDataByOwner = async (token, userId) => {
     return await response.json();
 }
 
+export const fetchFarmDataByOwnerWithoutToken = async (userId) => {
+    const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/farms/owner/${userId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return await response.json();
+}
+
 // alle packages van een farm ophalen
 export const fetchPackagesData = async (farmId) => {
     const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/farms/${farmId}/packages`, {
