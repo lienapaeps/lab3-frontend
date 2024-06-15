@@ -8,7 +8,7 @@ import { globalStyles } from '../../styles/global';
 import AgendaCard from '../../components/AgendaCard';
 import COLORS from '../../constants/color';
 
-const CalendarFarmer = () => {
+const CalendarFarmer = ({ navigation }) => {
     // const [user, setUser] = useState(null);
     const [farmData, setFarmData] = useState(null);
     const [activityData, setActivityData] = useState(null);
@@ -54,6 +54,12 @@ const CalendarFarmer = () => {
         };
         fetchData();
     }, []);
+
+    const handleAddActivity = () => {
+        const farmId = farmData._id;
+        console.log("add activity", farmId)
+        navigation.navigate('AppStackFarmer', { screen: 'AddActivity', params: { farmId } });
+    };
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -108,8 +114,8 @@ const CalendarFarmer = () => {
                     ListEmptyComponent={
                         <View style={styles.emptyState}>
                             <Image style={styles.iconImage} source={require('../../assets/icons/calendar-create.png')} />
-                            <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je hebt nog activiteiten toegevoegd.</Text>
-                            <TouchableOpacity style={styles.button}>
+                            <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je hebt nog geen activiteiten toegevoegd.</Text>
+                            <TouchableOpacity style={styles.button} onPress={handleAddActivity}>
                                 <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Activiteit toevoegen</Text>
                             </TouchableOpacity>
                         </View>
