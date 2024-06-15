@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { act, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Image, ActivityIndicator, TouchableOpacity, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useIsFocused } from '@react-navigation/native';
@@ -8,37 +8,58 @@ import { fetchUserData, fetchSubscriptionData, getUserIdAndToken, fetchActivityD
 import COLORS from '../../constants/color';
 import { globalStyles } from '../../styles/global';
 import AgendaCard from '../../components/AgendaCard';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import CalendarPage from './CalendarPage';
 
 const HomeUser = ({ navigation, route }) => {
     const [userData, setUserData] = useState(null);
-    const [agendaData, setAgendaData] = useState(null); 
+    const [agendaData, setAgendaData] = useState(null);
     const [subscriptionData, setSubscriptionData] = useState(null);
     const [loading, setLoading] = useState(true);
     const isFocused = useIsFocused();
     const [activitiesData, setActivitiesData] = useState(null);
 
-    const goToCalendar = () => {
-        navigation.navigate('AppStack', { screen: 'Calendar' });
-    };
+    //------------------------------------------------
+    // Get the current date
+    const today = new Date();
+    const currentDay = today.getDay();
+    // Calculate the start and end of the current week
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - currentDay + 1);
+    const endOfWeek = new Date(today);
+    endOfWeek.setDate(today.getDate() + (7 - currentDay));
+
+    // Create an array of the days of the week
+    const week = Array.from({ length: 7 }, (_, i) => {
+        const day = new Date(startOfWeek);
+        day.setDate(startOfWeek.getDate() + i);
+        return day;
+    });
+    //------------------------------------------------
+
+    //navigations
+    function goToCalendar() {
+        navigation.navigate('AppStack', { screen: 'Calendar' , params: { activitiesData, userData, subscriptionData}});
+    }
 
     const goToFarm = () => {
         navigation.navigate('App', { screen: 'FarmUser' });
-    };    
+    };
 
     const goToProfile = () => {
-        navigation.navigate('AppStack', { screen: 'Profile', params: { userData, subscriptionData }});
-    }; 
+        navigation.navigate('AppStack', { screen: 'Profile', params: { userData, subscriptionData } });
+    };
 
     const goToExplore = () => {
         navigation.navigate('App', { screen: 'Explore' });
     }
 
     const goToPackageDetails = (packageId, farmId, userId, packageName) => {
-        navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId, userId, packageName }});
+        navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId, userId, packageName } });
     };
 
     const handleAgendaCardPress = (activityId, farmName) => {
-        navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmName }});
+        navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmName } });
     };
 
     useEffect(() => {
@@ -100,26 +121,40 @@ const HomeUser = ({ navigation, route }) => {
         );
     }
 
+// Check if the dates from activities are the same as a day in the calendar
+const renderDot = (day) => {
+    const isActivityDay = activitiesData.some(activity => {
+        const activityDate = new Date(activity.start.date);
+  
+        return day.toDateString() === activityDate.toDateString();
+    });
+    if (isActivityDay) {
+        return <View style={styles.dot} />;
+    } else {
+        return null;
+    }
+    
+};
     return (
         <SafeAreaView style={globalStyles.container}>
             {/* Header met profielfoto en meldingsbel */}
             {userData && (
                 <View style={styles.profile}>
                     <TouchableOpacity style={styles.profileBtn} onPress={goToProfile}>
-                        <Image style={styles.profileImage} source={{ uri: userData.profilePicture }}/>
-                        <Text style={{...globalStyles.headerTextSmaller, ...globalStyles.capitalize}}>{userData.firstname}</Text>
+                        <Image style={styles.profileImage} source={{ uri: userData.profilePicture }} />
+                        <Text style={{ ...globalStyles.headerTextSmaller, ...globalStyles.capitalize }}>{userData.firstname}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.notification}>
                         <Image style={styles.notificationImage} source={require('../../assets/icons/notification.png')} />
                     </TouchableOpacity>
                 </View>
             )}
-    
+
             {/* Weergave van huidig pakket */}
             <View>
                 <Text style={globalStyles.headerTextSmall}>Huidig Pakket</Text>
             </View>
-    
+
             {/* Laadinidicator */}
             {loading ? (
                 <View style={styles.loadingContainer}>
@@ -132,34 +167,50 @@ const HomeUser = ({ navigation, route }) => {
                         // Er is een pakket
                         <TouchableOpacity onPress={() => goToPackageDetails(subscriptionData.package._id, subscriptionData.farm._id, userData._id, subscriptionData.package.name)}>
                             <View style={styles.packageCard}>
-                                <Text style={{...globalStyles.headerText, ...styles.packageFarm}}>{subscriptionData.farm.name}</Text>
-                                <Image style={styles.packageImage} source={{ uri: subscriptionData.farm.farmImage }}/>
+                                <Text style={{ ...globalStyles.headerText, ...styles.packageFarm }}>{subscriptionData.farm.name}</Text>
+                                <Image style={styles.packageImage} source={{ uri: subscriptionData.farm.farmImage }} />
                                 <View style={styles.overlayImage}></View>
                                 <View style={styles.packageLabel}>
-                                    <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white}}>{subscriptionData.package.name}</Text>
+                                    <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>{subscriptionData.package.name}</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
                     ) : (
                         // Er is geen pakket
                         <View style={styles.packageEmpty}>
-                            <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')}/>
-                            <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
+                            <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')} />
+                            <Text style={{ ...globalStyles.bodyText, ...styles.emptyText }}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
                             <TouchableOpacity style={styles.button} onPress={goToFarm}>
-                                <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
+                                <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
                             </TouchableOpacity>
                         </View>
                     )}
                 </View>
             )}
-    
+
             {/* Weergave van kalender */}
             <View>
-                <Text style={{...globalStyles.headerTextSmall, marginBottom: 10}}>Kalender</Text>
+                <Text style={{ ...globalStyles.headerTextSmall, marginBottom: 10 }}>Kalender</Text>
+                <TouchableOpacity style={styles.calendar} onPress={goToCalendar}>
+
+                    {week.map((day, index) => (
+                        <View key={index} style=
+                            {{ ...styles.calendarBlock, backgroundColor: day.getDate() === today.getDate() ? COLORS.orange : COLORS.lightOrange }}>
+                            <Text style={[globalStyles.bodyTextSmallUppercased, { color: day.getDate() === today.getDate() ? COLORS.white : COLORS.offBlack }]}>
+                                {day.toLocaleDateString('nl-NL', { weekday: 'short' })}</Text>
+                            <Text style={[globalStyles.headerTextMedium, { color: day.getDate() === today.getDate() ? COLORS.white : COLORS.offBlack }]}>
+                                {day.getDate()}</Text>
+                            {renderDot(day)}
+
+                        </View>
+                    ))}
+                </TouchableOpacity>
             </View>
-    
+
             {/* Activiteiten weergave */}
             {activitiesData && activitiesData.length > 0 ? (
+
+ 
                     // Er zijn activiteiten in de kalender
                     <View>
                         <FlatList
@@ -180,6 +231,7 @@ const HomeUser = ({ navigation, route }) => {
                         </TouchableOpacity>
                     </View>
                 )
+
             }
         </SafeAreaView>
     );
@@ -193,6 +245,21 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         borderRadius: 10,
         backgroundColor: COLORS.orange,
+    },
+
+    calendar: {
+        paddingBottom: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    dot: {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+        backgroundColor: COLORS.offBlack,
+        position: 'absolute',
+        bottom: -5,
+        
     },
     emptyText: {
         marginBottom: 30,
@@ -222,12 +289,12 @@ const styles = StyleSheet.create({
     notification: {
         backgroundColor: COLORS.white,
         padding: 15,
-        borderRadius: 100, 
+        borderRadius: 100,
         shadowColor: 'rgba(0,0,0, .1)',
-        shadowOffset: { height: 1, width: 1 }, 
+        shadowOffset: { height: 1, width: 1 },
         shadowOpacity: 1,
         shadowRadius: 1,
-        elevation: 2,    
+        elevation: 2,
     },
     notificationImage: {
         width: 22,
@@ -245,6 +312,17 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         marginTop: 20,
         alignItems: 'center',
+    },
+    calendarBlock: {
+        //responsive 
+        width: 44,
+        height: 60,
+        borderRadius: 4,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: COLORS.lightOrange,
+        shadowColor: 'rgba(0,0,0, .1)',
+        textTransform: 'uppercase',
     },
     packageCard: {
         marginTop: 15,
