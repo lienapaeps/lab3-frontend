@@ -51,6 +51,19 @@ const CalendarPage = ({ navigation, route }) => {
 
   const currentMonthName = new Intl.DateTimeFormat('nl-NL', { month: 'long' }).format(new Date(currentYear, currentMonth - 1));
 
+  const renderDot = (day) => {
+    const isActivityDay = activitiesData.some(activity => {
+        const activityDate = new Date(activity.start.date);
+        return activityDate.getDate() === day && activityDate.getMonth() + 1 === currentMonth && activityDate.getFullYear() === currentYear;
+    });
+    if (isActivityDay) {
+        return <View style={styles.dot} />;
+    } else {
+        return null;
+    }
+    
+};
+
 
   return (
     <SafeAreaView style={globalStyles.container}>
@@ -89,9 +102,12 @@ const CalendarPage = ({ navigation, route }) => {
                 day === today.getDate() && currentMonth === today.getMonth() + 1 && currentYear === today.getFullYear() && { color: COLORS.white }
               ]}>
                   {day}</Text>
+                  {renderDot(day)}
+                  
               </View>
             ))}
           </View>
+
         </View>
 
         <Text style={globalStyles.headerTextSmallerRegular}>Aankomende activiteiten</Text>
@@ -189,7 +205,16 @@ const styles = StyleSheet.create({
     width: 100,
     textAlign: 'center',
     fontSize: 16,
-  }
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: COLORS.offBlack,
+    position: 'absolute',
+    bottom: -5,
+    
+},
 
 });
 
