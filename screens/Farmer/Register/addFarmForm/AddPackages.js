@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     packageContainer: {
         flexDirection: 'row',
         paddingVertical: 30,
-        marginBottom: 20,
+        marginBottom: 15,
         borderColor: COLORS.veryLightOffBlack,
         backgroundColor: COLORS.white,
         borderWidth: 1,
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     scrollViewContent: {
-        flexGrow: 1,
+        // flexGrow: 1,
         justifyContent: 'center',
     },
     errorMessageContainer: {

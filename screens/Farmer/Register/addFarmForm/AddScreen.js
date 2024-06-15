@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Platform, SafeAreaView, Image, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform, SafeAreaView, Image, ActivityIndicator, ScrollView, KeyboardAvoidingView } from 'react-native';
 import ProgressBar from 'react-native-progress/Bar';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { format } from 'date-fns';
+import { format, set } from 'date-fns';
 
 import { globalStyles } from '../../../../styles/global';
 import COLORS from '../../../../constants/color';
@@ -21,6 +21,7 @@ const AddFarm = ({ navigation, route }) => {
     const [defaultTime, setDefaultTime] = useState('');
     const [currentStep, setCurrentStep] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const progress = (currentStep + 1) / totalSteps;
     const [selectedImageUri, setSelectedImageUri] = useState('');
     const [formData, setFormData] = useState({
@@ -64,25 +65,28 @@ const AddFarm = ({ navigation, route }) => {
     };
 
     const getCoordinates = async () => {
-      const address = `${formData.adress.street} ${formData.adress.number} ${formData.adress.zipcode} ${formData.adress.city}`;
+        const { street, number, zipcode, city } = formData.adress;
+        const address = `${street} ${number}, ${zipcode} ${city}, Belgium`
 
-      try {
-        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=AIzaSyA77msktu9JGTv3EpKeXIX-lwfjjYYoX_s`);
-        const data = await response.json();
+        try {
+            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=AIzaSyAC7ET4OFss_xdzmtOwBSTYZaMVSDsyftw`);
+            const data = await response.json();
 
-        if (data.results && data.results.length > 0) {
-          const coordinates = data.results[0].geometry.location;
-          return coordinates;
-        } else {
-            throw new Error('Geen coördinaten gevonden voor het opgegeven adres');
+            if (data.results && data.results.length > 0) {
+            const coordinates = data.results[0].geometry.location;
+            return coordinates;
+            } else {
+                throw new Error('Geen coördinaten gevonden voor het opgegeven adres');
+            }
+        } catch (error) {
+            throw new Error('Fout bij het ophalen van coördinaten: ' + error.message);
         }
-      } catch (error) {
-          throw new Error('Fout bij het ophalen van coördinaten: ' + error.message);
-      }
     };
 
-    const nextStep = () => {
-        if (validateStep()) {
+    const nextStep = async () => {
+        const isValid = await validateStep();
+    
+        if (isValid) {
             setErrorMessage('');
             if (currentStep < totalSteps - 1) {
                 setCurrentStep(currentStep + 1);
@@ -157,6 +161,9 @@ const AddFarm = ({ navigation, route }) => {
 
     const submitForm = async () => {
         try {
+
+            setIsLoading(true);
+
             const coordinates = await getCoordinates();
             const imageUrl = await uploadToCloudinary(selectedImageUri);
 
@@ -188,6 +195,8 @@ const AddFarm = ({ navigation, route }) => {
         } catch (error) {
             console.error('Fout bij het toevoegen van boerderij:', error);
             setErrorMessage('Er is een fout opgetreden bij het toevoegen van boerderij');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -386,6 +395,12 @@ const AddFarm = ({ navigation, route }) => {
                             <InputField label="Email (optioneel)" placeholder="Email" keyboardType="email-address" value={formData.contact.email} onChangeText={text => updateFormData('contact.email', text)}/>
                             <InputField label="Website (optioneel)" placeholder="Website" value={formData.contact.website} onChangeText={text => updateFormData('contact.website', text)}/>
                         </View>
+                        {/* laden */}
+                        {isLoading && (
+                            <View style={styles.loadingContainer}>
+                                <ActivityIndicator size="medium" color={COLORS.offBlack} />
+                            </View>
+                        )}
                     </View>
                 );
             default:
@@ -502,6 +517,16 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         marginBottom: 15,
+    },
+    loadingContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 999,
     },
 });
 

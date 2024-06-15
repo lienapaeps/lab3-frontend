@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert, ActivityIndicator, TextInput } from 'react-native'
+import { useFocusEffect } from '@react-navigation/native';
 
-import { fetchPackageData } from '../../utils/fetchHelpers';
+import { fetchPackageData, updatePackage } from '../../utils/fetchHelpers';
 
 import COLORS from '../../constants/color';
 import { globalStyles } from '../../styles/global';
@@ -11,76 +12,87 @@ const PackageDetail = ({ navigation, route }) => {
     const [packageData, setPackageData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [tempPrice, setTempPrice] = useState(null);
 
     const { id } = route.params;
 
+    const fetchData = async () => {
+        try {
+            const packageDataResponse = await fetchPackageData(id);
+            setPackageData(packageDataResponse.data.package);
+            setTempPrice(packageDataResponse.data.package.price.toString());
+            setLoading(false);
+        } catch (error) {
+            console.error('Error:', error);
+            setError(error);
+        }
+    };
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const packageDataResponse = await fetchPackageData(id);
-                setPackageData(packageDataResponse.data.package);
-                console.log('Package:', packageDataResponse.data.package);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error:', error);
-                setError(error);
-            }
-        }
-
         fetchData();
-    }
-    , []);
+    }, []);
 
-    const handleIncreaseQuantity = (productId) => {
-        setPackageData((prevData) => ({
-            ...prevData,
-            contents: prevData.contents.map((product) =>
-                product._id === productId
-                    ? {
-                        ...product,
-                        quantity: product.unit === 'stuk'
-                            ? product.quantity + 1
-                            : product.quantity + 50,
-                    }
-                    : product
-            ),
-        }));
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchData();
+        }, [])
+    );
+
+    const handlePriceChange = (text) => {
+        setTempPrice(text);
     };
 
-    const handleDecreaseQuantity = (productId) => {
-        setPackageData((prevData) => ({
-            ...prevData,
-            contents: prevData.contents.map((product) =>
-                product._id === productId && product.quantity > (product.unit === 'stuk' ? 1 : 50)
-                    ? {
-                        ...product,
-                        quantity: product.unit === 'stuk'
-                            ? product.quantity - 1
-                            : product.quantity - 50,
-                    }
-                    : product
-            ),
-        }));
-    };
-
-    const isMinusInactive = (product) => {
-        if (product.unit === 'stuk') {
-            return product.quantity === 1;
-        } else {
-            return product.quantity === 50;
+    const handleConfirmPriceChange = async () => {
+        try {
+            const updatedPackageData = {
+                price: parseFloat(tempPrice),
+                contents: packageData.contents,
+                pickUpDate: packageData.pickUpDate,
+            };
+    
+            const response = await updatePackage(id, updatedPackageData);
+    
+            setPackageData(response.data.package);
+    
+            Alert.alert('Prijs bijgewerkt', 'De prijs van het pakket is succesvol bijgewerkt.');
+        } catch (error) {
+            console.error('Error bij het bijwerken van de prijs:', error);
+            Alert.alert('Fout bij bijwerken', 'Er is een fout opgetreden bij het bijwerken van de prijs.');
+            setTempPrice(packageData.price.toString());
         }
     };
 
-    const handlePriceChange = (newPrice) => {
-        setPackageData((prevData) => ({
-            ...prevData,
-            price: newPrice,
-        }));
+    const handleRemoveItem = async (productId) => {
+        try {
+            setPackageData((prevData) => {
+                const updatedContents = prevData.contents.filter(item => item._id !== productId);
+                return {
+                    ...prevData,
+                    contents: updatedContents
+                };
+            });
+    
+            Alert.alert('Product verwijderd', 'Het product is verwijderd uit het pakket.', [{ text: 'OK' }]);
+    
+            const updatedPackageData = {
+                ...packageData,
+                contents: packageData.contents.filter(item => item._id !== productId)
+            };
+
+            const response = await updatePackage(id, updatedPackageData);
+    
+            setPackageData(response.data.package);
+        } catch (error) {
+            console.error('Error bij het verwijderen van het product:', error);
+            Alert.alert('Fout bij verwijderen', 'Er is een fout opgetreden bij het verwijderen van het product.');
+        }
     };
 
-    const handleAddProducts = (packageId) => {
-        console.log('Add packageId:', packageId);
-        navigation.navigate('AppStackFarmer', { screen: 'UpdatePackage', params: { id: packageId } });
+    const handleAddProducts = () => {
+        navigation.navigate('UpdatePackage', { 
+            id: packageData._id,
+            selectedProducts: packageData.contents,
+        });
     };
 
     if (loading) {
@@ -109,20 +121,25 @@ const PackageDetail = ({ navigation, route }) => {
                         </TouchableOpacity>
                     </View>
                     
-                    <Text style={{...globalStyles.headerTextMedium, marginBottom: 15 }}>Prijs pakket</Text>
-                    <TextInput 
-                        placeholder='Prijs' 
-                        style={styles.input} 
-                        value={packageData.price.toString()} 
-                        onChangeText={handlePriceChange} 
-                        keyboardType="numeric"
-                    />
+                    {/* Prijs updaten */}
+                    <Text style={{ ...globalStyles.headerTextMedium, marginBottom: 15 }}>Prijs pakket</Text>
+                    <View style={styles.priceInputContainer}>
+                        <TextInput
+                            placeholder='Prijs'
+                            style={styles.input}
+                            value={tempPrice}
+                            onChangeText={handlePriceChange}
+                            keyboardType="numeric"
+                        />
+                        <TouchableOpacity style={styles.confirmButton} onPress={handleConfirmPriceChange}>
+                            <Text style={styles.confirmButtonText}>Opslaan</Text>
+                        </TouchableOpacity>
+                    </View>
                     
                     <Text style={{...globalStyles.headerTextMedium, marginBottom: 5 }}>Inhoud pakket</Text>
                     {packageData.contents.length === 0 ? (
                         <View style={styles.emptyStateContainer}>
-                            {/* <Image source={require('../../assets/icons/empty.png')} style={styles.emptyStateImage} /> */}
-                            <Text style={globalStyles.bodyTextRegular}>Er zit nog geen inhoud in dit pakket.</Text>
+                            <Text style={{...globalStyles.bodyText, marginBottom: 25 }}>Er zit nog geen inhoud in dit pakket.</Text>
                             <Button 
                                 filled={true} 
                                 title="Voeg producten toe" 
@@ -137,27 +154,13 @@ const PackageDetail = ({ navigation, route }) => {
                                 <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginRight: 15 }}>
                                     <Text style={globalStyles.bodyTextSemiBold}>{product.item}</Text>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <TouchableOpacity
-                                            onPress={() => handleDecreaseQuantity(product._id)}
-                                            disabled={isMinusInactive(product)}
-                                        >
-                                            <Image
-                                                source={isMinusInactive(product)
-                                                    ? require('../../assets/icons/minus-inactive.png')
-                                                    : require('../../assets/icons/minus.png')}
-                                                style={{ width: 30, height: 30, marginRight: 6 }}
-                                            />
-                                        </TouchableOpacity>
-                                        <View style={{ flexDirection: 'column', alignItems: 'center', marginHorizontal: 8 }}>
-                                            <Text style={globalStyles.bodyTextSemiBold}>{product.quantity}</Text>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                            <Text style={{...globalStyles.bodyTextSemiBold, marginRight: 5 }}>{product.quantity}</Text>
                                             <Text style={globalStyles.bodyTextRegular}>{product.unit}</Text>
                                         </View>
-                                        <TouchableOpacity onPress={() => handleIncreaseQuantity(product._id)}>
-                                            <Image source={require('../../assets/icons/plus.png')} style={{ width: 30, height: 30, marginLeft: 6 }} />
-                                        </TouchableOpacity>
                                     </View>
                                 </View>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => handleRemoveItem(product._id)}>
                                     <Image source={require('../../assets/icons/delete.png')} style={{ width: 20, height: 20 }} />
                                 </TouchableOpacity>
                             </View>
@@ -167,8 +170,8 @@ const PackageDetail = ({ navigation, route }) => {
                         <View style={{ marginTop: 20 }}>
                             <Button 
                                 filled={true} 
-                                title="Opslaan" 
-                                onPress={() => console.log('Button Pressed')} 
+                                title="Inhoud wijzigen" 
+                                onPress={() => handleAddProducts(packageData._id)}
                                 style={{ marginBottom: 50}}
                             />
                         </View>
@@ -185,13 +188,14 @@ const styles = StyleSheet.create({
         height: 30,
     },
     input: {
+        flex: 1,
         padding: 18,
         borderColor: COLORS.veryLightOffBlack,
         backgroundColor: COLORS.white,
         borderWidth: 1,
         borderRadius: 10,
         fontSize: 16,
-        marginBottom: 20
+        marginRight: 15
     },
     packageName: {
         textAlign: 'center',
@@ -217,8 +221,30 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: 15,
     },
-    addButton: {
-        marginTop: 25,
+    confirmButton: {
+        backgroundColor: COLORS.green,
+        padding: 18,
+        borderRadius: 10,
+    },
+    confirmButtonText: {
+        color: COLORS.white,
+        textAlign: 'center',
+        fontSize: 16,
+        fontFamily: 'Poppins_500Medium',
+    },
+    priceInputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 15,
+    },
+    priceInput: {
+        padding: 18,
+        borderColor: COLORS.veryLightOffBlack,
+        backgroundColor: COLORS.white,
+        borderWidth: 1,
+        borderRadius: 10,
+        fontSize: 16,
+        marginBottom: 20,
     },
 });
 

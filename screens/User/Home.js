@@ -209,26 +209,29 @@ const renderDot = (day) => {
 
             {/* Activiteiten weergave */}
             {activitiesData && activitiesData.length > 0 ? (
-                // Er zijn activiteiten in de kalender
-                <View>
-                    <FlatList
-                        style={styles.flow}
-                        showsVerticalScrollIndicator={false}
-                        data={activitiesData}
-                        keyExtractor={(item) => item._id}
-                        renderItem={({ item }) => <AgendaCard activity={item} onPress={handleAgendaCardPress} />}
-                    />
-                </View>
-            ) : (
-                // Er zijn geen activiteiten in de kalender
-                <View style={styles.calendarEmpty}>
-                    <Image style={styles.iconImage} source={require('../../assets/icons/date-black.png')} />
-                    <Text style={{ ...globalStyles.bodyText, ...styles.emptyText }}>Je kalender is nog leeg want je hebt geen activiteiten.</Text>
-                    <TouchableOpacity style={styles.button} onPress={goToExplore}>
-                        <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek een activiteit</Text>
-                    </TouchableOpacity>
-                </View>
-            )
+
+ 
+                    // Er zijn activiteiten in de kalender
+                    <View>
+                        <FlatList
+                            style={styles.flow}
+                            showsVerticalScrollIndicator={false}
+                            data={activitiesData}
+                            keyExtractor={(item) => item._id}
+                            renderItem={({ item }) => <AgendaCard activity={item} showFarmDetails={true} onPress={handleAgendaCardPress} />}
+                        />
+                    </View>
+                ) : (
+                    // Er zijn geen activiteiten in de kalender
+                    <View style={styles.calendarEmpty}>
+                        <Image style={styles.iconImage} source={require('../../assets/icons/date-black.png')}/>
+                        <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je kalender is nog leeg want je hebt geen activiteiten.</Text>
+                        <TouchableOpacity style={styles.button} onPress={goToExplore}>
+                            <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek een activiteit</Text>
+                        </TouchableOpacity>
+                    </View>
+                )
+
             }
         </SafeAreaView>
     );

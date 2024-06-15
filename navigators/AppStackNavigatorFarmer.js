@@ -8,6 +8,8 @@ import CalendarFarmer from '../screens/Farmer/Calendar';
 import ChatFarmer from '../screens/Farmer/Chat';
 import PackageDetail from '../screens/Farmer/PackageDetail';
 import UpdatePackage from '../screens/Farmer/UpdatePackage/UpdatePackage';
+import EditPackages from '../screens/Farmer/EditPackages/EditPackages';
+import AddActivity from '../screens/Farmer/AddActivity/AddActivity';
 
 import NavigationOptions from '../components/NavigationOptions';
 
@@ -26,6 +28,12 @@ const AppStackNavigatorFarmer = () => {
           })}
         />
         <Stack.Screen name="UpdatePackage" component={UpdatePackage} options={NavigationOptions}/>
+        <Stack.Screen name="EditPackages" component={EditPackages} options={NavigationOptions}/>
+        <Stack.Screen name="AddActivity" component={AddActivity}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
     </Stack.Navigator>
   );
 };

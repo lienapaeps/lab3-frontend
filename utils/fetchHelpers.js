@@ -83,6 +83,16 @@ export const fetchFarmDataByOwner = async (token, userId) => {
     return await response.json();
 }
 
+export const fetchFarmDataByOwnerWithoutToken = async (userId) => {
+    const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/farms/owner/${userId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return await response.json();
+}
+
 // alle packages van een farm ophalen
 export const fetchPackagesData = async (farmId) => {
     const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/farms/${farmId}/packages`, {
@@ -246,3 +256,26 @@ export const fetchProducts = async () => {
     });
     return await response.json();
 };
+
+// update package farmer
+export const updatePackage = async (packageId, updatedPackageData) => {
+    try {
+        const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/packages/${packageId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedPackageData),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error updating package:', error);
+        throw error; // Verder doorgeven voor eventuele verdere foutafhandeling in de UI
+    }
+};
+

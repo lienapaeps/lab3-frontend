@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Image, ActivityIndicator, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 
-import { stringifyData } from '../../utils/utils';
 import { fetchUserData, fetchFarmDataByOwner, fetchPackagesData, getUserIdAndToken } from '../../utils/fetchHelpers';
 
 import COLORS from '../../constants/color';
@@ -16,55 +16,56 @@ const FarmFarmer = ({ navigation }) => {
     const [loading, setLoading] = useState(true);
     const [userId, setUserId] = useState(null);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const { token, userId } = await getUserIdAndToken();
+    const fetchData = async () => {
+        try {
+            const { token, userId } = await getUserIdAndToken();
 
-                setUserId(userId);
+            if (!token) {
+                navigation.navigate('Login');
+                return;
+            }
 
-                console.log('UserId:', userId)
+            const userDataResponse = await fetchUserData(token, userId);
+            if (userDataResponse && userDataResponse.data && userDataResponse.data.user) {
+                setUserData(userDataResponse.data.user);
+            } else {
+                console.error('Invalid user data response');
+                return;
+            }
 
-                if (!token) {
-                    navigation.navigate('Login');
-                    return;
-                }
+            const farmDataResponse = await fetchFarmDataByOwner(token, userId);
+            if (farmDataResponse && farmDataResponse.data && farmDataResponse.data.farm) {
+                setFarmData(farmDataResponse.data.farm);
 
-                const userDataResponse = await fetchUserData(token, userId);
-                if (userDataResponse && userDataResponse.data && userDataResponse.data.user) {
-                    setUserData(userDataResponse.data.user);
-                } else {
-                    console.error('Invalid user data response');
-                    return;
-                }
-
-                const farmDataResponse = await fetchFarmDataByOwner(token, userId);
-                if (farmDataResponse && farmDataResponse.data && farmDataResponse.data.farm) {
-                    setFarmData(farmDataResponse.data.farm);
-
+                if (farmDataResponse.data.farm._id) {
                     const packagesDataResponse = await fetchPackagesData(farmDataResponse.data.farm._id);
                     setPackagesData(packagesDataResponse.data.packages);
-                } else {
-                    setFarmData(null);
                 }
-
-                setLoading(false);
-
-            } catch (error) {
-                console.error('Error:', error);
+            } else {
+                setFarmData(null);
             }
-        }
 
-        fetchData();
-    }, []);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error:', error);
+            setLoading(false); 
+        }
+    };
+
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchData();
+        }, [])
+    );
 
     const handlePackageCardPress = (packageId) => {
-        console.log('Pressed packageId:', packageId);
         navigation.navigate('AppStackFarmer', { screen: 'PackageDetail', params: { id: packageId } });
     }
 
-    const goToAddFarm = () => {
-        navigation.navigate('AddFarm', { params: { uid: userId } });
+    const handleAddPackage = () => {
+        const farmId = farmData._id;
+        console.log("add package", farmId)
+        navigation.navigate('AppStackFarmer', { screen: 'EditPackages', params: { farmId } });
     }
 
     if (loading) {
@@ -84,17 +85,15 @@ const FarmFarmer = ({ navigation }) => {
                 <View style={styles.headerContainer}>
                     <View>
                         <View>
-                            <Text style={globalStyles.headerTextSmall}>{farmData.name}</Text>
+                            <Text style={{...globalStyles.headerTextSmall, ...globalStyles.capitalize}}>{farmData.name}</Text>
                             <Text style={{...globalStyles.bodyText, ...globalStyles.capitalize}}>{farmData.adress.street} {farmData.adress.number}, {farmData.adress.zipcode} {farmData.adress.city}</Text>
-                            <Text style={globalStyles.bodyText}>{farmData.farmLocation}</Text>
                         </View>
-                        <View style={{ flexDirection: 'row', gap: 5, marginBottom: 15 }}>
+                        <View style={{ flexDirection: 'row', gap: 5, marginBottom: 15, marginTop: 10 }}>
                             <Text style={globalStyles.bodyTextSemiBold}>{farmData?.members?.length ?? 0}</Text>
-                            <Text style={globalStyles.bodyText}>leden</Text>
+                            <Text style={globalStyles.bodyText}>
+                                {farmData?.members?.length === 1 ? 'lid' : 'leden'}
+                            </Text>
                         </View>
-                    </View>
-                    <View> 
-                        
                     </View>
                 </View>
                 
@@ -117,8 +116,8 @@ const FarmFarmer = ({ navigation }) => {
                         ))}
                     </ScrollView>
 
-                    <TouchableOpacity style={styles.btn}>
-                        <Text style={{...globalStyles.bodyTextMedium, color: COLORS.orange}}>Pakket toevoegen +</Text>
+                    <TouchableOpacity style={styles.btn} onPress={handleAddPackage}>
+                        <Text style={{ ...globalStyles.bodyTextMedium, color: COLORS.orange }}>Pakketen beheren</Text>
                     </TouchableOpacity>
                 </View>
             </View>

@@ -6,11 +6,9 @@ import { fetchFarmDataById } from '../utils/fetchHelpers';
 import { globalStyles } from '../styles/global';
 import COLORS from './../constants/color';
 
-const AgendaCard = ({ activity, onPress }) => {
+const AgendaCard = ({ activity, onPress, showFarmDetails }) => {
     const [farmName, setFarmName] = useState('');
     const [farmPicture, setFarmPicture] = useState('');
-
-    // console.log(activity.farm);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -26,22 +24,23 @@ const AgendaCard = ({ activity, onPress }) => {
     };
 
     useEffect(() => {
-        // Functie om boerderijgegevens op te halen en de naam in te stellen
-        const fetchFarmData = async () => {
-            try {
-                const farmDataResponse = await fetchFarmDataById(activity.farm);
-                if (farmDataResponse && farmDataResponse.data && farmDataResponse.data.farm) {
-                    const farm = farmDataResponse.data.farm;
-                    setFarmName(farm.name);
-                    setFarmPicture(farm.farmImage)
+        if (showFarmDetails) {
+            const fetchFarmData = async () => {
+                try {
+                    const farmDataResponse = await fetchFarmDataById(activity.farm);
+                    if (farmDataResponse && farmDataResponse.data && farmDataResponse.data.farm) {
+                        const farm = farmDataResponse.data.farm;
+                        setFarmName(farm.name);
+                        setFarmPicture(farm.farmImage);
+                    }
+                } catch (error) {
+                    console.log('Error fetching farm data:', error);
                 }
-            } catch (error) {
-                console.log('Error fetching farm data:', error);
-            }
-        };
+            };
 
-        fetchFarmData();
-    }, [activity.farm]);
+            fetchFarmData();
+        }
+    }, [activity.farm, showFarmDetails]);
 
     const handlePress = () => {
         onPress(activity._id, farmName);
@@ -61,14 +60,16 @@ const AgendaCard = ({ activity, onPress }) => {
                         {formatDate(activity.start.date)} - {activity.start.time} - {activity.end.time}
                     </Text>
 
-                    <View style={styles.attendees}>
-                        <View style={styles.profileContainer}>
-                            {farmPicture ? (
-                            <Image style={styles.profileImage} source={{ uri: farmPicture }} />
-                        ) : null}
-                            <Text style={{ ...globalStyles.bodyTextSemiBold, marginLeft: 10 }}>{farmName}</Text>
+                    {showFarmDetails && (
+                        <View style={styles.attendees}>
+                            <View style={styles.profileContainer}>
+                                {farmPicture ? (
+                                <Image style={styles.profileImage} source={{ uri: farmPicture }} />
+                            ) : null}
+                                <Text style={{ ...globalStyles.bodyTextSemiBold, marginLeft: 10 }}>{farmName}</Text>
+                            </View>
                         </View>
-                    </View>
+                    )}
                 </View>
             </View>
         </TouchableOpacity>
