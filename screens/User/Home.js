@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { act, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Image, ActivityIndicator, TouchableOpacity, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useIsFocused } from '@react-navigation/native';
@@ -19,19 +19,15 @@ const HomeUser = ({ navigation, route }) => {
     const isFocused = useIsFocused();
     const [activitiesData, setActivitiesData] = useState(null);
 
-//------------------------------------------------
+    //------------------------------------------------
     // Get the current date
     const today = new Date();
     const currentDay = today.getDay();
-    console.log('today:', today);
-    console.log('currentDay:', currentDay);
     // Calculate the start and end of the current week
     const startOfWeek = new Date(today);
     startOfWeek.setDate(today.getDate() - currentDay + 1);
     const endOfWeek = new Date(today);
     endOfWeek.setDate(today.getDate() + (7 - currentDay));
-    console.log('startOfWeek:', startOfWeek);
-    console.log('endOfWeek:', endOfWeek);
 
     // Create an array of the days of the week
     const week = Array.from({ length: 7 }, (_, i) => {
@@ -41,12 +37,10 @@ const HomeUser = ({ navigation, route }) => {
     });
     //------------------------------------------------
 
-    console.log(activitiesData.date);
-
     //navigations
-    const goToCalendar = () => {
+    function goToCalendar() {
         navigation.navigate('AppStack', { screen: 'Calendar' });
-    };
+    }
 
     const goToFarm = () => {
         navigation.navigate('App', { screen: 'FarmUser' });
@@ -127,6 +121,20 @@ const HomeUser = ({ navigation, route }) => {
         );
     }
 
+// Check if the dates from activities are the same as a day in the calendar
+const renderDot = (day) => {
+    const isActivityDay = activitiesData.some(activity => {
+        const activityDate = new Date(activity.start.date);
+  
+        return day.toDateString() === activityDate.toDateString();
+    });
+    if (isActivityDay) {
+        return <View style={styles.dot} />;
+    } else {
+        return null;
+    }
+    
+};
     return (
         <SafeAreaView style={globalStyles.container}>
             {/* Header met profielfoto en meldingsbel */}
@@ -190,8 +198,10 @@ const HomeUser = ({ navigation, route }) => {
                             {{ ...styles.calendarBlock, backgroundColor: day.getDate() === today.getDate() ? COLORS.orange : COLORS.lightOrange }}>
                             <Text style={[globalStyles.bodyTextSmallUppercased, { color: day.getDate() === today.getDate() ? COLORS.white : COLORS.offBlack }]}>
                                 {day.toLocaleDateString('nl-NL', { weekday: 'short' })}</Text>
-                                <Text style={[globalStyles.headerTextMedium, { color: day.getDate() === today.getDate() ? COLORS.white : COLORS.offBlack }]}>
+                            <Text style={[globalStyles.headerTextMedium, { color: day.getDate() === today.getDate() ? COLORS.white : COLORS.offBlack }]}>
                                 {day.getDate()}</Text>
+                            {renderDot(day)}
+
                         </View>
                     ))}
                 </TouchableOpacity>
@@ -238,6 +248,15 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
+    },
+    dot: {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+        backgroundColor: COLORS.offBlack,
+        position: 'absolute',
+        bottom: -5,
+        
     },
     emptyText: {
         marginBottom: 30,
