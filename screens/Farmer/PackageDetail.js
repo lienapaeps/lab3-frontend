@@ -170,7 +170,7 @@ const PackageDetail = ({ navigation, route }) => {
                         <View style={{ marginTop: 20 }}>
                             <Button 
                                 filled={true} 
-                                title="Aanbod wijzigen" 
+                                title="Inhoud wijzigen" 
                                 onPress={() => handleAddProducts(packageData._id)}
                                 style={{ marginBottom: 50}}
                             />

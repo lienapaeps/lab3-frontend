@@ -116,11 +116,9 @@ const FarmFarmer = ({ navigation }) => {
                         ))}
                     </ScrollView>
 
-                    {packagesData.length < 3 && (
-                        <TouchableOpacity style={styles.btn} onPress={handleAddPackage}>
-                            <Text style={{ ...globalStyles.bodyTextMedium, color: COLORS.orange }}>Pakket toevoegen +</Text>
-                        </TouchableOpacity>
-                    )}
+                    <TouchableOpacity style={styles.btn} onPress={handleAddPackage}>
+                        <Text style={{ ...globalStyles.bodyTextMedium, color: COLORS.orange }}>Pakketen beheren</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
