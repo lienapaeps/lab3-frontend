@@ -1,18 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { fetchUserData, getUserIdAndToken, fetchFarmDataByOwnerWithoutToken, fetchReviewsData } from '../../utils/fetchHelpers';
-
+import { fetchUserData, getUserIdAndToken, fetchFarmDataByOwnerWithoutToken, fetchReviewsData, fetchActivityDataFarm } from '../../utils/fetchHelpers';
+import ActivityCard from '../../components/ActivityCard';
 import COLORS from '../../constants/color';
 import { globalStyles } from '../../styles/global';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
 
 const HomeFarmer = ({ navigation }) => {
     const [userData, setUserData] = useState(null);
     const [farmData, setFarmData] = useState(null);
     const [reviewsData, setReviewsData] = useState(null);
+    const [activityData, setActivityData] = useState(null);
     const [averageRating, setAverageRating] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    const goToActivity = () => {
+        if (farmData && farmData.data && farmData.data.farm && farmData.data.farm._id) {
+            navigation.navigate('AppStackFarmer', {
+                screen: 'AddActivity',
+                params: { farmId: farmData.data.farm._id },
+            });
+        } else {
+            console.error('Farm data is not available to navigate to AddActivity');
+        }
+    };
 
     const goToProfile = () => {
         navigation.navigate('AppStack', { screen: 'Profile', params: { userData } });
@@ -51,8 +63,12 @@ const HomeFarmer = ({ navigation }) => {
                 setLoading(true); // Set loading to true before fetching farm data
                 try {
                     const farmResponse = await fetchFarmDataByOwnerWithoutToken(userData._id);
-                    setFarmData(farmResponse);
-                    console.log(farmResponse);
+                    if (farmResponse && farmResponse.data && farmResponse.data.farm) {
+                        setFarmData(farmResponse);
+                        console.log(farmResponse);
+                    } else {
+                        console.error('Invalid farm data response');
+                    }
                 } catch (error) {
                     console.error('Error:', error);
                 } finally {
@@ -67,20 +83,22 @@ const HomeFarmer = ({ navigation }) => {
     useEffect(() => {
         const fetchReviews = async () => {
             if (farmData && farmData.data && farmData.data.farm && farmData.data.farm._id) {
-                setLoading(true); // Set loading to true before fetching reviews
+                setLoading(true);
                 try {
                     const reviewsResponse = await fetchReviewsData(farmData.data.farm._id);
-                    setReviewsData(reviewsResponse);
-
-                    // Calculate average rating
                     if (reviewsResponse && reviewsResponse.data && reviewsResponse.data.reviews) {
+                        setReviewsData(reviewsResponse);
+
+                        // Calculate average rating
                         const reviews = reviewsResponse.data.reviews;
                         const totalRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
-                        const avgRating = totalRatings / reviews.length;
+                        const avgRating = (totalRatings / reviews.length).toFixed(1);
                         setAverageRating(avgRating);
-                    }
 
-                    console.log(reviewsResponse);
+                        console.log(reviewsResponse);
+                    } else {
+                        console.error('Invalid reviews data response');
+                    }
                 } catch (error) {
                     console.error('Error:', error);
                 } finally {
@@ -90,6 +108,30 @@ const HomeFarmer = ({ navigation }) => {
         };
 
         fetchReviews();
+    }, [farmData]);
+
+    useEffect(() => {
+        const fetchActivityData = async () => {
+            if (farmData && farmData.data && farmData.data.farm && farmData.data.farm._id) {
+                setLoading(true);
+                try {
+                    const activityResponse = await fetchActivityDataFarm(farmData.data.farm._id);
+                    if (activityResponse && activityResponse.data && activityResponse.data.activities) {
+                        const filteredActivities = activityResponse.data.activities.filter(activity => activity.category === 'Workshop');
+                        setActivityData({ data: { activities: filteredActivities } });
+                        console.log(activityResponse);
+                    } else {
+                        console.error('Invalid activity data response');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+
+        fetchActivityData();
     }, [farmData]);
 
     if (loading) {
@@ -110,62 +152,91 @@ const HomeFarmer = ({ navigation }) => {
 
     return (
         <SafeAreaView style={globalStyles.container}>
-            {/* header with profile pic and notification bell */}
-            {userData && (
-                <View style={styles.profile}>
-                    <TouchableOpacity style={styles.profileBtn} onPress={goToProfile}>
-                        <Image style={styles.profileImage} source={{ uri: userData.profilePicture }} />
-                        <Text style={globalStyles.headerTextSmaller}>{userData.firstname} {userData.lastname}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.notification}>
-                        <Image style={styles.notificationImage} source={require('../../assets/icons/notification.png')} />
-                    </TouchableOpacity>
-                </View>
-            )}
-            <View>
-                <Text style={globalStyles.headerText}>Overzicht</Text>
-                <View style={styles.flexDirection}>
-                    <View style={styles.card}>
-                        <Image style={styles.icon} source={require('../../assets/icons/WinkelmandFarmer.png')} />
-                        <Text style={globalStyles.bodyTextBold}>Pakketten</Text>
-                        <View style={styles.alignCenter}>
-                            <Text style={globalStyles.headerTextSmall}>{farmData.data.farm.members.length}</Text>
-                            <Text style={[globalStyles.bodyTextBold, styles.percent]}>+3.4%</Text>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <TouchableOpacity activeOpacity={1}>
+                    {/* header with profile pic and notification bell */}
+                    {userData && (
+                        <View style={styles.profile}>
+                            <TouchableOpacity style={styles.profileBtn} onPress={goToProfile}>
+                                <Image style={styles.profileImage} source={{ uri: userData.profilePicture }} />
+                                <Text style={globalStyles.headerTextSmaller}>{userData.firstname} {userData.lastname}</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.notification}>
+                                <Image style={styles.notificationImage} source={require('../../assets/icons/notification.png')} />
+                            </TouchableOpacity>
                         </View>
-                        <Text style={globalStyles.bodyText}>Voorbije maand</Text>
-                    </View>
-                    <View style={styles.card}>
-                        <Image style={styles.icon} source={require('../../assets/icons/DollarFarmer.png')} />
-                        <Text style={globalStyles.bodyTextBold}>Omzet</Text>
-                        <View style={styles.alignCenter}>
-                            <Text style={globalStyles.headerTextSmall}>€815.17</Text>
-                            <Text style={[globalStyles.bodyTextBold, styles.percent]}>+4.1%</Text>
+                    )}
+                    <View>
+                        <Text style={globalStyles.headerText}>Overzicht</Text>
+                        <View style={styles.flexDirection}>
+                            <View style={styles.card}>
+                                <Image style={styles.icon} source={require('../../assets/icons/WinkelmandFarmer.png')} />
+                                <Text style={globalStyles.bodyTextBold}>Pakketten</Text>
+                                <View style={styles.alignCenter}>
+                                    <Text style={globalStyles.headerTextSmall}>{farmData.data.farm.members?.length ?? 0}</Text>
+                                    <Text style={[globalStyles.bodyTextBold, styles.percent]}>+3.4%</Text>
+                                </View>
+                                <Text style={globalStyles.bodyText}>Voorbije maand</Text>
+                            </View>
+                            <View style={styles.card}>
+                                <Image style={styles.icon} source={require('../../assets/icons/DollarFarmer.png')} />
+                                <Text style={globalStyles.bodyTextBold}>Omzet</Text>
+                                <View style={styles.alignCenter}>
+                                    <Text style={globalStyles.headerTextSmall}>€815.17</Text>
+                                    <Text style={[globalStyles.bodyTextBold, styles.percent]}>+4.1%</Text>
+                                </View>
+                                <Text style={globalStyles.bodyText}>Voorbije maand</Text>
+                            </View>
                         </View>
-                        <Text style={globalStyles.bodyText}>Voorbije maand</Text>
-                    </View>
-                </View>
 
-                <View style={styles.flexDirection}>
-                    <View style={styles.card}>
-                        <Image style={styles.icon} source={require('../../assets/icons/FollowersFarmer.png')} />
-                        <Text style={globalStyles.bodyTextBold}>Volgers</Text>
-                        <View style={styles.alignCenter}>
-                            <Text style={globalStyles.headerTextSmall}>15</Text>
-                            <Text style={[globalStyles.bodyTextBold, styles.percent]}>+1.6%</Text>
+                        <View style={styles.flexDirection}>
+                            <View style={styles.card}>
+                                <Image style={styles.icon} source={require('../../assets/icons/FollowersFarmer.png')} />
+                                <Text style={globalStyles.bodyTextBold}>Volgers</Text>
+                                <View style={styles.alignCenter}>
+                                    <Text style={globalStyles.headerTextSmall}>15</Text>
+                                    <Text style={[globalStyles.bodyTextBold, styles.percent]}>+1.6%</Text>
+                                </View>
+                                <Text style={globalStyles.bodyText}>Voorbije maand</Text>
+                            </View>
+                            <View style={styles.card}>
+                                <Image style={styles.icon} source={require('../../assets/icons/RatingFarmer.png')} />
+                                <Text style={globalStyles.bodyTextBold}>Beoordeling</Text>
+                                <View style={styles.alignCenter}>
+                                    <Text style={globalStyles.headerTextSmall}>{averageRating}/5</Text>
+                                    <Text style={[globalStyles.bodyTextBold, styles.percent]}>{reviewsData.data.reviews?.length ?? 0} reviews</Text>
+                                </View>
+                                <Text style={globalStyles.bodyText}>Voorbije maand</Text>
+                            </View>
                         </View>
-                        <Text style={globalStyles.bodyText}>Voorbije maand</Text>
-                    </View>
-                    <View style={styles.card}>
-                        <Image style={styles.icon} source={require('../../assets/icons/RatingFarmer.png')} />
-                        <Text style={globalStyles.bodyTextBold}>Beoordeling</Text>
-                        <View style={styles.alignCenter}>
-                            <Text style={globalStyles.headerTextSmall}>{averageRating}/5</Text>
-                            <Text style={[globalStyles.bodyTextBold, styles.percent]}>{reviewsData.data.reviews.length} reviews</Text>
+
+                        <View>
+                            <Text style={[globalStyles.headerText, styles.activityTitle]}>Geplande evenementen</Text>
+                            {activityData && activityData.data && activityData.data.activities && activityData.data.activities.length > 0 ? (
+                                <FlatList 
+                                    data={activityData.data.activities ?? []}
+                                    style={styles.activities}
+                                    horizontal={true}
+                                    showsHorizontalScrollIndicator={true}
+                                    keyExtractor={(item) => item._id}
+                                    renderItem={({ item }) => (
+                                        <ActivityCard activityData={item} farmData={farmData.data.farm} />
+                                    )}
+                                    contentContainerStyle={{ gap: 15 }}
+                                />
+                            ) : (
+                                <View style={styles.packageEmpty}>
+                                    <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')} />
+                                    <Text style={{ ...globalStyles.bodyText, ...styles.emptyText }}>Je hebt nog geen evenementen aangemaakt, maak een evenement aan.</Text>
+                                    <TouchableOpacity style={styles.button} onPress={goToActivity}>
+                                        <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            )}
                         </View>
-                        <Text style={globalStyles.bodyText}>Voorbije maand</Text>
                     </View>
-                </View>
-            </View>
+                </TouchableOpacity>
+            </ScrollView>
         </SafeAreaView>
     );
 }
@@ -186,6 +257,37 @@ const styles = StyleSheet.create({
         height: 55,
         borderRadius: 50,
         marginRight: 10,
+    },
+    button: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 15,
+        paddingHorizontal: 20,
+        borderRadius: 10,
+        backgroundColor: COLORS.orange,
+    },
+    emptyText: {
+        marginBottom: 30,
+        textAlign: 'center',
+    },
+    iconImage: {
+        marginBottom: 15,
+        width: 22,
+        height: 24,
+    },
+    packageEmpty: {
+        paddingVertical: 40,
+        marginHorizontal: 20,
+        marginBottom: 20,
+        alignItems: 'center',
+    },
+    activities: {
+        marginTop: 20,
+        marginBottom: 20,
+        gap: 15,
+    },
+    activityTitle: {
+        marginTop: 30,
     },
     notification: {
         backgroundColor: COLORS.white,
