@@ -47,6 +47,16 @@ export const fetchSubscriptionData = async (token, userId) => {
     return await response.json();
 };
 
+export const fetchSubscriptionDataWithoutToken = async (userId) => {
+    const response = await fetch(`https://lab3-backend-w1yl.onrender.com/users/check-subscription/${userId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return await response.json();
+};
+
 // fetch alle farm data
 export const fetchFarmData = async () => {
     const response = await fetch('https://lab3-backend-w1yl.onrender.com/api/farms', {
