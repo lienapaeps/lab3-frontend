@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert, ActivityIndicator, TextInput } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native';
+import { format } from 'date-fns';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 
 import { fetchPackageData, updatePackage } from '../../utils/fetchHelpers';
 
@@ -13,6 +15,8 @@ const PackageDetail = ({ navigation, route }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [tempPrice, setTempPrice] = useState(null);
+    const [tempPickUpDate, setTempPickUpDate] = useState(null);
+    const [isDateTimePickerVisible, setIsDateTimePickerVisible] = useState(false);
 
     const { id } = route.params;
 
@@ -21,6 +25,13 @@ const PackageDetail = ({ navigation, route }) => {
             const packageDataResponse = await fetchPackageData(id);
             setPackageData(packageDataResponse.data.package);
             setTempPrice(packageDataResponse.data.package.price.toString());
+
+            if (packageDataResponse.data.package.pickUpDate) {
+                setTempPickUpDate(new Date(packageDataResponse.data.package.pickUpDate));
+            } else {
+                setTempPickUpDate(null);
+            }
+
             setLoading(false);
         } catch (error) {
             console.error('Error:', error);
@@ -42,22 +53,29 @@ const PackageDetail = ({ navigation, route }) => {
         setTempPrice(text);
     };
 
-    const handleConfirmPriceChange = async () => {
+    const handlePickUpDateChange = (date) => {
+        setTempPickUpDate(date);
+        setIsDateTimePickerVisible(false);
+    };
+
+    const handleConfirmChange = async () => {
         try {
             const updatedPackageData = {
                 price: parseFloat(tempPrice),
                 contents: packageData.contents,
-                pickUpDate: packageData.pickUpDate,
+                pickUpDate: tempPickUpDate ? tempPickUpDate.toISOString() : null,
             };
     
+            console.log("updated package " + updatedPackageData);
+
             const response = await updatePackage(id, updatedPackageData);
     
             setPackageData(response.data.package);
     
-            Alert.alert('Prijs bijgewerkt', 'De prijs van het pakket is succesvol bijgewerkt.');
+            Alert.alert('Pakket is bijgewerkt', 'Het pakket is succesvol bijgewerkt.');
         } catch (error) {
             console.error('Error bij het bijwerken van de prijs:', error);
-            Alert.alert('Fout bij bijwerken', 'Er is een fout opgetreden bij het bijwerken van de prijs.');
+            Alert.alert('Fout bij bijwerken', 'Er is een fout opgetreden bij het bijwerken van het pakket.');
             setTempPrice(packageData.price.toString());
         }
     };
@@ -131,11 +149,31 @@ const PackageDetail = ({ navigation, route }) => {
                             onChangeText={handlePriceChange}
                             keyboardType="numeric"
                         />
-                        <TouchableOpacity style={styles.confirmButton} onPress={handleConfirmPriceChange}>
+                        <TouchableOpacity style={styles.confirmButton} onPress={handleConfirmChange}>
+                            <Text style={styles.confirmButtonText}>Opslaan</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    {/* Ophaaldatum invoer */}
+                    <Text style={{...globalStyles.headerTextMedium, marginBottom: 15 }}>Ophaaldatum</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 15 }}>
+                        <TouchableOpacity style={styles.input} onPress={() => setIsDateTimePickerVisible(true)}>
+                            <Text>{tempPickUpDate ? format(tempPickUpDate, 'dd-MM-yyyy') : ''}</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.confirmButton} onPress={handleConfirmChange}>
                             <Text style={styles.confirmButtonText}>Opslaan</Text>
                         </TouchableOpacity>
                     </View>
                     
+                    <DateTimePicker
+                        isVisible={isDateTimePickerVisible}
+                        mode="date"
+                        textColor="#000000"
+                        onConfirm={handlePickUpDateChange}
+                        onCancel={() => setIsDateTimePickerVisible(false)}
+                    />
+
                     <Text style={{...globalStyles.headerTextMedium, marginBottom: 5 }}>Inhoud pakket</Text>
                     {packageData.contents.length === 0 ? (
                         <View style={styles.emptyStateContainer}>
