@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { View, Text, Image, StyleSheet, TouchableOpacity, SafeAreaView, Button } from 'react-native'
+import React, { useState, useEffect, } from 'react'
+import { View, Text, Image, StyleSheet, TouchableOpacity, SafeAreaView, Button, Linking } from 'react-native'
 
 import COLORS from '../../../constants/color';
 import { globalStyles } from '../../../styles/global';
@@ -8,11 +8,16 @@ const Settings = ({ navigation, route }) => {
     const userData = route.params.userData;
 
     const handleGoToAccess = async () => {
-        navigation.navigate('AppStack', { screen: 'Access', params: { userData: userData }});
+        Linking.openSettings();
     }
 
     const handleGoToLanguage = async () => {
         navigation.navigate('AppStack', { screen: 'Language', params: { userData: userData }});
+    }
+
+    const handleGoToNotifications = async () => {
+        Linking.openSettings();
+
     }
 
     return (
@@ -31,11 +36,12 @@ const Settings = ({ navigation, route }) => {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button } onPress={handleGoToLanguage}>
                         <Text style={globalStyles.headerTextSmallerMedium}>Taal</Text>
-                        <Text style={styles.buttonData}>{userData.taal}</Text>
+                        <Text style={styles.buttonData}>Nederlands</Text>
                         <Image style={styles.icon} source={require('../../../assets/arrow-right.png')}/>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={handleGoToNotifications}>
                         <Text style={globalStyles.headerTextSmallerMedium}>Meldingen</Text>
+                        <Image style={styles.icon} source={require('../../../assets/arrow-right.png')}/>
                     </TouchableOpacity>
                 </View>
         </SafeAreaView>
@@ -70,9 +76,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     buttonData: {
-    fontWeight: '300',
-        marginLeft: 20,
-       
+        fontWeight: '300',
+        color: COLORS.offBlack,
+        flex: 1,
+        marginRight: 20,
+        textAlign: 'right',
+        
     },
     icon: {
         width: 20,

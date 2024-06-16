@@ -17,25 +17,28 @@ const Faq = ({ navigation, route }) => {
     }
 
     useEffect(() => {
-        // Fetch the FAQ questions from the backend
-        // Update the questions state with the fetched questions
         const fetchedQuestions = [
             {
-                title: 'How do I create an account?',
-                answer: 'To create an account, click the "Sign Up" button on the home page and fill in the required information.'
+                title: 'Hoe maak ik een account aan?',
+                answer: 'Om een account aan te maken, klik op de "Aanmelden" knop op de startpagina en vul de vereiste informatie in.'
             },
             {
-                title: 'How do I log in?',
-                answer: 'To log in, click the "Log In" button on the home page and enter your email and password.'
+                title: 'Hoe log ik in?',
+                answer: 'Om in te loggen, klik op de "Inloggen" knop op de startpagina en voer je e-mail en wachtwoord in.'
             },
             {
-                title: 'How do I reset my password?',
-                answer: 'To reset your password, click the "Forgot Password" link on the login page and follow the instructions.'
+                title: 'Hoe reset ik mijn wachtwoord?',
+                answer: 'Om je wachtwoord te resetten, klik op de "Wachtwoord vergeten" link op de inlogpagina en volg de instructies.'
             },
             {
-                title: 'How do I update my account information?',
-                answer: 'To update your account information, go to the "My Account" section and click on the information you want to update.'
+                title: 'Hoe update ik mijn accountinformatie?',
+                answer: 'Om je accountinformatie bij te werken, ga naar de "Mijn Account" sectie en klik op de informatie die je wilt bijwerken.'
             },
+            {
+                title: 'Hoe abbonneer ik op een abbonement?',
+                answer: 'Om je te abonneren op een abonnement, ga naar de "Abonnementen" sectie op de "Home" menu en klik op de "Abonneren" knop.'
+            },
+
         ];
         setQuestions(fetchedQuestions);
     }, []);

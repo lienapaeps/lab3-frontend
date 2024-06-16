@@ -26,19 +26,19 @@ const Profile = ({ navigation, route }) => {
     };
 
     const handleGoToAccount = async () => {
-        navigation.navigate('AppStack', { screen: 'MyAccount', params: { userData: userData }});
+        navigation.navigate('AppStack', { screen: 'MyAccount', params: { userData: userData } });
     }
 
     const handleGoToSettings = async () => {
-        navigation.navigate('AppStack', { screen: 'Settings', params: { userData: userData }});
+        navigation.navigate('AppStack', { screen: 'Settings', params: { userData: userData } });
     }
 
     const handleGoToMySubscription = async () => {
-        navigation.navigate('AppStack', { screen: 'MySubscription', params: { userData: userData, subscriptionData }});
+        navigation.navigate('AppStack', { screen: 'MySubscription', params: { userData: userData, subscriptionData } });
     }
 
     const handleGoToFaq = async () => {
-        navigation.navigate('AppStack', { screen: 'FAQ', params: { userData: userData }});
+        navigation.navigate('AppStack', { screen: 'FAQ', params: { userData: userData } });
     }
 
     const handleEditProfilePicture = async () => {
@@ -111,7 +111,7 @@ const Profile = ({ navigation, route }) => {
                         </View>
                     </TouchableOpacity>
                 </View>
-                <Text style={{...globalStyles.headerTextSmall, ...globalStyles.capitalize}}>{userData.firstname} {userData.lastname}</Text>
+                <Text style={{ ...globalStyles.headerTextSmall, ...globalStyles.capitalize }}>{userData.firstname} {userData.lastname}</Text>
             </View>
             <View style={styles.profileSection}>
                 <ProfileItem title="Mijn account" onPress={handleGoToAccount} icon={require('../../assets/icons/user-green.png')} />
@@ -119,9 +119,12 @@ const Profile = ({ navigation, route }) => {
                 {!userData.isFarmer && <ProfileItem title="Mijn abonnement" onPress={handleGoToMySubscription} icon={require('../../assets/icons/farm-icon-active.png')} />}
                 <ProfileItem title="FAQ" onPress={handleGoToFaq} icon={require('../../assets/icons/faq-green.png')} />
             </View>
-            <View style={styles.logout}>
-                <Button title="Uitloggen" onPress={handleLogout} color={COLORS.alert}/>
-            </View>
+
+            <TouchableOpacity style={styles.logout} onPress={handleLogout}>
+                <Text style={{ ...globalStyles.headerTextSmallerMedium, color: COLORS.alert }}>Uitloggen</Text>
+            </TouchableOpacity>
+
+
         </SafeAreaView>
     );
 }
@@ -179,13 +182,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: COLORS.white,
         borderRadius: 10,
-        padding: 10,
+        padding: 15,
         shadowColor: COLORS.offBlack,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
-       
+
+
 
     },
     plusBtn: {
