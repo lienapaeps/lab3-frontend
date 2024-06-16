@@ -22,7 +22,7 @@ const Explore = ({ navigation }) => {
         const fetchData = async () => {
             try {
                 const data = await fetchActivityData();
-                const sortedActivities = data.data.activities.sort((a, b) => new Date(a.start.date) - new Date(b.start.date));
+                const sortedActivities = data.data.activities.sort((a, b) => new Date(b.start.date) - new Date(a.start.date));
                 setActivityData(sortedActivities);
             } catch (error) {
                 setError(error);
