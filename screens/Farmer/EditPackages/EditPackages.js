@@ -39,6 +39,10 @@ const EditPackages = ({ navigation, route }) => {
         navigation.navigate('AppStackFarmer', { screen: 'PackageDetail', params: { id: packageId } });
     }
 
+    const handleAddPackagePress = (packageName) => {
+        navigation.navigate('AppStackFarmer', { screen: 'AddNewPackage', params: { packageName: packageName, farmId: farmId } });
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View>
@@ -48,22 +52,30 @@ const EditPackages = ({ navigation, route }) => {
                         <TouchableOpacity key={index} onPress={() => handlePackageCardPress(pkg._id)}>
                             <View style={styles.packageContainer}>
                                 <Text style={{...globalStyles.headerTextSmaller, marginLeft: 15}}>{pkg.name}</Text>
+                                <Text style={{...globalStyles.headerTextSmaller, ...styles.add}}>Beheren</Text>
                             </View>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
 
                 <Text style={{...globalStyles.headerTextSmall, marginBottom: 15}}>Aanbod uitbreiden</Text>
+                {availablePackages.length > 0 ? (
                 <ScrollView>
                     {availablePackages.map((pkg, index) => (
-                        <TouchableOpacity key={index}>
+                        <TouchableOpacity key={index} onPress={() => handleAddPackagePress(pkg.name)}>
                             <View style={styles.packageContainer}>
                                 <Text style={{...globalStyles.headerTextSmaller, marginLeft: 15, marginBottom: 5}}>{pkg.name}</Text>
                                 <Text style={{...globalStyles.bodyTextSmall, marginBottom: 5, marginLeft: 15}}>{pkg.description}</Text>
+                                <Text style={{...globalStyles.headerTextSmaller, ...styles.add}}>Toevoegen</Text>
                             </View>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
+            ) : (
+                <View>
+                    <Text style={globalStyles.bodyText}>Er zijn op dit moment geen beschikbare pakketten om toe te voegen.</Text>
+                </View>
+            )}
             </View>
         </SafeAreaView>
     );
@@ -121,6 +133,13 @@ const styles = StyleSheet.create({
         padding: 12,
         borderRadius: 5,
     },
+    add: {
+        color: COLORS.orange,
+        marginLeft: 15,
+        position: 'absolute',
+        top: 15,
+        right: 15
+    }
 });
 
 export default EditPackages;
