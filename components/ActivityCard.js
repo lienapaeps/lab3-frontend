@@ -63,7 +63,7 @@ const AcitvityCard = ({ activityData, onPress }) => {
       const background = category === "Workshop" ? COLORS.orange : COLORS.green;
 
     return (
-        <TouchableOpacity onPress={handlePress} style={styles.card}>
+        <TouchableOpacity onPress={handlePress} activeOpacity={1} style={styles.card}>
                 <View style={styles.cardImage}>
                     <Image style={styles.image} source={{uri: activityData.image }} />
                 </View>

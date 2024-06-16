@@ -44,7 +44,7 @@ const Agenda = ({ route, navigation }) => {
                 renderItem={({ item }) => <AgendaCard activity={item} onPress={handleAgendaCardPress}/>}
                 ListEmptyComponent={
                     <Text style={styles.emptyState}>
-                        Er zijn geen activiteiten gepland 🍃
+                        Er zijn geen activiteiten gepland 📅
                     </Text>
                 }
                 ListHeaderComponent={<Text style={globalStyles.headerTextSmall}>Aankomende activiteiten</Text>}

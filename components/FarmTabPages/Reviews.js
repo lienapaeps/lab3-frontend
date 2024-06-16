@@ -57,7 +57,7 @@ const Reviews = ({ navigation, route }) => {
                 renderItem={({ item }) => (
                     <Review item={item} />
                 )}
-                ListEmptyComponent={<Text style={styles.emptyState}>No reviews available 🍃</Text>}
+                ListEmptyComponent={<Text style={styles.emptyState}>Geen reviews achtergelaten ✍️</Text>}
             />
             </TouchableOpacity>    
         </View> 
