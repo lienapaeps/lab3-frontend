@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform, SafeAreaView, Image, TextInput, KeyboardAvoidingView, ScrollView, ActivityIndicator } from 'react-native';
-import { CheckBox } from 'react-native-elements';
+import SelectDropdown from 'react-native-select-dropdown'
+
+import { uploadToCloudinary } from '../../../utils/uploadHelpers';
 
 import { globalStyles } from '../../../styles/global';
 import COLORS from '../../../constants/color';
@@ -15,6 +17,11 @@ const AddActivity = ({ navigation, route }) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [isProcessing, setIsProcessing] = useState(false);
     const [successfullyAdded, setSuccessfullyAdded] = useState(false);
+    const activityCategories = ['workshop'];
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedImageUri, setSelectedImageUri] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [isLoadingImage, setIsLoadingImage] = useState(false);
 
     const [activityData, setActivityData] = useState({
         title: '',
@@ -32,16 +39,61 @@ const AddActivity = ({ navigation, route }) => {
         farm: farmId,
     });
 
-    const handleChange = (field, value) => {
-        setActivityData(prevState => ({
-            ...prevState,
-            [field]: value
-        }));
+    const handleSelectCategory = (selectedItem, index) => {
+        setSelectedCategory(selectedItem);
+        handleChange('category', selectedItem);
     };
 
-    const nextStep = () => {
-        if (currentStep < totalSteps - 1) {
-            setCurrentStep(currentStep + 1);
+    const renderDropdownButton = (selectedItem, isOpened) => {
+        return (
+            <View style={styles.dropdownButtonStyle}>
+                <Text style={styles.dropdownButtonTxtStyle}>
+                    {(selectedItem && selectedItem) || 'Selecteer categorie'}
+                </Text>
+                <Image source={require('../../../assets/arrow-down.png')} style={styles.dropdownButtonArrowStyle} />
+            </View>
+        );
+    };
+
+    const renderDropdownItem = (item, index, isSelected) => {
+        return (
+            <View style={{ ...styles.dropdownItemStyle, ...(isSelected && { backgroundColor: '#E4D9D5' }) }}>
+                <Text style={styles.dropdownItemTxtStyle}>{item}</Text>
+            </View>
+        );
+    };
+
+    const handleChange = (field, value) => {
+        setActivityData({
+            ...activityData,
+            [field]: value,
+        });
+    };
+    
+    const handleImageSelected = async (uri) => {
+        setIsLoadingImage(true);
+        try {
+            const imageUrl = await uploadToCloudinary(uri); 
+            setSelectedImage(imageUrl);
+            setIsLoadingImage(false);
+        } catch (error) {
+            console.error('Error uploading image to Cloudinary:', error);
+            setErrorMessage('Er is iets misgegaan bij het uploaden van de afbeelding.');
+        }
+    };
+
+    const formatTime = (time) => {
+        return `${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}`;
+    };
+
+    const nextStep = async () => {
+        const isValid = await validateStep();
+    
+        if (isValid) {
+            setErrorMessage('');
+            if (currentStep < totalSteps - 1) {
+                setCurrentStep(currentStep + 1);
+            }
         }
     };
 
@@ -51,25 +103,74 @@ const AddActivity = ({ navigation, route }) => {
         }
     };
 
-    // const validateStep = () => {
-    //     switch (currentStep) {
-    //         case 0:
-    //             return validateStep1();
-    //         case 1:
-    //             return validateStep2();
-    //         case 2:
-    //             return true;
-    //         default:
-    //             return true;
-    //     }
-    // };
+    const validateStep = () => {
+        switch (currentStep) {
+            case 0:
+                return validateStep1();
+            case 1:
+                return validateStep2();
+            default:
+                return true;
+        }
+    };
+
+    const validateStep1 = () => {
+        if (activityData.title === '' || activityData.category === '' || activityData.start.date === '' || activityData.start.time === '' || activityData.end.date === '' || activityData.end.time === '') {
+            setErrorMessage('Vul alle verplichte velden in.');
+            return false;
+        }
+        return true;
+    };
+
+    const validateStep2 = () => {
+        if (activityData.description === '' || selectedImageUri === '') {
+            setErrorMessage('Vul alle verplichte velden in.');
+            return false;
+        }
+        return true;
+    };
 
     const submitForm = async () => {
         setIsProcessing(true);
         try {
-            // Voeg hier de API-call toe om de activiteit op te slaan
-            console.log('Submitting form with data:', activityData);
-            // Als succesvol
+
+            const formattedStartTime = formatTime(activityData.start.time);
+            const formattedEndTime = formatTime(activityData.end.time);
+            
+            const formattedData = {
+                ...activityData,
+                start: {
+                    ...activityData.start,
+                    time: formattedStartTime
+                },
+                end: {
+                    ...activityData.end,
+                    time: formattedEndTime
+                }
+            };
+
+            const imageUrl = await uploadToCloudinary(selectedImageUri);
+
+            formattedData.image = imageUrl;
+
+            console.log('Submitting form with data:', formattedData);
+
+            // const responser = await fetch('https://lab3-backend-w1yl.onrender.com/api/activities/', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify(formattedData),
+            // });
+
+            // const json = await responser.json();
+
+            // if (json.status === 'success') {
+            //     navigation.navigate('AppStackFarmer', { screen: 'CalendarFarmer',});
+            // } else {
+            //     setErrorMessage(json.message);
+            // }
+
             setSuccessfullyAdded(true);
             // navigation.goBack();
         } catch (error) {
@@ -104,20 +205,53 @@ const AddActivity = ({ navigation, route }) => {
                             <Text style={globalStyles.headerText}>Activiteit toevoegen</Text>
                             <Text style={{ ...globalStyles.bodyText, marginBottom: 5 }}>Basis informatie</Text>
                             <View style={styles.inputs}>
-                                <InputField label="Naam activiteit*" placeholder="Naam activiteit" value={activityData.title} onChangeText={(text) => handleChange('title', text)}/>
-                                <InputField label="Soort activiteit*" placeholder="Soort activiteit" value={activityData.category} onChangeText={(text) => handleChange('category', text)}/>
+                                <InputField
+                                    label="Naam activiteit*"
+                                    placeholder="Naam activiteit"
+                                    value={activityData.title}
+                                    onChangeText={(text) => handleChange('title', text)}
+                                />
+
+                                <Text style={styles.label}>Categorie*</Text>
+                                <SelectDropdown
+                                    data={activityCategories}
+                                    onSelect={handleSelectCategory}
+                                    renderButton={renderDropdownButton}
+                                    renderItem={renderDropdownItem}
+                                    showsVerticalScrollIndicator={false}
+                                    dropdownStyle={styles.dropdownMenuStyle}
+                                />                       
                                 
                                 <Text style={styles.label}>Begin*</Text>
                                 <View style={styles.date}>
-                                    <TextInput style={styles.input} placeholder="Datum" value={activityData.start.date} onChangeText={(text) => handleChange('start.date', text)}/>
-                                    <TextInput style={styles.input} placeholder="Tijd" value={activityData.start.time} onChangeText={(text) => handleChange('start.time', text)}/>
+                                    <TextInput 
+                                        style={styles.input}
+                                        placeholder="Datum"                                         
+                                        value={activityData.start.date}
+                                        onChangeText={(text) => handleChange('start.date', text)}
+                                    />
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Tijd"
+                                        value={activityData.start.time}
+                                        onChangeText={(text) => handleChange('start.time', text)}
+                                    />
                                 </View>
                                 <Text style={styles.label}>Einde*</Text>
                                 <View style={styles.date}>
-                                    <TextInput style={styles.input} placeholder="Datum" value={activityData.end.date} onChangeText={(text) => handleChange('end.date', text)}/>
-                                    <TextInput style={styles.input} placeholder="Tijd" value={activityData.end.time} onChangeText={(text) => handleChange('end.time', text)}/>
+                                    <TextInput 
+                                        style={styles.input}
+                                        placeholder="Datum"
+                                        value={activityData.end.date}
+                                        onChangeText={(text) => handleChange('end.date', text)}
+                                    />
+                                    <TextInput
+                                        style={styles.input} 
+                                        placeholder="Tijd" 
+                                        value={activityData.end.time}
+                                        onChangeText={(text) => handleChange('end.time', text)}
+                                    />
                                 </View>
-                                
                             </View>     
                         </View>
                     );
@@ -134,8 +268,17 @@ const AddActivity = ({ navigation, route }) => {
                             <Text style={globalStyles.headerText}>Activiteit toevoegen</Text>
                             <Text style={{ ...globalStyles.bodyText, marginBottom: 5 }}>Details</Text>
                             <View style={styles.inputs}>
-                                <ImageUpload title="een afbeelding" onImageSelect={(url) => handleChange('image', url)} />
-                                <InputField multiline={true} label="Beschrijving*" placeholder="Beschrijving" value={activityData.description} onChangeText={(text) => handleChange('description', text)}/>
+                                <ImageUpload
+                                    title="een afbeelding"
+                                    onImageSelected={handleImageSelected}
+                                />
+                                <InputField
+                                    multiline={true}
+                                    label="Beschrijving*"
+                                    placeholder="Beschrijving"
+                                    value={activityData.description}
+                                    onChangeText={(text) => handleChange('description', text)}
+                                />
                             </View>     
                         </View>
                     );
@@ -151,11 +294,41 @@ const AddActivity = ({ navigation, route }) => {
                             {/* formulier */}
                             <Text style={globalStyles.headerText}>Activiteit toevoegen</Text>
                             <Text style={{ ...globalStyles.bodyText, marginBottom: 15 }}>Overzicht</Text>
-                            <View>
-                                <Text style={globalStyles.bodyText}>Afbeelding van de activiteit</Text>
-                                <Text style={styles.label}>Naam activiteit</Text>
-                                <Text style={globalStyles.bodyText}>Datum en tijd</Text>
-                                <Text style={styles.label}>Beschrijving</Text>
+                            <View style={{marginBottom: 25}}>
+                                {isLoadingImage ? (
+                                    <Text style={globalStyles.bodyText}>Afbeelding wordt geladen ...</Text>
+                                ) : selectedImage ? (
+                                    <Image
+                                        source={{ uri: selectedImage }}
+                                        style={{ width: '100%', height: 160, marginBottom: 10, borderRadius: 10}}
+                                    />
+                                ) : (
+                                    <Text style={globalStyles.bodyText}>Geen afbeelding geselecteerd</Text>
+                                )}
+
+                                {/* Naam en categorie */}
+                                <Text style={{...globalStyles.headerTextSmall, ...globalStyles.capitalize, marginBottom: 10}}>{activityData.category}: {activityData.title}</Text>
+
+                                <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10, marginTop: 10, gap: 10}}>
+                                    {/* Datum en tijd */}
+                                    <View style={{flexDirection: 'row', marginBottom: 10, gap: 10}}>
+                                        <Image source={require('../../../assets/icons/date-black.png')} style={{width: 20, height: 22}} />
+                                        <Text style={globalStyles.bodyText}>
+                                            {activityData.start.date}
+                                        </Text>
+                                    </View>
+
+                                    <View style={{flexDirection: 'row', marginBottom: 10, gap: 10}}>
+                                        <Image source={require('../../../assets/icons/clock-black.png')} style={{width: 20, height: 20}} />
+                                        <Text style={globalStyles.bodyText}>
+                                            {activityData.start.time} - {activityData.end.time}
+                                        </Text>
+                                    </View>
+                                </View>
+
+                                {/* Beschrijving */}
+                                <Text style={globalStyles.headerTextSmaller}>Beschrijving</Text>
+                                <Text style={globalStyles.bodyText}>{activityData.description}</Text>
                             </View>     
                         </View>
                     );
@@ -268,11 +441,48 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginTop: 15,
     },
-    checkBoxContainer: {
-        padding: 15,
-        marginLeft: 0,
-        flex: 1,
+    dropdownButtonStyle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: COLORS.white,
+        borderWidth: 1,
+        borderColor: COLORS.veryLightOffBlack,
         borderRadius: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 18,
+    },
+    dropdownButtonTxtStyle: {
+        flex: 1,
+        fontSize: 16,
+        color: COLORS.offBlack,
+        textTransform: 'capitalize',
+    },
+    dropdownButtonArrowStyle: {
+        width: 20,
+        height: 20,
+        tintColor: COLORS.offBlack,
+        marginRight: 10,
+    },
+    dropdownItemStyle: {
+        alignItems: 'center',
+        backgroundColor: COLORS.white,
+        padding: 18,
+        borderBottomWidth: 1,
+        borderBottomColor: COLORS.veryLightOffBlack,
+    },
+    dropdownItemTxtStyle: {
+        fontSize: 16,
+        color: COLORS.offBlack,
+        textTransform: 'capitalize',
+    },
+    dropdownMenuStyle: {
+        marginTop: 2,
+        backgroundColor: COLORS.white,
+        borderWidth: 1,
+        borderColor: COLORS.veryLightOffBlack,
+        borderRadius: 10,
+        width: '90%',
+        maxHeight: 200,
     },
 });
 
