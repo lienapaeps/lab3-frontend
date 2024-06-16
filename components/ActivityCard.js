@@ -14,6 +14,7 @@ const AcitvityCard = ({ activityData, onPress }) => {
     const date = new Date(activityData.start.date);
     const options = { day: '2-digit', month: 'long'};
     const formattedDate = date.toLocaleDateString('nl-NL', options); // 06 juni
+    const shortenedDate = formattedDate.replace(/(\d{2}) (\w{3})\w+/, '$1 $2'); // "06 jun"
 
     useEffect(() => {
         const fetchFarmDataById = async (id) => {
@@ -71,7 +72,7 @@ const AcitvityCard = ({ activityData, onPress }) => {
                     <Text style={{...globalStyles.headerTextSmaller, fontSize: 18}}>{activityData.title}</Text>
                 </View>
                 <View style={styles.cardDate}>
-                    <Text style={{...globalStyles.headerTextSmaller, color: COLORS.offBlack}}>{formattedDate}</Text>
+                    <Text style={{...globalStyles.headerTextSmaller, color: COLORS.offBlack}}>{shortenedDate}</Text>
                 </View>
                 <View style={{...styles.cardType, backgroundColor: background}}>
                     <Text style={{...globalStyles.headerTextSmaller, color: COLORS.offWhite }}>{activityData.category}</Text>
