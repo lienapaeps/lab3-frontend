@@ -167,7 +167,7 @@ const HomeFarmer = ({ navigation }) => {
                         </View>
                     )}
                     <View>
-                        <Text style={globalStyles.headerText}>Overzicht</Text>
+                        <Text style={globalStyles.headerTextSmall}>Overzicht</Text>
                         <View style={styles.flexDirection}>
                             <View style={styles.card}>
                                 <Image style={styles.icon} source={require('../../assets/icons/WinkelmandFarmer.png')} />
@@ -211,7 +211,7 @@ const HomeFarmer = ({ navigation }) => {
                         </View>
 
                         <View>
-                            <Text style={[globalStyles.headerText, styles.activityTitle]}>Geplande evenementen</Text>
+                            <Text style={[globalStyles.headerTextSmall, styles.activityTitle]}>Geplande evenementen</Text>
                             {activityData && activityData.data && activityData.data.activities && activityData.data.activities.length > 0 ? (
                                 <FlatList 
                                     data={activityData.data.activities ?? []}
@@ -229,7 +229,7 @@ const HomeFarmer = ({ navigation }) => {
                                     <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')} />
                                     <Text style={{ ...globalStyles.bodyText, ...styles.emptyText }}>Je hebt nog geen evenementen aangemaakt, maak een evenement aan.</Text>
                                     <TouchableOpacity style={styles.button} onPress={goToActivity}>
-                                        <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
+                                        <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Activiteit toevoegen</Text>
                                     </TouchableOpacity>
                                 </View>
                             )}
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
         gap: 15,
     },
     activityTitle: {
-        marginTop: 30,
+        marginTop: 20,
     },
     notification: {
         backgroundColor: COLORS.white,
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
         elevation: 2,
         flex: 1,
         padding: 15,
-        marginTop: 20,
+        marginTop: 10,
     },
     flexDirection: {
         flexDirection: 'row',
