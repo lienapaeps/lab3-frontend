@@ -4,32 +4,52 @@ import { globalStyles } from '../../../../styles/global';
 import COLORS from '../../../../constants/color';
 
 const Language = ({ navigation, route }) => {
-    const [selectedLanguage, setSelectedLanguage] = useState('Nederlands');
+    const [showMessage, setShowMessage] = useState(false);
 
-    const languageOptions = ['Nederlands', 'Français', 'English', 'Deutsch'];
-
-    const handleLanguageSelection = (language) => {
-        setSelectedLanguage(language);
-    }
+    const handleInfoIconClick = () => {
+        setShowMessage(true);
+        setTimeout(() => {
+            setShowMessage(false);
+        }, 4000);
+    };
 
     return (
         <SafeAreaView style={globalStyles.container}>
             <View style={styles.header}>
                 <Text style={globalStyles.headerText}>Taal</Text>
             </View>
-            {languageOptions.map((language, index) => (
-                <TouchableOpacity
-                    key={index}
-                    style={[styles.languageOption, selectedLanguage === language && styles.selectedLanguageOption]}
-                    onPress={() => handleLanguageSelection(language)}
-                >
-                    <Text style={globalStyles.bodyTextSemiBold}>{language}</Text>
-                    {selectedLanguage === language && <Image style={styles.notificationImage} source={require('../../../../assets/arrow-down.png')} />}
-                </TouchableOpacity>
-            ))}
+            <View style={styles.content}>
+                <View style={styles.selectedLanguageOption}>
+                    <Text style={{...globalStyles.headerTextSmallerMedium, color: COLORS.offBlack}}>Nederlands</Text>
+                    <Image style={styles.notificationImage} source={require('../../../../assets/arrow-down.png')} />
+                </View>
+                <View style={styles.languageOption}>
+                    <Text style={{...globalStyles.headerTextSmallerMedium, color: COLORS.lightOffBlack}} >Français</Text>
+                    <TouchableOpacity onPress={handleInfoIconClick}>
+                        <Image style={styles.notificationImage} source={require('../../../../assets/InformationIcon.png')} />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.languageOption}>
+                    <Text style={{...globalStyles.headerTextSmallerMedium, color: COLORS.lightOffBlack}} >English</Text>
+                    <TouchableOpacity onPress={handleInfoIconClick}>
+                        <Image style={styles.notificationImage} source={require('../../../../assets/InformationIcon.png')} />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.languageOption}>
+                    <Text style={{...globalStyles.headerTextSmallerMedium, color: COLORS.lightOffBlack}} >Deutsch</Text>
+                    <TouchableOpacity onPress={handleInfoIconClick}>
+                        <Image style={styles.notificationImage} source={require('../../../../assets/InformationIcon.png')} />
+                    </TouchableOpacity>
+                </View>
+                {showMessage && (
+                    <View style={styles.languageOption}>
+                        <Text style={globalStyles.bodyTextRegular} >De keuze voor volgende taal optie is spijtig genoeg niet beschikbaar in de huidige versie van de app. Onze excuses voor het ongemak. </Text>
+                    </View>
+                )}
+            </View>
         </SafeAreaView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     header: {
@@ -38,21 +58,34 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
     },
     languageOption: {
+ 
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingVertical: 10,
         paddingHorizontal: 20,
         marginBottom: 10,
         borderRadius: 5,
+        alignContent: 'center',
+        alignItems: 'center',
+        //content aligns to center
     },
     selectedLanguageOption: {
-        backgroundColor: COLORS.lightGreen,
+      
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        marginBottom: 10,
+        borderRadius: 5,
+        alignContent: 'center',
+        alignItems: 'center',
     },
     notificationImage: {
-        width: 25,
-        height: 25,
-        padding: 5,
-       
+
+        width: 20,
+        height: 20,
+
+
     },
 });
 
