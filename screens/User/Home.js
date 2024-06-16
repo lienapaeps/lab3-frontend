@@ -318,7 +318,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     calendarBlock: {
-        //responsive 
         width: 44,
         height: 60,
         borderRadius: 4,

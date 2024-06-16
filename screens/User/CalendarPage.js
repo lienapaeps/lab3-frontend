@@ -4,12 +4,16 @@ import { globalStyles } from '../../styles/global';
 import COLORS from '../../constants/color';
 
 import AgendaCard from '../../components/AgendaCard';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const CalendarPage = ({ navigation, route }) => {
   const activitiesData = route.params.activitiesData;
   //get current month and year
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  //slected day is set to current day
+  const [selectedDay, setSelectedDay] = useState(new Date().getDate());
+
 
   const today = new Date();
 
@@ -64,6 +68,28 @@ const CalendarPage = ({ navigation, route }) => {
     
 };
 
+//_______________________________________________________________________________________
+const handleDayPress = (day) => {
+  if (day !== null) {
+    setSelectedDay(day);
+  }
+};
+
+
+
+
+const filterdActivities = activitiesData.filter(activity => {
+  const activityDate = new Date(activity.start.date);
+  return activityDate.getDate() === selectedDay && activityDate.getMonth() + 1 === currentMonth && activityDate.getFullYear() === currentYear;
+});
+
+const remainingActivities = activitiesData.filter(activity => {
+  const activityDate = new Date(activity.start.date);
+  return activityDate.getDate() !== selectedDay || activityDate.getMonth() + 1 !== currentMonth || activityDate.getFullYear() !== currentYear;
+});
+
+//_______________________________________________________________________________________
+
 
   return (
     <SafeAreaView style={globalStyles.container}>
@@ -93,18 +119,22 @@ const CalendarPage = ({ navigation, route }) => {
           {/* Render days */}
           <View style={styles.week}>
             {combinedArray.map((day, index) => (
-              <View key={index} style={[
+              
+              <TouchableOpacity key={index} style={[
                 styles.calendarBlock,
-                day === today.getDate() && currentMonth === today.getMonth() + 1 && currentYear === today.getFullYear() && { backgroundColor: COLORS.orange }
-              ]}>
+                day === today.getDate() && currentMonth === today.getMonth() + 1 && currentYear === today.getFullYear() && { backgroundColor: COLORS.green },
+                day === selectedDay && { backgroundColor: COLORS.orange },
+                day === null && { backgroundColor: Colors.transparent}
+              ]} onPress={() => handleDayPress(day)}>
                 <Text style={[
                 globalStyles.headerTextMedium,
-                day === today.getDate() && currentMonth === today.getMonth() + 1 && currentYear === today.getFullYear() && { color: COLORS.white }
+                day === today.getDate() && currentMonth === today.getMonth() + 1 && currentYear === today.getFullYear() && { color: COLORS.white },
+                day === selectedDay && { color: COLORS.white },
               ]}>
                   {day}</Text>
                   {renderDot(day)}
                   
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
 
@@ -115,15 +145,28 @@ const CalendarPage = ({ navigation, route }) => {
       </View>
       {/* Activiteiten weergave */}
       {activitiesData && activitiesData.length > 0 ? (
-                // Er zijn activiteiten in de kalender
+                // Show activities for selcted day first
                 <View>
                     <FlatList
                         style={styles.flow}
                         showsVerticalScrollIndicator={false}
-                        data={activitiesData}
+                        data={filterdActivities}
                         keyExtractor={(item) => item._id}
                         renderItem={({ item }) => <AgendaCard activity={item} />}
                     />
+                    {/* Show remaining activities */}
+                    {remainingActivities.length > 0 && (
+                        <View>
+                            <Text style={globalStyles.headerTextSmallerRegular}>Overige activiteiten</Text>
+                            <FlatList
+                                style={styles.flow}
+                                showsVerticalScrollIndicator={false}
+                                data={remainingActivities}
+                                keyExtractor={(item) => item._id}
+                                renderItem={({ item }) => <AgendaCard activity={item} />}
+                            />
+                        </View>
+                    )}
                 </View>
             ) : (
                 // Er zijn geen activiteiten in de kalender
@@ -212,8 +255,20 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: COLORS.offBlack,
     position: 'absolute',
-    bottom: -5,
-    
+    bottom: -5,  
+},
+packageEmpty: {
+  paddingVertical: 40,
+  marginHorizontal: 20,
+  marginBottom: 20,
+  alignItems: 'center',
+},
+calendarEmpty: {
+  paddingVertical: 20,
+  marginHorizontal: 20,
+  marginBottom: 20,
+  marginTop: 20,
+  alignItems: 'center',
 },
 
 });
