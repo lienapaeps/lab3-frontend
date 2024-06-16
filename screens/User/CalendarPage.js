@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, Image, StyleSheet, TouchableOpacity, SafeAreaView, Button, TextInput, FlatList } from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity, SafeAreaView, Button, TextInput, FlatList, ScrollView } from 'react-native'
 import { globalStyles } from '../../styles/global';
 import COLORS from '../../constants/color';
 
@@ -181,11 +181,11 @@ const CalendarPage = ({ navigation, route }) => {
           <TouchableOpacity style={styles.button} onPress={handlePreviousMonth}>
             <Image style={styles.icon} source={require('../../assets/Back-arrow.png')} />
           </TouchableOpacity>
-          <Text style={styles.calendarText}>{currentMonthName}</Text>
+          <Text style={[styles.calendarText, globalStyles.bodyTextBold, globalStyles.capitalize]}>{currentMonthName}</Text>
           <TouchableOpacity style={styles.button} onPress={handleNextMonth}>
             <Image style={styles.icon} source={require('../../assets/arrow-right.png')} />
           </TouchableOpacity>
-          <Text style={styles.calendarYear}>{currentYearName}</Text>
+          <Text style={[styles.calendarYear, globalStyles.bodyTextBold ]}>{currentYearName}</Text>
         </View>
         <View style={styles.calendar}>
           {/* Render weekdays */}
@@ -218,12 +218,17 @@ const CalendarPage = ({ navigation, route }) => {
             ))}
           </View>
         </View>
-        <Text style={globalStyles.headerTextSmallerRegular}>Activiteiten op deze dag</Text>
+        <View style={styles.lineDirection}>
+          <View style={styles.line}></View>
+        <Text style={[globalStyles.headerTextSmallerRegular, styles.activityTitle]}>Activiteiten op deze dag</Text>
+        <View style={styles.line}></View>
+        </View>
 
       </View>
       {/* Activiteiten weergave */}
       {activitiesData && activitiesData.length > 0 ? (
         // Show activities for selected day first
+        
         <View>
           {filterdActivities.length > 0 ? (
             <View style={styles.selectedDay}>
@@ -237,14 +242,18 @@ const CalendarPage = ({ navigation, route }) => {
             </View>
           ) : (
             <View style={styles.selectedDay}>
-              <Text style={globalStyles.bodyText}>Geen activiteiten op deze dag.</Text>
+              <Text style={[globalStyles.bodyText, styles.emptyState]}>Geen activiteiten op deze dag 💤</Text>
             </View>
           )}
 
           {/* Show remaining activities */}
           {remainingActivities.length > 0 && (
             <View>
-              <Text style={globalStyles.headerTextSmallerRegular}>Aankomende Activiteiten</Text>
+              <View style={styles.lineDirection}>
+                <View style={styles.line}></View>
+                <Text style={[globalStyles.headerTextSmallerRegular, styles.activityTitle]}>Aankomende activiteiten</Text>
+                <View style={styles.line}></View>
+              </View>
               <FlatList
                 style={styles.flow}
                 showsVerticalScrollIndicator={false}
@@ -266,7 +275,6 @@ const CalendarPage = ({ navigation, route }) => {
         </View>
       )
       }
-
     </SafeAreaView>
   )
 };
@@ -280,6 +288,21 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: 'column',
     justifyContent: 'center',
+  },
+  lineDirection: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  emptyState: {
+    marginTop: 30,
+  },
+  line: {
+    borderBottomWidth: 2,
+    borderBottomColor: COLORS.lightOffBlack,
+    width: 60,
+    marginHorizontal: 30,
   },
   week: {
     flexDirection: 'row',
@@ -336,8 +359,12 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
   },
+  iconImage: {
+    width: 20,
+    height: 22,
+    marginBottom: 20,
+  },
   calendarText: {
-
     fontWeight: 'medium',
     width: 100,
     textAlign: 'center',
@@ -366,14 +393,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   selectedDay: {
-
-    paddingBottom: 5,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightOrange,
+    paddingBottom: 25,
     marginBottom: 20,
-
-  },
-
+    alignItems: 'center',
+  }
 });
 
 export default CalendarPage;

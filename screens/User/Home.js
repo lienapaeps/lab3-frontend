@@ -10,6 +10,7 @@ import { globalStyles } from '../../styles/global';
 import AgendaCard from '../../components/AgendaCard';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import CalendarPage from './CalendarPage';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const HomeUser = ({ navigation, route }) => {
     const [userData, setUserData] = useState(null);
@@ -139,9 +140,10 @@ const renderDot = (day) => {
     }
     
 };
-    return (
-        <SafeAreaView style={globalStyles.container}>
-            {/* Header met profielfoto en meldingsbel */}
+return (
+    <SafeAreaView style={globalStyles.container}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+            {/* Header Section */}
             {userData && (
                 <View style={styles.profile}>
                     <TouchableOpacity style={styles.profileBtn} onPress={goToProfile}>
@@ -154,91 +156,77 @@ const renderDot = (day) => {
                 </View>
             )}
 
-            {/* Weergave van huidig pakket */}
+            {/* Package Section */}
             <View>
                 <Text style={globalStyles.headerTextSmall}>Huidig Pakket</Text>
+                {loading ? (
+                    <View style={styles.loadingContainer}>
+                        <ActivityIndicator size="medium" color={COLORS.offBlack} />
+                    </View>
+                ) : (
+                    <View>
+                        {subscriptionData && subscriptionData.package ? (
+                            <TouchableOpacity onPress={() => goToPackageDetails(subscriptionData.package._id, subscriptionData.farm._id, userData._id, subscriptionData.package.name)}>
+                                <View style={styles.packageCard}>
+                                    <Text style={{ ...globalStyles.headerText, ...styles.packageFarm }}>{subscriptionData.farm.name}</Text>
+                                    <Image style={styles.packageImage} source={{ uri: subscriptionData.farm.farmImage }} />
+                                    <View style={styles.overlayImage}></View>
+                                    <View style={styles.packageLabel}>
+                                        <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>{subscriptionData.package.name}</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        ) : (
+                            <View style={styles.packageEmpty}>
+                                <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')} />
+                                <Text style={{ ...globalStyles.bodyText, ...styles.emptyText }}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
+                                <TouchableOpacity style={styles.button} onPress={goToFarm}>
+                                    <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    </View>
+                )}
             </View>
 
-            {/* Laadinidicator */}
-            {loading ? (
-                <View style={styles.loadingContainer}>
-                    <ActivityIndicator size="medium" color={COLORS.offBlack} />
-                </View>
-            ) : (
-                // Pakketweergave
-                <View>
-                    {subscriptionData && subscriptionData.package ? (
-                        // Er is een pakket
-                        <TouchableOpacity onPress={() => goToPackageDetails(subscriptionData.package._id, subscriptionData.farm._id, userData._id, subscriptionData.package.name)}>
-                            <View style={styles.packageCard}>
-                                <Text style={{ ...globalStyles.headerText, ...styles.packageFarm }}>{subscriptionData.farm.name}</Text>
-                                <Image style={styles.packageImage} source={{ uri: subscriptionData.farm.farmImage }} />
-                                <View style={styles.overlayImage}></View>
-                                <View style={styles.packageLabel}>
-                                    <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>{subscriptionData.package.name}</Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    ) : (
-                        // Er is geen pakket
-                        <View style={styles.packageEmpty}>
-                            <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')} />
-                            <Text style={{ ...globalStyles.bodyText, ...styles.emptyText }}>Je hebt nog geen pakketten, zoek een boerderij om een pakket te vinden.</Text>
-                            <TouchableOpacity style={styles.button} onPress={goToFarm}>
-                                <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek Boerderij</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                </View>
-            )}
-
-            {/* Weergave van kalender */}
+            {/* Calendar Section */}
             <View>
                 <Text style={{ ...globalStyles.headerTextSmall, marginBottom: 10 }}>Kalender</Text>
                 <TouchableOpacity style={styles.calendar} onPress={goToCalendar}>
-
                     {week.map((day, index) => (
-                        <View key={index} style=
-                            {{ ...styles.calendarBlock, backgroundColor: day.getDate() === today.getDate() ? COLORS.orange : COLORS.lightOrange }}>
+                        <View key={index} style={{ ...styles.calendarBlock, backgroundColor: day.getDate() === today.getDate() ? COLORS.orange : COLORS.lightOrange }}>
                             <Text style={[globalStyles.bodyTextSmallUppercased, { color: day.getDate() === today.getDate() ? COLORS.white : COLORS.offBlack }]}>
                                 {day.toLocaleDateString('nl-NL', { weekday: 'short' })}</Text>
                             <Text style={[globalStyles.headerTextMedium, { color: day.getDate() === today.getDate() ? COLORS.white : COLORS.offBlack }]}>
                                 {day.getDate()}</Text>
                             {renderDot(day)}
-
                         </View>
                     ))}
                 </TouchableOpacity>
             </View>
 
-            {/* Activiteiten weergave */}
+            {/* Agenda Section */}
             {activitiesData && activitiesData.length > 0 ? (
-
- 
-                    // Er zijn activiteiten in de kalender
-                    <View>
-                        <FlatList
-                            style={styles.flow}
-                            showsVerticalScrollIndicator={false}
-                            data={activitiesData}
-                            keyExtractor={(item) => item._id}
-                            renderItem={({ item }) => <AgendaCard activity={item} showFarmDetails={true} onPress={handleAgendaCardPress} />}
-                        />
-                    </View>
-                ) : (
-                    // Er zijn geen activiteiten in de kalender
-                    <View style={styles.calendarEmpty}>
-                        <Image style={styles.iconImage} source={require('../../assets/icons/date-black.png')}/>
-                        <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je kalender is nog leeg want je hebt geen activiteiten.</Text>
-                        <TouchableOpacity style={styles.button} onPress={goToExplore}>
-                            <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek een activiteit</Text>
-                        </TouchableOpacity>
-                    </View>
-                )
-
-            }
-        </SafeAreaView>
-    );
+                <View style={{ paddingBottom: 20 }}>
+                    <FlatList
+                        data={activitiesData}
+                        keyExtractor={(item) => item._id}
+                        renderItem={({ item }) => <AgendaCard activity={item} showFarmDetails={true} onPress={handleAgendaCardPress} />}
+                        scrollEnabled={false}
+                    />
+                </View>
+            ) : (
+                <View style={styles.calendarEmpty}>
+                    <Image style={styles.iconImage} source={require('../../assets/icons/date-black.png')} />
+                    <Text style={{ ...globalStyles.bodyText, ...styles.emptyText }}>Je kalender is nog leeg want je hebt geen activiteiten.</Text>
+                    <TouchableOpacity style={styles.button} onPress={goToExplore}>
+                        <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek een activiteit</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
+        </ScrollView>
+    </SafeAreaView>
+);
 };
 
 const styles = StyleSheet.create({
