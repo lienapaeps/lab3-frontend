@@ -297,6 +297,7 @@ const styles = StyleSheet.create({
   },
   emptyState: {
     marginTop: 30,
+    textAlign: 'center',
   },
   line: {
     borderBottomWidth: 2,
@@ -370,7 +371,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
   },
-
   dot: {
     width: 10,
     height: 10,
@@ -395,7 +395,6 @@ const styles = StyleSheet.create({
   selectedDay: {
     paddingBottom: 25,
     marginBottom: 20,
-    alignItems: 'center',
   }
 });
 
