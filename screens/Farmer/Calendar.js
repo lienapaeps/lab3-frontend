@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { getUserIdAndToken, fetchFarmDataByOwner, fetchActivityDataFarm } from '../../utils/fetchHelpers';
 
+
 import { globalStyles } from '../../styles/global';
 import AgendaCard from '../../components/AgendaCard';
 import COLORS from '../../constants/color';
@@ -15,13 +16,92 @@ const CalendarFarmer = ({ navigation }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+//kalender blokje
+
+  //get current month and year
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  //slected day is set to current day
+  const [selectedDay, setSelectedDay] = useState(new Date().getDate());
+
+
+  const today = new Date();
+
+  //function to get days in specific month
+  const daysinMonth = (month, year) => new Date(year, month, 0).getDate();
+  console.log(currentMonth, currentYear);
+  const handlePreviousMonth = () => {
+    if (currentMonth === 1) {
+      setCurrentMonth(12);
+      setCurrentYear(prevYear => prevYear - 1);
+    } else {
+      setCurrentMonth(prevMonth => prevMonth - 1);
+    }
+  };
+
+  const handleNextMonth = () => {
+    if (currentMonth === 12) {
+      setCurrentMonth(1);
+      setCurrentYear(prevYear => prevYear + 1);
+    } else {
+      setCurrentMonth(prevMonth => prevMonth + 1);
+    }
+  };
+
+  const totalDays = daysinMonth(currentMonth, currentYear);
+  const daysArray = Array.from({ length: totalDays }, (_, i) => i + 1);
+
+  const firstDay = new Date(currentYear, currentMonth - 1, 0).getDay();
+  const emptyBlocks = Array(firstDay).fill(null);
+
+  const lastDay = new Date(currentYear, currentMonth, 0).getDate();
+  const lastDayIndex = new Date(currentYear, currentMonth - 1, lastDay - 1).getDay();
+  const remainingDays = 6 - lastDayIndex;
+  const emptyBlocksEnd = Array(remainingDays).fill(null);
+
+  const combinedArray = [...emptyBlocks, ...daysArray, ...emptyBlocksEnd];
+
+  const weekdays = ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'];
+
+  const currentMonthName = new Intl.DateTimeFormat('nl-NL', { month: 'long' }).format(new Date(currentYear, currentMonth - 1));
+  const currentYearName = new Intl.DateTimeFormat('nl-NL', { year: 'numeric' }).format(new Date(currentYear, currentMonth - 1));
+
+  const handleDayPress = (day) => {
+    if (day !== null) {
+      setSelectedDay(day);
+    }
+  };
+
+  console.log(activityData);
+
+  //check if there are activities and render dot if there is an activity on that day
+    const renderDot = (day) => {
+        if (activityData) {
+            const activities = activityData.filter(activity => {
+                const activityDay = new Date(activity.start.date).getDate();
+                return activityDay === day;
+            }
+            );
+            if (activities.length > 0) {
+                return (
+                    <View style={{ backgroundColor: COLORS.orange, width: 5, height: 5, borderRadius: 50, position: 'absolute', bottom: 0, right: 0 }}></View>
+                );
+            }
+        }
+    };
+
+    
+
+  //kalender blokje
+
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const { token, userId } = await getUserIdAndToken();
 
                 console.log("User ID: ", userId)
-                
+
                 if (!token) {
                     navigation.navigate('Login');
                     return;
@@ -76,7 +156,7 @@ const CalendarFarmer = ({ navigation }) => {
         ];
         const month = monthNames[date.getMonth()];
         const year = date.getFullYear();
-    
+
         return `${dayOfWeek} ${day} ${month} ${year}`;
     };
 
@@ -90,10 +170,54 @@ const CalendarFarmer = ({ navigation }) => {
 
     return (
         <SafeAreaView style={globalStyles.container}>
-            <View>
-                <Text style={{...globalStyles.headerText, textAlign: 'center'}}>Agenda</Text>
+            <View style={styles.header}>
+                <Text style={{ ...globalStyles.headerText, textAlign: 'center' }}>Agenda</Text>
             </View>
-            <View style={styles.calendarContainer}>
+            <View style={styles.content}>
+                <View style={styles.calendarDay}>
+
+                    <TouchableOpacity style={styles.monthButton} onPress={handlePreviousMonth}>
+                        <Image style={styles.icon} source={require('../../assets/Back-arrow.png')} />
+                    </TouchableOpacity>
+                    <Text style={[styles.calendarText, globalStyles.bodyTextBold, globalStyles.capitalize]}>{currentMonthName}</Text>
+                    <TouchableOpacity style={styles.monthButton} onPress={handleNextMonth}>
+                        <Image style={styles.icon} source={require('../../assets/arrow-right.png')} />
+                    </TouchableOpacity>
+                    <Text style={[styles.calendarYear, globalStyles.bodyTextBold]}>{currentYearName}</Text>
+                </View>
+                <View style={styles.calendar}>
+                    {/* Render weekdays */}
+                    <View style={styles.week}>
+                        {weekdays.map((weekday, index) => (
+                            <View key={index} style={styles.weekBlock}>
+                                <Text style={globalStyles.headerTextMedium} >{weekday}</Text>
+                            </View>
+                        ))}
+                    </View>
+                    {/* Render days */}
+                    <View style={styles.week}>
+                        {combinedArray.map((day, index) => (
+
+                            <TouchableOpacity key={index} style={[
+                                styles.calendarBlock,
+                                day === today.getDate() && currentMonth === today.getMonth() + 1 && currentYear === today.getFullYear() && { backgroundColor: COLORS.green },
+                                day === selectedDay && { backgroundColor: COLORS.orange },
+                                day === null && { backgroundColor: COLORS.offWhite }
+                            ]} onPress={() => handleDayPress(day)}>
+                                <Text style={[
+                                    globalStyles.headerTextMedium,
+                                    day === today.getDate() && currentMonth === today.getMonth() + 1 && currentYear === today.getFullYear() && { color: COLORS.white },
+                                    day === selectedDay && { color: COLORS.white },
+                                ]}>
+                                    {day}</Text>
+                                {renderDot(day)}
+                              
+                               
+
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                </View>
             </View>
             <View>
                 <View style={styles.dividerContainer}>
@@ -107,16 +231,16 @@ const CalendarFarmer = ({ navigation }) => {
                     keyExtractor={(item) => item._id}
                     renderItem={({ item }) => (
                         <View>
-                            <Text style={{...globalStyles.bodyTextSemiBold, marginBottom: 10}}>{formatDate(item.start.date)}</Text>
+                            <Text style={{ ...globalStyles.bodyTextSemiBold, marginBottom: 10 }}>{formatDate(item.start.date)}</Text>
                             <AgendaCard activity={item} />
                         </View>
                     )}
                     ListEmptyComponent={
                         <View style={styles.emptyState}>
                             <Image style={styles.iconImage} source={require('../../assets/icons/calendar-create.png')} />
-                            <Text style={{...globalStyles.bodyText, ...styles.emptyText}}>Je hebt nog geen activiteiten toegevoegd.</Text>
+                            <Text style={{ ...globalStyles.bodyText, ...styles.emptyText }}>Je hebt nog geen activiteiten toegevoegd.</Text>
                             <TouchableOpacity style={styles.button} onPress={handleAddActivity}>
-                                <Text style={{...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Activiteit toevoegen</Text>
+                                <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Activiteit toevoegen</Text>
                             </TouchableOpacity>
                         </View>
                     }
@@ -127,6 +251,11 @@ const CalendarFarmer = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
+    header: {
+        alignItems: 'center',
+        marginBottom: 20,
+        paddingBottom: 20,
+      },
     emptyState: {
         marginTop: 20,
         justifyContent: 'center',
@@ -138,10 +267,81 @@ const styles = StyleSheet.create({
         width: 22,
         height: 24,
     },
+    content: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+      },
+      lineDirection: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 10,
+      },
+      line: {
+        borderBottomWidth: 2,
+        borderBottomColor: COLORS.lightOffBlack,
+        width: 60,
+        marginHorizontal: 30,
+      },
+      week: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+    
+      },
+      calendarYear: {
+        fontWeight: 'medium',
+        width: 100,
+        textAlign: 'center',
+        fontSize: 16,
+    
+      },
+      calendar: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignContent: 'center',
+        flexWrap: 'wrap',
+        paddingBottom: 20,
+    
+      },
+      calendarBlock: {
+        width: 40,
+        height: 40,
+        padding: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 5,
+        backgroundColor: COLORS.lightOrange,
+        borderRadius: 5,
+      },
+      weekBlock: {
+        width: 40,
+        height: 40,
+        padding: 5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 5,
+      },
+      calendarDay: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginBottom: 20,
+        alignSelf: 'left',
+      },
     emptyText: {
         marginBottom: 30,
         textAlign: 'center',
     },
+    icon: {
+        width: 20,
+        height: 20,
+      },
+      monthButton: {
+        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
+      },
     button: {
         alignItems: 'center',
         justifyContent: 'center',

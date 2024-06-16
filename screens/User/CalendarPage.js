@@ -8,75 +8,7 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const CalendarPage = ({ navigation, route }) => {
 
-  //______________________________________Actviteiten_______________________________________
-  const activitiesData = route.params.activitiesData
-  //______________________________________Test dummy data_______________________________________
-  /*
-  const activitiesData = [
-    {
-      _id: '4',
-      title: 'Activiteit 2',
-      start: {
-        date: '2024-06-20T10:00:00.000Z',
-      },
-      end: {
-        date: '2024-06-20T10:00:00.000Z',
-      },
-      farm: '4',
-      enrolledUsers: [],
-    },
-    {
-      _id: '5',
-      title: 'Activiteit 3',
-      start: {
-        date: '2024-06-22T14:00:00.000Z',
-      },
-      end: {
-        date: '2024-06-22T16:00:00.000Z',
-      },
-      farm: '5',
-      enrolledUsers: [],
-    },
-    {
-      _id: '6',
-      title: 'Activiteit 4',
-      start: {
-        date: '2024-06-25T09:00:00.000Z',
-      },
-      end: {
-        date: '2024-06-25T12:00:00.000Z',
-      },
-      farm: '6',
-      enrolledUsers: [],
-    },
-    {
-      _id: '7',
-      title: 'Activiteit 5',
-      start: {
-        date: '2024-06-28T16:00:00.000Z',
-      },
-      end: {
-        date: '2024-06-28T18:00:00.000Z',
-      },
-      farm: '7',
-      enrolledUsers: [],
-    },
-    {
-      _id: '8',
-      title: 'Activiteit 6',
-      start: {
-        date: '2024-06-30T11:00:00.000Z',
-      },
-      end: {
-        date: '2024-06-30T13:00:00.000Z',
-      },
-      farm: '8',
-      enrolledUsers: [],
-    },
-  ];
-  */
-  //______________________________________Test dummy data_______________________________________
-
+  const activitiesData = route.params.activitiesData;
   //get current month and year
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
@@ -185,7 +117,7 @@ const CalendarPage = ({ navigation, route }) => {
           <TouchableOpacity style={styles.button} onPress={handleNextMonth}>
             <Image style={styles.icon} source={require('../../assets/arrow-right.png')} />
           </TouchableOpacity>
-          <Text style={[styles.calendarYear, globalStyles.bodyTextBold ]}>{currentYearName}</Text>
+          <Text style={[styles.calendarYear, globalStyles.bodyTextBold]}>{currentYearName}</Text>
         </View>
         <View style={styles.calendar}>
           {/* Render weekdays */}
@@ -220,15 +152,15 @@ const CalendarPage = ({ navigation, route }) => {
         </View>
         <View style={styles.lineDirection}>
           <View style={styles.line}></View>
-        <Text style={[globalStyles.headerTextSmallerRegular, styles.activityTitle]}>Activiteiten op deze dag</Text>
-        <View style={styles.line}></View>
+          <Text style={[globalStyles.headerTextSmallerRegular, styles.activityTitle]}>Activiteiten op deze dag</Text>
+          <View style={styles.line}></View>
         </View>
 
       </View>
       {/* Activiteiten weergave */}
       {activitiesData && activitiesData.length > 0 ? (
         // Show activities for selected day first
-        
+
         <View>
           {filterdActivities.length > 0 ? (
             <View style={styles.selectedDay}>
