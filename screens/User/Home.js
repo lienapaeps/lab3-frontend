@@ -43,7 +43,7 @@ const HomeUser = ({ navigation, route }) => {
 
     //navigations
     function goToCalendar() {
-        navigation.navigate('AppStack', { screen: 'Calendar' , params: { activitiesData, userData, subscriptionData}});
+        navigation.navigate('AppStack', { screen: 'Calendar' , params: { activitiesData }});
     }
 
     const goToFarm = () => {

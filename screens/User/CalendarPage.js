@@ -7,7 +7,8 @@ import AgendaCard from '../../components/AgendaCard';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const CalendarPage = ({ navigation, route }) => {
-  const activitiesData = route.params.activitiesData;
+  const activitiesData = route.params.activitiesData
+
   //get current month and year
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
@@ -54,41 +55,51 @@ const CalendarPage = ({ navigation, route }) => {
   const weekdays = ['Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo'];
 
   const currentMonthName = new Intl.DateTimeFormat('nl-NL', { month: 'long' }).format(new Date(currentYear, currentMonth - 1));
+  const currentYearName = new Intl.DateTimeFormat('nl-NL', { year: 'numeric' }).format(new Date(currentYear, currentMonth - 1));
 
   const renderDot = (day) => {
     const isActivityDay = activitiesData.some(activity => {
-        const activityDate = new Date(activity.start.date);
-        return activityDate.getDate() === day && activityDate.getMonth() + 1 === currentMonth && activityDate.getFullYear() === currentYear;
+      const activityDate = new Date(activity.start.date);
+      return activityDate.getDate() === day && activityDate.getMonth() + 1 === currentMonth && activityDate.getFullYear() === currentYear;
     });
     if (isActivityDay) {
-        return <View style={styles.dot} />;
+      return <View style={styles.dot} />;
     } else {
-        return null;
+      return null;
     }
-    
+
+  };
+
+  //_______________________________________________________________________________________
+
+  const handleDayPress = (day) => {
+    if (day !== null) {
+      setSelectedDay(day);
+    }
+  };
+
+  const goToExplore = () => {
+    navigation.navigate('App', { screen: 'Explore' });
+  };
+
+ 
+  const handleAgendaCardPress = (activityId, farmName) => {
+    navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmName } });
 };
 
-//_______________________________________________________________________________________
-const handleDayPress = (day) => {
-  if (day !== null) {
-    setSelectedDay(day);
-  }
-};
 
 
+  const filterdActivities = activitiesData.filter(activity => {
+    const activityDate = new Date(activity.start.date);
+    return activityDate.getDate() === selectedDay && activityDate.getMonth() + 1 === currentMonth && activityDate.getFullYear() === currentYear;
+  });
 
+  const remainingActivities = activitiesData.filter(activity => {
+    const activityDate = new Date(activity.start.date);
+    return activityDate.getDate() !== selectedDay || activityDate.getMonth() + 1 !== currentMonth || activityDate.getFullYear() !== currentYear;
+  });
 
-const filterdActivities = activitiesData.filter(activity => {
-  const activityDate = new Date(activity.start.date);
-  return activityDate.getDate() === selectedDay && activityDate.getMonth() + 1 === currentMonth && activityDate.getFullYear() === currentYear;
-});
-
-const remainingActivities = activitiesData.filter(activity => {
-  const activityDate = new Date(activity.start.date);
-  return activityDate.getDate() !== selectedDay || activityDate.getMonth() + 1 !== currentMonth || activityDate.getFullYear() !== currentYear;
-});
-
-//_______________________________________________________________________________________
+  //_______________________________________________________________________________________
 
 
   return (
@@ -106,6 +117,7 @@ const remainingActivities = activitiesData.filter(activity => {
           <TouchableOpacity style={styles.button} onPress={handleNextMonth}>
             <Image style={styles.icon} source={require('../../assets/arrow-right.png')} />
           </TouchableOpacity>
+          <Text style={styles.calendarYear}>{currentYearName}</Text>
         </View>
         <View style={styles.calendar}>
           {/* Render weekdays */}
@@ -119,66 +131,64 @@ const remainingActivities = activitiesData.filter(activity => {
           {/* Render days */}
           <View style={styles.week}>
             {combinedArray.map((day, index) => (
-              
+
               <TouchableOpacity key={index} style={[
                 styles.calendarBlock,
                 day === today.getDate() && currentMonth === today.getMonth() + 1 && currentYear === today.getFullYear() && { backgroundColor: COLORS.green },
                 day === selectedDay && { backgroundColor: COLORS.orange },
-                day === null && { backgroundColor: Colors.transparent}
+                day === null && { backgroundColor: Colors.transparent }
               ]} onPress={() => handleDayPress(day)}>
                 <Text style={[
-                globalStyles.headerTextMedium,
-                day === today.getDate() && currentMonth === today.getMonth() + 1 && currentYear === today.getFullYear() && { color: COLORS.white },
-                day === selectedDay && { color: COLORS.white },
-              ]}>
+                  globalStyles.headerTextMedium,
+                  day === today.getDate() && currentMonth === today.getMonth() + 1 && currentYear === today.getFullYear() && { color: COLORS.white },
+                  day === selectedDay && { color: COLORS.white },
+                ]}>
                   {day}</Text>
-                  {renderDot(day)}
-                  
+                {renderDot(day)}
+
               </TouchableOpacity>
             ))}
           </View>
-
         </View>
-
         <Text style={globalStyles.headerTextSmallerRegular}>Aankomende activiteiten</Text>
 
       </View>
       {/* Activiteiten weergave */}
       {activitiesData && activitiesData.length > 0 ? (
-                // Show activities for selcted day first
-                <View>
-                    <FlatList
-                        style={styles.flow}
-                        showsVerticalScrollIndicator={false}
-                        data={filterdActivities}
-                        keyExtractor={(item) => item._id}
-                        renderItem={({ item }) => <AgendaCard activity={item} />}
-                    />
-                    {/* Show remaining activities */}
-                    {remainingActivities.length > 0 && (
-                        <View>
-                            <Text style={globalStyles.headerTextSmallerRegular}>Overige activiteiten</Text>
-                            <FlatList
-                                style={styles.flow}
-                                showsVerticalScrollIndicator={false}
-                                data={remainingActivities}
-                                keyExtractor={(item) => item._id}
-                                renderItem={({ item }) => <AgendaCard activity={item} />}
-                            />
-                        </View>
-                    )}
-                </View>
-            ) : (
-                // Er zijn geen activiteiten in de kalender
-                <View style={styles.calendarEmpty}>
-                    <Image style={styles.iconImage} source={require('../../assets/icons/date-black.png')} />
-                    <Text style={{ ...globalStyles.bodyText, ...styles.emptyText }}>Je kalender is nog leeg want je hebt geen activiteiten.</Text>
-                    <TouchableOpacity style={styles.button}>
-                        <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek een activiteit</Text>
-                    </TouchableOpacity>
-                </View>
-            )
-            }
+        // Show activities for selcted day first
+        <View>
+          <FlatList
+            style={styles.flow}
+            showsVerticalScrollIndicator={false}
+            data={filterdActivities}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => <AgendaCard activity={item} showFarmDetails={true} onPress={handleAgendaCardPress} />}
+          />
+          {/* Show remaining activities */}
+          {remainingActivities.length > 0 && (
+            <View>
+              <Text style={globalStyles.headerTextSmallerRegular}>Overige activiteiten</Text>
+              <FlatList
+                style={styles.flow}
+                showsVerticalScrollIndicator={false}
+                data={remainingActivities}
+                keyExtractor={(item) => item._id}
+                renderItem={({ item }) => <AgendaCard activity={item} showFarmDetails={true} onPress={handleAgendaCardPress} />}
+              />
+            </View>
+          )}
+        </View>
+      ) : (
+        // Er zijn geen activiteiten in de kalender
+        <View style={styles.calendarEmpty}>
+          <Image style={styles.iconImage} source={require('../../assets/icons/date-black.png')} />
+          <Text style={{ ...globalStyles.bodyText, ...styles.emptyText }}>Je kalender is nog leeg want je hebt geen activiteiten.</Text>
+          <TouchableOpacity style={styles.button} onPress={goToExplore}>
+            <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Zoek een activiteit</Text>
+          </TouchableOpacity>
+        </View>
+      )
+      }
 
     </SafeAreaView>
   )
@@ -201,13 +211,20 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
 
   },
+  calendarYear: {
+    fontWeight: 'medium',
+    width: 100,
+    textAlign: 'center',
+    fontSize: 16,
+  
+  },
   calendar: {
     flexDirection: 'column',
     justifyContent: 'center',
     alignContent: 'center',
     flexWrap: 'wrap',
     paddingBottom: 20,
- 
+
   },
   calendarBlock: {
     width: 40,
@@ -243,7 +260,7 @@ const styles = StyleSheet.create({
     height: 20,
   },
   calendarText: {
-   
+
     fontWeight: 'medium',
     width: 100,
     textAlign: 'center',
@@ -255,21 +272,21 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: COLORS.offBlack,
     position: 'absolute',
-    bottom: -5,  
-},
-packageEmpty: {
-  paddingVertical: 40,
-  marginHorizontal: 20,
-  marginBottom: 20,
-  alignItems: 'center',
-},
-calendarEmpty: {
-  paddingVertical: 20,
-  marginHorizontal: 20,
-  marginBottom: 20,
-  marginTop: 20,
-  alignItems: 'center',
-},
+    bottom: -5,
+  },
+  packageEmpty: {
+    paddingVertical: 40,
+    marginHorizontal: 20,
+    marginBottom: 20,
+    alignItems: 'center',
+  },
+  calendarEmpty: {
+    paddingVertical: 20,
+    marginHorizontal: 20,
+    marginBottom: 20,
+    marginTop: 20,
+    alignItems: 'center',
+  },
 
 });
 
