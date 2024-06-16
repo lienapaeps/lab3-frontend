@@ -20,12 +20,15 @@ const HomeUser = ({ navigation, route }) => {
     const [activitiesData, setActivitiesData] = useState(null);
 
     //------------------------------------------------
+
     // Get the current date
     const today = new Date();
     const currentDay = today.getDay();
     // Calculate the start and end of the current week
     const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - currentDay + 1);
+    //startOfWeek.setDate(today.getDate() - currentDay + 1);
+    //start of the week is always monday
+    startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + (startOfWeek.getDay() === 0 ? -6 : 1));
     const endOfWeek = new Date(today);
     endOfWeek.setDate(today.getDate() + (7 - currentDay));
 
@@ -36,10 +39,11 @@ const HomeUser = ({ navigation, route }) => {
         return day;
     });
     //------------------------------------------------
+  
 
     //navigations
     function goToCalendar() {
-        navigation.navigate('AppStack', { screen: 'Calendar' , params: { activitiesData, userData, subscriptionData}});
+        navigation.navigate('AppStack', { screen: 'Calendar' , params: { activitiesData }});
     }
 
     const goToFarm = () => {
@@ -314,7 +318,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     calendarBlock: {
-        //responsive 
         width: 44,
         height: 60,
         borderRadius: 4,
