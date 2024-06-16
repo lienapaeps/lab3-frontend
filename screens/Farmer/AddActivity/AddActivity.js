@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform, SafeAreaView, Image, TextInput, KeyboardAvoidingView, ScrollView, ActivityIndicator } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown'
+import DateTimePicker from 'react-native-modal-datetime-picker';
+import { format } from 'date-fns';
 
 import { uploadToCloudinary } from '../../../utils/uploadHelpers';
 
@@ -20,19 +22,52 @@ const AddActivity = ({ navigation, route }) => {
     const activityCategories = ['workshop'];
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedImageUri, setSelectedImageUri] = useState(null);
-    const [selectedImage, setSelectedImage] = useState(null);
     const [isLoadingImage, setIsLoadingImage] = useState(false);
+
+    const [isDateTimePickerVisible, setIsDateTimePickerVisible] = useState(false);
+    const [fields, setFields] = useState({
+        start: null,
+        end: null,
+    });
+
+    const [selectedField, setSelectedField] = useState(null);
+
+    const handlePickDateTime = (field) => {
+        setIsDateTimePickerVisible(true);
+        setSelectedField(field); 
+    };
+
+    const handleDateTimePicked = (date) => {
+        const formattedDate = format(date, 'dd-MM-yyyy');
+        const formattedTime = format(date, 'HH:mm');
+    
+        const updatedStart = selectedField === 'start' ? { date: formattedDate, time: formattedTime } : { ...activityData.start };
+        const updatedEnd = selectedField === 'end' ? { date: formattedDate, time: formattedTime } : { ...activityData.end };
+    
+        setActivityData(prevData => ({
+            ...prevData,
+            start: updatedStart,
+            end: updatedEnd,
+        }));
+    
+        setFields(prevFields => ({
+            ...prevFields,
+            [selectedField]: date,
+        }));
+    
+        setIsDateTimePickerVisible(false);
+    };
 
     const [activityData, setActivityData] = useState({
         title: '',
         category: '',
         start: {
             date: '',
-            time: ''
+            time: '',
         },
         end: {
             date: '',
-            time: ''
+            time: '',
         },
         description: '',
         image: '',
@@ -74,16 +109,14 @@ const AddActivity = ({ navigation, route }) => {
         setIsLoadingImage(true);
         try {
             const imageUrl = await uploadToCloudinary(uri); 
-            setSelectedImage(imageUrl);
+            setSelectedImageUri(imageUrl);
+            console.log('Image URL:', imageUrl); // Voeg deze regel toe voor debuggen
             setIsLoadingImage(false);
         } catch (error) {
             console.error('Error uploading image to Cloudinary:', error);
             setErrorMessage('Er is iets misgegaan bij het uploaden van de afbeelding.');
+            setIsLoadingImage(false);
         }
-    };
-
-    const formatTime = (time) => {
-        return `${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}`;
     };
 
     const nextStep = async () => {
@@ -134,45 +167,40 @@ const AddActivity = ({ navigation, route }) => {
         setIsProcessing(true);
         try {
 
-            const formattedStartTime = formatTime(activityData.start.time);
-            const formattedEndTime = formatTime(activityData.end.time);
-            
             const formattedData = {
                 ...activityData,
+                image: selectedImageUri,
                 start: {
-                    ...activityData.start,
-                    time: formattedStartTime
+                    date: new Date(activityData.start.date), // Zorg ervoor dat dit een Date object is
+                    time: activityData.start.time
                 },
                 end: {
-                    ...activityData.end,
-                    time: formattedEndTime
+                    date: new Date(activityData.end.date), // Zorg ervoor dat dit een Date object is
+                    time: activityData.end.time
                 }
             };
 
-            const imageUrl = await uploadToCloudinary(selectedImageUri);
-
-            formattedData.image = imageUrl;
-
             console.log('Submitting form with data:', formattedData);
 
-            // const responser = await fetch('https://lab3-backend-w1yl.onrender.com/api/activities/', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify(formattedData),
-            // });
+            const response = await fetch('https://lab3-backend-w1yl.onrender.com/api/activities', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formattedData),
+            });
 
-            // const json = await responser.json();
+            const json = await response.json();
 
-            // if (json.status === 'success') {
-            //     navigation.navigate('AppStackFarmer', { screen: 'CalendarFarmer',});
-            // } else {
-            //     setErrorMessage(json.message);
-            // }
+            if (json.status === 'success') {
+                console.log('Activity added successfully:', json);
+                setSuccessfullyAdded(true);
+                // navigation.navigate('AppStackFarmer', { screen: 'CalendarFarmer',});
+                navigation.goBack();
+            } else {
+                setErrorMessage(json.message);
+            }
 
-            setSuccessfullyAdded(true);
-            // navigation.goBack();
         } catch (error) {
             console.error('Error submitting form:', error);
             setErrorMessage('Er is iets misgegaan. Probeer het opnieuw.');
@@ -222,36 +250,30 @@ const AddActivity = ({ navigation, route }) => {
                                     dropdownStyle={styles.dropdownMenuStyle}
                                 />                       
                                 
+                                {/* Begin datum en tijd */}
                                 <Text style={styles.label}>Begin*</Text>
-                                <View style={styles.date}>
-                                    <TextInput 
-                                        style={styles.input}
-                                        placeholder="Datum"                                         
-                                        value={activityData.start.date}
-                                        onChangeText={(text) => handleChange('start.date', text)}
-                                    />
-                                    <TextInput
-                                        style={styles.input}
-                                        placeholder="Tijd"
-                                        value={activityData.start.time}
-                                        onChangeText={(text) => handleChange('start.time', text)}
-                                    />
-                                </View>
+                                <TouchableOpacity style={styles.input} onPress={() => handlePickDateTime('start')}>
+                                    <Text>
+                                        {fields.start ? `${format(fields.start, 'dd-MM-yyyy HH:mm')}` : 'Selecteer begindatum en tijd'}
+                                    </Text>
+                                </TouchableOpacity>
+
+                                {/* Eind datum en tijd */}
                                 <Text style={styles.label}>Einde*</Text>
-                                <View style={styles.date}>
-                                    <TextInput 
-                                        style={styles.input}
-                                        placeholder="Datum"
-                                        value={activityData.end.date}
-                                        onChangeText={(text) => handleChange('end.date', text)}
-                                    />
-                                    <TextInput
-                                        style={styles.input} 
-                                        placeholder="Tijd" 
-                                        value={activityData.end.time}
-                                        onChangeText={(text) => handleChange('end.time', text)}
-                                    />
-                                </View>
+                                <TouchableOpacity style={styles.input} onPress={() => handlePickDateTime('end')}>
+                                    <Text>
+                                        {fields.end ? `${format(fields.end, 'dd-MM-yyyy HH:mm')}` : 'Selecteer einddatum en tijd'}
+                                    </Text>
+                                </TouchableOpacity>
+
+                                <DateTimePicker
+                                    isVisible={isDateTimePickerVisible}
+                                    mode="datetime"
+                                    onConfirm={handleDateTimePicked}
+                                    onCancel={() => setIsDateTimePickerVisible(false)}
+                                    textColor='#000000'
+                                />
+
                             </View>     
                         </View>
                     );
@@ -297,9 +319,9 @@ const AddActivity = ({ navigation, route }) => {
                             <View style={{marginBottom: 25}}>
                                 {isLoadingImage ? (
                                     <Text style={globalStyles.bodyText}>Afbeelding wordt geladen ...</Text>
-                                ) : selectedImage ? (
+                                ) : selectedImageUri ? (
                                     <Image
-                                        source={{ uri: selectedImage }}
+                                        source={{ uri: selectedImageUri }}
                                         style={{ width: '100%', height: 160, marginBottom: 10, borderRadius: 10}}
                                     />
                                 ) : (
