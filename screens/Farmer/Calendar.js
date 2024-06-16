@@ -72,6 +72,26 @@ const CalendarFarmer = ({ navigation }) => {
     }
   };
 
+  console.log(activityData);
+
+  //check if there are activities and render dot if there is an activity on that day
+    const renderDot = (day) => {
+        if (activityData) {
+            const activities = activityData.filter(activity => {
+                const activityDay = new Date(activity.start.date).getDate();
+                return activityDay === day;
+            }
+            );
+            if (activities.length > 0) {
+                return (
+                    <View style={{ backgroundColor: COLORS.orange, width: 5, height: 5, borderRadius: 50, position: 'absolute', bottom: 0, right: 0 }}></View>
+                );
+            }
+        }
+    };
+
+    
+
   //kalender blokje
 
 
@@ -190,6 +210,8 @@ const CalendarFarmer = ({ navigation }) => {
                                     day === selectedDay && { color: COLORS.white },
                                 ]}>
                                     {day}</Text>
+                                {renderDot(day)}
+                              
                                
 
                             </TouchableOpacity>
