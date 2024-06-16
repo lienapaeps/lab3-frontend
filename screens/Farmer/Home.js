@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { fetchUserData, getUserIdAndToken, fetchFarmDataByOwnerWithoutToken, fetchReviewsData, fetchActivityDataFarm } from '../../utils/fetchHelpers';
+import { fetchUserData, getUserIdAndToken, fetchPackagesData, fetchFarmDataByOwnerWithoutToken, fetchReviewsData, fetchActivityDataFarm } from '../../utils/fetchHelpers';
 import ActivityCard from '../../components/ActivityCard';
 import COLORS from '../../constants/color';
 import { globalStyles } from '../../styles/global';
@@ -12,6 +12,7 @@ const HomeFarmer = ({ navigation }) => {
     const [farmData, setFarmData] = useState(null);
     const [reviewsData, setReviewsData] = useState(null);
     const [activityData, setActivityData] = useState(null);
+    const [packagesData, setPackagesData] = useState(null);
     const [averageRating, setAverageRating] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -48,7 +49,7 @@ const HomeFarmer = ({ navigation }) => {
                     return;
                 }
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Error fetching user data:', error);
             } finally {
                 setLoading(false);
             }
@@ -65,12 +66,12 @@ const HomeFarmer = ({ navigation }) => {
                     const farmResponse = await fetchFarmDataByOwnerWithoutToken(userData._id);
                     if (farmResponse && farmResponse.data && farmResponse.data.farm) {
                         setFarmData(farmResponse);
-                        console.log(farmResponse);
+                        console.log('Farm Data:', farmResponse);
                     } else {
                         console.error('Invalid farm data response');
                     }
                 } catch (error) {
-                    console.error('Error:', error);
+                    console.error('Error fetching farm data:', error);
                 } finally {
                     setLoading(false); // Ensure loading is set to false after fetching farm data
                 }
@@ -92,15 +93,15 @@ const HomeFarmer = ({ navigation }) => {
                         // Calculate average rating
                         const reviews = reviewsResponse.data.reviews;
                         const totalRatings = reviews.reduce((sum, review) => sum + review.rating, 0);
-                        const avgRating = (totalRatings / reviews.length).toFixed(1);
+                        const avgRating = reviews.length ? (totalRatings / reviews.length).toFixed(1) : 0;
                         setAverageRating(avgRating);
 
-                        console.log(reviewsResponse);
+                        console.log('Reviews Data:', reviewsResponse);
                     } else {
                         console.error('Invalid reviews data response');
                     }
                 } catch (error) {
-                    console.error('Error:', error);
+                    console.error('Error fetching reviews data:', error);
                 } finally {
                     setLoading(false); // Ensure loading is set to false after fetching reviews
                 }
@@ -119,12 +120,12 @@ const HomeFarmer = ({ navigation }) => {
                     if (activityResponse && activityResponse.data && activityResponse.data.activities) {
                         const filteredActivities = activityResponse.data.activities.filter(activity => activity.category === 'Workshop');
                         setActivityData({ data: { activities: filteredActivities } });
-                        console.log(activityResponse);
+                        console.log('Activity Data:', activityResponse);
                     } else {
                         console.error('Invalid activity data response');
                     }
                 } catch (error) {
-                    console.error('Error:', error);
+                    console.error('Error fetching activity data:', error);
                 } finally {
                     setLoading(false);
                 }
@@ -132,6 +133,36 @@ const HomeFarmer = ({ navigation }) => {
         };
 
         fetchActivityData();
+    }, [farmData]);
+
+    useEffect(() => {
+        const fetchPackages = async () => {
+            if (farmData && farmData.data && farmData.data.farm && farmData.data.farm._id) {
+                setLoading(true);
+                try {
+                    const packageResponse = await fetchPackagesData(farmData.data.farm._id);
+                    if (packageResponse && packageResponse.data && packageResponse.data.packages) {
+                        const packages = packageResponse.data.packages;
+
+                        const totalRevenue = packages.reduce((sum, pkg) => {
+                            const packageRevenue = pkg.price * pkg.subscribedUsers.length;
+                            return sum + packageRevenue;
+                        }, 0).toFixed(2);
+                        
+                        setPackagesData(totalRevenue);
+                        console.log('Total Revenue:', totalRevenue);
+                    } else {
+                        console.error('Invalid package data response');
+                    }
+                } catch (error) {
+                    console.error('Error fetching package data:', error);
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+    
+        fetchPackages();
     }, [farmData]);
 
     if (loading) {
@@ -174,7 +205,6 @@ const HomeFarmer = ({ navigation }) => {
                                 <Text style={globalStyles.bodyTextBold}>Pakketten</Text>
                                 <View style={styles.alignCenter}>
                                     <Text style={globalStyles.headerTextSmall}>{farmData.data.farm.members?.length ?? 0}</Text>
-                                    <Text style={[globalStyles.bodyTextBold, styles.percent]}>+3.4%</Text>
                                 </View>
                                 <Text style={globalStyles.bodyText}>Voorbije maand</Text>
                             </View>
@@ -182,8 +212,7 @@ const HomeFarmer = ({ navigation }) => {
                                 <Image style={styles.icon} source={require('../../assets/icons/DollarFarmer.png')} />
                                 <Text style={globalStyles.bodyTextBold}>Omzet</Text>
                                 <View style={styles.alignCenter}>
-                                    <Text style={globalStyles.headerTextSmall}>€815.17</Text>
-                                    <Text style={[globalStyles.bodyTextBold, styles.percent]}>+4.1%</Text>
+                                    <Text style={globalStyles.headerTextSmall}>{packagesData}</Text>
                                 </View>
                                 <Text style={globalStyles.bodyText}>Voorbije maand</Text>
                             </View>
@@ -194,19 +223,25 @@ const HomeFarmer = ({ navigation }) => {
                                 <Image style={styles.icon} source={require('../../assets/icons/FollowersFarmer.png')} />
                                 <Text style={globalStyles.bodyTextBold}>Volgers</Text>
                                 <View style={styles.alignCenter}>
-                                    <Text style={globalStyles.headerTextSmall}>15</Text>
-                                    <Text style={[globalStyles.bodyTextBold, styles.percent]}>+1.6%</Text>
+                                    <Text style={globalStyles.headerTextSmall}>{activityData && activityData.data && activityData.data.activities && activityData.data.activities.length > 0
+                                        ? activityData.data.activities[0].enrolledUsers.length : '0'}</Text>
                                 </View>
                                 <Text style={globalStyles.bodyText}>Voorbije maand</Text>
                             </View>
                             <View style={styles.card}>
                                 <Image style={styles.icon} source={require('../../assets/icons/RatingFarmer.png')} />
                                 <Text style={globalStyles.bodyTextBold}>Beoordeling</Text>
+                                {activityData && activityData.data && activityData.data.activities && activityData.data.activities.length > 0 ? (
                                 <View style={styles.alignCenter}>
-                                    <Text style={globalStyles.headerTextSmall}>{averageRating}/5</Text>
+                                    <Text style={globalStyles.headerTextSmall}>{averageRating || averageRating === '0' ? averageRating : '0'}/5</Text>
                                     <Text style={[globalStyles.bodyTextBold, styles.percent]}>{reviewsData.data.reviews?.length ?? 0} reviews</Text>
                                 </View>
-                                <Text style={globalStyles.bodyText}>Voorbije maand</Text>
+                                ) : (
+                                    <View style={styles.alignCenter}>
+                                        <Text style={[globalStyles.bodyTextBold, styles.percent]}>Geen reviews</Text>
+                                    </View>
+                                )}
+                                <Text style={[globalStyles.bodyText, styles.marginAuto]}>Voorbije maand</Text>
                             </View>
                         </View>
 
@@ -229,7 +264,7 @@ const HomeFarmer = ({ navigation }) => {
                                     <Image style={styles.iconImage} source={require('../../assets/icons/package-empty.png')} />
                                     <Text style={{ ...globalStyles.bodyText, ...styles.emptyText }}>Je hebt nog geen evenementen aangemaakt, maak een evenement aan.</Text>
                                     <TouchableOpacity style={styles.button} onPress={goToActivity}>
-                                        <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Activiteit toevoegen</Text>
+                                        <Text style={{ ...globalStyles.bodyTextSemiBold, color: COLORS.white }}>Maak evenement</Text>
                                     </TouchableOpacity>
                                 </View>
                             )}
@@ -257,6 +292,9 @@ const styles = StyleSheet.create({
         height: 55,
         borderRadius: 50,
         marginRight: 10,
+    },
+    marginAuto: {
+        marginTop: 'auto',
     },
     button: {
         alignItems: 'center',
