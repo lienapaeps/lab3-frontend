@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Platform, SafeAreaView, Image, TextInput, KeyboardAvoidingView, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform, SafeAreaView, Image, KeyboardAvoidingView, ScrollView } from 'react-native';
 import SelectDropdown from 'react-native-select-dropdown'
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { format } from 'date-fns';
@@ -17,9 +17,7 @@ const AddActivity = ({ navigation, route }) => {
     const totalSteps = 3;
     const [currentStep, setCurrentStep] = useState(0);
     const [errorMessage, setErrorMessage] = useState('');
-    const [isProcessing, setIsProcessing] = useState(false);
-    const [successfullyAdded, setSuccessfullyAdded] = useState(false);
-    const activityCategories = ['workshop'];
+    const activityCategories = ['Workshop'];
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedImageUri, setSelectedImageUri] = useState(null);
     const [isLoadingImage, setIsLoadingImage] = useState(false);
@@ -82,8 +80,10 @@ const AddActivity = ({ navigation, route }) => {
     const renderDropdownButton = (selectedItem, isOpened) => {
         return (
             <View style={styles.dropdownButtonStyle}>
-                <Text style={styles.dropdownButtonTxtStyle}>
-                    {(selectedItem && selectedItem) || 'Selecteer categorie'}
+                <Text style={{
+                    ...styles.dropdownButtonTxtStyle,
+                }}>
+                    {selectedItem || 'Selecteer categorie'}
                 </Text>
                 <Image source={require('../../../assets/arrow-down.png')} style={styles.dropdownButtonArrowStyle} />
             </View>
@@ -110,7 +110,6 @@ const AddActivity = ({ navigation, route }) => {
         try {
             const imageUrl = await uploadToCloudinary(uri); 
             setSelectedImageUri(imageUrl);
-            console.log('Image URL:', imageUrl); // Voeg deze regel toe voor debuggen
             setIsLoadingImage(false);
         } catch (error) {
             console.error('Error uploading image to Cloudinary:', error);
@@ -164,18 +163,17 @@ const AddActivity = ({ navigation, route }) => {
     };
 
     const submitForm = async () => {
-        setIsProcessing(true);
         try {
 
             const formattedData = {
                 ...activityData,
                 image: selectedImageUri,
                 start: {
-                    date: new Date(activityData.start.date), // Zorg ervoor dat dit een Date object is
+                    date: new Date(activityData.start.date),
                     time: activityData.start.time
                 },
                 end: {
-                    date: new Date(activityData.end.date), // Zorg ervoor dat dit een Date object is
+                    date: new Date(activityData.end.date),
                     time: activityData.end.time
                 }
             };
@@ -194,7 +192,6 @@ const AddActivity = ({ navigation, route }) => {
 
             if (json.status === 'success') {
                 console.log('Activity added successfully:', json);
-                setSuccessfullyAdded(true);
                 // navigation.navigate('AppStackFarmer', { screen: 'CalendarFarmer',});
                 navigation.goBack();
             } else {
@@ -252,17 +249,17 @@ const AddActivity = ({ navigation, route }) => {
                                 
                                 {/* Begin datum en tijd */}
                                 <Text style={styles.label}>Begin*</Text>
-                                <TouchableOpacity style={styles.input} onPress={() => handlePickDateTime('start')}>
-                                    <Text>
-                                        {fields.start ? `${format(fields.start, 'dd-MM-yyyy HH:mm')}` : 'Selecteer begindatum en tijd'}
+                                <TouchableOpacity style={styles.inputDatetime} onPress={() => handlePickDateTime('start')}>
+                                    <Text style={{fontSize: 16, color: COLORS.offBlack}}>
+                                        {fields.start ? `${format(fields.start, 'dd-MM-yyyy HH:mm')}` : 'Selecteer datum en tijd'}
                                     </Text>
                                 </TouchableOpacity>
 
                                 {/* Eind datum en tijd */}
                                 <Text style={styles.label}>Einde*</Text>
-                                <TouchableOpacity style={styles.input} onPress={() => handlePickDateTime('end')}>
-                                    <Text>
-                                        {fields.end ? `${format(fields.end, 'dd-MM-yyyy HH:mm')}` : 'Selecteer einddatum en tijd'}
+                                <TouchableOpacity style={styles.inputDatetime} onPress={() => handlePickDateTime('end')}>
+                                    <Text style={{fontSize: 16, color: COLORS.offBlack}}>
+                                        {fields.end ? `${format(fields.end, 'dd-MM-yyyy HH:mm')}` : 'Selecteer datum en tijd'}
                                     </Text>
                                 </TouchableOpacity>
 
@@ -272,6 +269,7 @@ const AddActivity = ({ navigation, route }) => {
                                     onConfirm={handleDateTimePicked}
                                     onCancel={() => setIsDateTimePickerVisible(false)}
                                     textColor='#000000'
+                                    minuteInterval={15}
                                 />
 
                             </View>     
@@ -449,6 +447,15 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: COLORS.veryLightOffBlack,
         flex: 1
+    },
+    inputDatetime: {
+        paddingVertical: 18,
+        paddingLeft: 10,
+        height: 55,
+        borderRadius: 10,
+        backgroundColor: COLORS.white,
+        borderWidth: 1,
+        borderColor: COLORS.veryLightOffBlack,
     },
     date: {
         flexDirection: 'row',
