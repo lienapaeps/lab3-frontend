@@ -74,17 +74,19 @@ const CalendarFarmer = ({ navigation }) => {
 
   console.log(activityData);
 
-  //check if there are activities and render dot if there is an activity on that day
+  //check if there are activities and render dot if there is an activity on that day in that month
     const renderDot = (day) => {
         if (activityData) {
             const activities = activityData.filter(activity => {
-                const activityDay = new Date(activity.start.date).getDate();
-                return activityDay === day;
-            }
-            );
+                const activityDate = new Date(activity.start.date);
+                return activityDate.getDate() === day && activityDate.getMonth() + 1 === currentMonth && activityDate.getFullYear() === currentYear;
+            });
+
             if (activities.length > 0) {
                 return (
-                    <View style={{ backgroundColor: COLORS.orange, width: 5, height: 5, borderRadius: 50, position: 'absolute', bottom: 0, right: 0 }}></View>
+                    <View style={{ position: 'absolute', bottom: -5, right: 0, left: 0, flexDirection: 'row', justifyContent: 'center' }}>
+                        <View style={{ width: 10, height: 10, backgroundColor: COLORS.offBlack, borderRadius: 50 }}></View>
+                    </View>
                 );
             }
         }
@@ -355,6 +357,12 @@ const styles = StyleSheet.create({
         width: '25%',
         marginHorizontal: 10,
     },
+    calendarText: {
+        fontWeight: 'medium',
+        width: 100,
+        textAlign: 'center',
+        fontSize: 16,
+      },
 });
 
 export default CalendarFarmer;
