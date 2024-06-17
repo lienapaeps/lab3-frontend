@@ -21,7 +21,7 @@ const Settings = ({ navigation, route }) => {
     }
 
     return (
-        <SafeAreaView style={globalStyles.container}>
+        <SafeAreaView style={{...globalStyles.container, marginHorizontal: 20}}>
             <View style={styles.header}>
                 <Text style={globalStyles.headerText}>Mijn account</Text>
             </View>

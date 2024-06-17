@@ -20,7 +20,7 @@ const MySubscription = ({ navigation, route }) => {
     };   
 
     return (
-        <SafeAreaView style={globalStyles.container}>
+        <SafeAreaView style={{...globalStyles.container, marginHorizontal: 20}}>
             {/* weergave van huidig pakket */}
             <View style={styles.header}>
                 <Text style={globalStyles.headerText}>Mijn abonnement</Text>

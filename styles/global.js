@@ -5,8 +5,8 @@ export const globalStyles = StyleSheet.create({
     container: {
         flex: 1,
         // padding: 25,
-        marginLeft: 20,
-        marginRight: 20,
+        paddingLeft: 20,
+        paddingRight: 20,
         paddingBottom: -30,
         backgroundColor: COLORS.offWhite,
     },
