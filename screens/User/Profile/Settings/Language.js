@@ -19,27 +19,18 @@ const Language = ({ navigation, route }) => {
                 <Text style={globalStyles.headerText}>Taal</Text>
             </View>
             <View style={styles.content}>
-                <View style={styles.selectedLanguageOption}>
+                <View style={styles.languageOption}>
+                    <Image style={styles.notificationImage} source={require('../../../../assets/icons/dutch.png')} />
                     <Text style={{...globalStyles.headerTextSmallerMedium, color: COLORS.offBlack}}>Nederlands</Text>
-                    <Image style={styles.notificationImage} source={require('../../../../assets/arrow-down.png')} />
+                    <Image style={{...styles.notificationImage, marginLeft: 'auto'}} source={require('../../../../assets/icons/check-mark.png')} />
                 </View>
                 <View style={styles.languageOption}>
+                    <Image style={styles.notificationImage} source={require('../../../../assets/icons/french.png')} />
                     <Text style={{...globalStyles.headerTextSmallerMedium, color: COLORS.lightOffBlack}} >Français</Text>
-                    <TouchableOpacity onPress={handleInfoIconClick}>
-                        <Image style={styles.notificationImage} source={require('../../../../assets/InformationIcon.png')} />
-                    </TouchableOpacity>
                 </View>
                 <View style={styles.languageOption}>
+                    <Image style={styles.notificationImage} source={require('../../../../assets/icons/english-uk.png')} />
                     <Text style={{...globalStyles.headerTextSmallerMedium, color: COLORS.lightOffBlack}} >English</Text>
-                    <TouchableOpacity onPress={handleInfoIconClick}>
-                        <Image style={styles.notificationImage} source={require('../../../../assets/InformationIcon.png')} />
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.languageOption}>
-                    <Text style={{...globalStyles.headerTextSmallerMedium, color: COLORS.lightOffBlack}} >Deutsch</Text>
-                    <TouchableOpacity onPress={handleInfoIconClick}>
-                        <Image style={styles.notificationImage} source={require('../../../../assets/InformationIcon.png')} />
-                    </TouchableOpacity>
                 </View>
                 {showMessage && (
                     <View style={styles.languageOption}>
@@ -57,20 +48,22 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         paddingBottom: 20,
     },
+    content: {
+        alignItems: 'flex-start'
+    },
     languageOption: {
- 
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
+        gap: 15,
         paddingVertical: 10,
         paddingHorizontal: 20,
         marginBottom: 10,
         borderRadius: 5,
         alignContent: 'center',
         alignItems: 'center',
-        //content aligns to center
+        width: '100%',
     },
     selectedLanguageOption: {
-      
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingVertical: 10,
@@ -81,11 +74,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     notificationImage: {
-
-        width: 20,
-        height: 20,
-
-
+        width: 32,
+        height: 32,
     },
 });
 
