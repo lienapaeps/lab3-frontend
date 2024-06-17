@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from 'react-native'
 
-import { fetchActivityDataById, fetchUserDataById, getUserIdAndToken, enrollInActivity, unenrollFromActivity } from '../../utils/fetchHelpers';
+import { fetchActivityDataById, fetchUserDataById, getUserIdAndToken, enrollInActivity, unenrollFromActivity, fetchFarmDataById } from '../../utils/fetchHelpers';
 
 import COLORS from '../../constants/color';
 import { globalStyles } from '../../styles/global';
@@ -10,11 +10,14 @@ import Button from '../../components/Button';
 const ActivityDetail = ({ navigation, route }) => {
     const [activityData, setActivityData] = useState([]);
     const [enrolledUsers, setEnrolledUsers] = useState([]);
+    const [farmData, setFarmData] = useState([]);
     const [isEnrolled, setIsEnrolled] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const { id, farmName } = route.params;
+    const { id, farmId } = route.params;
+
+    console.log(route.params);
 
     const formatDate = (dateString) => {
         if (!dateString) {
@@ -44,6 +47,10 @@ const ActivityDetail = ({ navigation, route }) => {
                 // console.log("User response:", userResponse);
                 return userResponse?.data?.user || {};
             }));
+
+            const farmData = await fetchFarmDataById(farmId);
+            setFarmData(farmData.data.farm);
+
             // console.log("Enrolled users:", users);
             setEnrolledUsers(users);
     
@@ -128,7 +135,7 @@ const ActivityDetail = ({ navigation, route }) => {
                                 </View>
                                 <View style={styles.headerInfo}>
                                     <Image style={styles.imgLocation} source={require('../../assets/icons/locatie-black.png')} />
-                                    <Text style={globalStyles.bodyText}>{farmName}</Text>
+                                    <Text style={globalStyles.bodyText}>{farmData.name}</Text>
                                 </View>
                             </View>
                         </View>

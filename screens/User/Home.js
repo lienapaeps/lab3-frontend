@@ -63,8 +63,8 @@ const HomeUser = ({ navigation, route }) => {
         navigation.navigate('AppStack', { screen: 'PackageDetail', params: { packageId, farmId, userId, packageName } });
     };
 
-    const handleAgendaCardPress = (activityId, farmName) => {
-        navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmName } });
+    const handleAgendaCardPress = (activityId, farmId) => {
+        navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmId } });
     };
 
     useEffect(() => {
@@ -211,7 +211,7 @@ return (
                     <FlatList
                         data={activitiesData}
                         keyExtractor={(item) => item._id}
-                        renderItem={({ item }) => <AgendaCard activity={item} showFarmDetails={true} onPress={handleAgendaCardPress} />}
+                        renderItem={({ item }) => <AgendaCard activity={item} showFarmDetails={true} onPress={() => handleAgendaCardPress(item._id, item.farm)} />}
                         scrollEnabled={false}
                     />
                 </View>

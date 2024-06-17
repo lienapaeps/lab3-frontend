@@ -18,27 +18,26 @@ const AcitvityCard = ({ activityData, onPress }) => {
 
     useEffect(() => {
         const fetchFarmDataById = async (id) => {
-          try {
-            const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/farms/${farmId}`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              mode: 'cors',
-            });
-            const data = await response.json();
-            setFarmData(data.data.farm);
-          } catch (error) {
-            setError(error);
-          } finally {
-            setLoading(false);
-          }
+            try {
+                const response = await fetch(`https://lab3-backend-w1yl.onrender.com/api/farms/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    mode: 'cors',
+                });
+                const data = await response.json();
+                setFarmData(data.data.farm);
+            } catch (error) {
+                setError(error);
+            } finally {
+                setLoading(false);
+            }
         };
 
-        const { id } = farmId
-    
-        fetchFarmDataById(id);
-      }, []);
+        fetchFarmDataById(farmId);
+
+    }, [farmId]);
     
       if (loading) {
         return (
@@ -52,12 +51,12 @@ const AcitvityCard = ({ activityData, onPress }) => {
         );
     }
     
-      if (error) {
-        return <Text>Error: {error.message}</Text>;
-      }
+    if (error) {
+    return <Text>Error: {error.message}</Text>;
+    }
 
-      const handlePress = () => {
-        onPress(activityData._id, farmData.name);
+    const handlePress = () => {
+        onPress(activityData._id);
     }
 
       const category = activityData.category;

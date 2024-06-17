@@ -30,9 +30,9 @@ const Agenda = ({ route, navigation }) => {
 
     // console.log(activityData);
 
-    const handleAgendaCardPress = (activityId, farmName) => {
-        navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmName }});
-    }
+    const handleAgendaCardPress = (activityId, farmId) => {
+        navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmId } });
+    };
 
     return(
         <View style={styles.container}>
@@ -41,7 +41,7 @@ const Agenda = ({ route, navigation }) => {
                 showsVerticalScrollIndicator={false}
                 data={activityData}
                 keyExtractor={(item) => item._id}
-                renderItem={({ item }) => <AgendaCard activity={item} onPress={handleAgendaCardPress}/>}
+                renderItem={({ item }) => <AgendaCard activity={item} onPress={() => handleAgendaCardPress(item._id, item.farm)}/>}
                 ListEmptyComponent={
                     <Text style={styles.emptyState}>
                         Er zijn geen activiteiten gepland 📅
