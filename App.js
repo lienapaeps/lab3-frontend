@@ -11,6 +11,8 @@ import AppStackNavigator from './navigators/AppStackNavigator';
 import AppTabNavigatorFarmer from './navigators/AppTabNavigatorFarmer';
 import AppStackNavigatorFarmer from './navigators/AppStackNavigatorFarmer';
 
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 import useCustomFonts from './constants/loadFonts';
 
 const Stack = createStackNavigator();
@@ -48,6 +50,7 @@ export default function App() {
   } else {
     return (
       <>
+      <GestureHandlerRootView>
         <StatusBar color="black" />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
@@ -67,6 +70,7 @@ export default function App() {
             </NavigationContainer>
           </View>
         </TouchableWithoutFeedback>
+        </GestureHandlerRootView>
       </>
     );
   }
