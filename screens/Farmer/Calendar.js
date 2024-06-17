@@ -90,50 +90,37 @@ const CalendarFarmer = ({ navigation }) => {
         }
     };
 
-    
-
-  //kalender blokje
-
-
-    useEffect(() => {
+      //fetch farm data and activity data
+      useEffect(() => {
         const fetchData = async () => {
             try {
-                const { token, userId } = await getUserIdAndToken();
-
-                console.log("User ID: ", userId)
-
-                if (!token) {
-                    navigation.navigate('Login');
-                    return;
-                }
-
+                const { userId, token } = await getUserIdAndToken();
                 const farmDataResponse = await fetchFarmDataByOwner(token, userId);
                 if (farmDataResponse && farmDataResponse.data && farmDataResponse.data.farm) {
                     setFarmData(farmDataResponse.data.farm);
-                    console.log("Farm data: ", farmDataResponse.data.farm)
+
+                    if (farmDataResponse.data.farm._id) {
+                        const activityDataResponse = await fetchActivityDataFarm(farmDataResponse.data.farm._id);
+                        setActivityData(activityDataResponse.data.activities);
+                    }
                 } else {
-                    console.error('Invalid farm data response');
-                    return;
+                    setFarmData(null);
                 }
-
-                const farmId = farmData._id;
-                console.log("Farm ID: ", farmId)
-
-                const activityDataResponse = await fetchActivityDataFarm(farmId);
-                // const filteredActivities = data.data.activities.filter(activity => activity.category === 'Workshop');
-                setActivityData(activityDataResponse.data.activities);
-                console.log("Activity data: ", activityDataResponse.data.activities)
 
                 setLoading(false);
             } catch (error) {
+
+                console.error('Error:', error);
+                setLoading(false);
                 setError(error);
-                setLoading(false);
-            } finally {
-                setLoading(false);
             }
         };
+
         fetchData();
     }, []);
+
+    console.log("Activity data: ", activityData);
+    
 
     const handleAddActivity = () => {
         const farmId = farmData._id;
