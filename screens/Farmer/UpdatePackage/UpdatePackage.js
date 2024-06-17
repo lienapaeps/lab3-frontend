@@ -103,7 +103,7 @@ const UpdatePackage = ({ navigation, route }) => {
             // Update the package with the new contents
             const updatedPackageData = {
                 price: currentPackageData.price,
-                pickUpDate: new Date().toISOString(),
+                pickUpDate: currentPackageData.pickUpDate || null,
                 contents: productsToUpdate
             };
     
