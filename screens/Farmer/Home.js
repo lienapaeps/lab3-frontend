@@ -165,6 +165,10 @@ const HomeFarmer = ({ navigation }) => {
         fetchPackages();
     }, [farmData]);
 
+    const handleAgendaCardPress = (activityId, farmId) => {
+        navigation.navigate('AppStackFarmer', { screen: 'ActivityDetail', params: { id: activityId, farmId } });
+    };
+
     if (loading) {
         return (
             <SafeAreaView style={globalStyles.loadingContainer}>
@@ -255,7 +259,7 @@ const HomeFarmer = ({ navigation }) => {
                                     showsHorizontalScrollIndicator={true}
                                     keyExtractor={(item) => item._id}
                                     renderItem={({ item }) => (
-                                        <ActivityCard activityData={item} farmData={farmData.data.farm} />
+                                        <ActivityCard activityData={item} farmData={farmData.data.farm} onPress={() => handleAgendaCardPress(item._id, item.farm)} />
                                     )}
                                     contentContainerStyle={{ gap: 15 }}
                                 />
