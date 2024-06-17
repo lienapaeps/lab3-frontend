@@ -6,6 +6,7 @@ import ActivityCard from '../../components/ActivityCard';
 import COLORS from '../../constants/color';
 import { globalStyles } from '../../styles/global';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { useFocusEffect } from '@react-navigation/native';
 
 const HomeFarmer = ({ navigation }) => {
     const [userData, setUserData] = useState(null);
@@ -111,59 +112,67 @@ const HomeFarmer = ({ navigation }) => {
         fetchReviews();
     }, [farmData]);
 
-    useEffect(() => {
-        const fetchActivityData = async () => {
-            if (farmData && farmData.data && farmData.data.farm && farmData.data.farm._id) {
-                setLoading(true);
-                try {
-                    const activityResponse = await fetchActivityDataFarm(farmData.data.farm._id);
-                    if (activityResponse && activityResponse.data && activityResponse.data.activities) {
-                        const filteredActivities = activityResponse.data.activities.filter(activity => activity.category === 'Workshop');
-                        setActivityData({ data: { activities: filteredActivities } });
-                        console.log('Activity Data:', activityResponse);
-                    } else {
-                        console.error('Invalid activity data response');
-                    }
-                } catch (error) {
-                    console.error('Error fetching activity data:', error);
-                } finally {
-                    setLoading(false);
-                }
-            }
-        };
+    const fetchPackages = React.useCallback(async () => {
+        if (farmData && farmData.data && farmData.data.farm && farmData.data.farm._id) {
+            setLoading(true);
+            try {
+                const packageResponse = await fetchPackagesData(farmData.data.farm._id);
+                if (packageResponse && packageResponse.data && packageResponse.data.packages) {
+                    const packages = packageResponse.data.packages;
 
-        fetchActivityData();
+                    const totalRevenue = packages.reduce((sum, pkg) => {
+                        const packageRevenue = pkg.price * pkg.subscribedUsers.length;
+                        return sum + packageRevenue;
+                    }, 0).toFixed(2);
+
+                    setPackagesData(totalRevenue);
+                    console.log('Total Revenue:', totalRevenue);
+                } else {
+                    console.error('Invalid package data response');
+                }
+            } catch (error) {
+                console.error('Error fetching package data:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
     }, [farmData]);
 
-    useEffect(() => {
-        const fetchPackages = async () => {
-            if (farmData && farmData.data && farmData.data.farm && farmData.data.farm._id) {
-                setLoading(true);
-                try {
-                    const packageResponse = await fetchPackagesData(farmData.data.farm._id);
-                    if (packageResponse && packageResponse.data && packageResponse.data.packages) {
-                        const packages = packageResponse.data.packages;
-
-                        const totalRevenue = packages.reduce((sum, pkg) => {
-                            const packageRevenue = pkg.price * pkg.subscribedUsers.length;
-                            return sum + packageRevenue;
-                        }, 0).toFixed(2);
-                        
-                        setPackagesData(totalRevenue);
-                        console.log('Total Revenue:', totalRevenue);
-                    } else {
-                        console.error('Invalid package data response');
-                    }
-                } catch (error) {
-                    console.error('Error fetching package data:', error);
-                } finally {
-                    setLoading(false);
+    const fetchActivityData = React.useCallback(async () => {
+        if (farmData && farmData.data && farmData.data.farm && farmData.data.farm._id) {
+            setLoading(true);
+            try {
+                const activityResponse = await fetchActivityDataFarm(farmData.data.farm._id);
+                if (activityResponse && activityResponse.data && activityResponse.data.activities) {
+                    const filteredActivities = activityResponse.data.activities.filter(activity => activity.category === 'Workshop');
+                    setActivityData({ data: { activities: filteredActivities } });
+                    console.log('Activity Data:', activityResponse);
+                } else {
+                    console.error('Invalid activity data response');
                 }
+            } catch (error) {
+                console.error('Error fetching activity data:', error);
+            } finally {
+                setLoading(false);
             }
-        };
-    
-        fetchPackages();
+        }
     }, [farmData]);
+
+    const farmId = farmData && farmData.data && farmData.data.farm && farmData.data.farm._id;
+
+    useEffect(() => {
+        if (farmId) {
+            fetchActivityData();
+            fetchPackages();
+        }
+    }, [farmId, fetchActivityData, fetchPackages]);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchActivityData();
+            fetchPackages();
+        }, [fetchActivityData, fetchPackages])
+    );
 
     const handleAgendaCardPress = (activityId, farmId) => {
         navigation.navigate('AppStackFarmer', { screen: 'ActivityDetail', params: { id: activityId, farmId } });

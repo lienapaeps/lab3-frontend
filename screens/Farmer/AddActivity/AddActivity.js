@@ -36,11 +36,11 @@ const AddActivity = ({ navigation, route }) => {
     };
 
     const handleDateTimePicked = (date) => {
-        const formattedDate = format(date, 'dd-MM-yyyy');
+        // const formattedDate = format(date, 'dd-MM-yyyy');
         const formattedTime = format(date, 'HH:mm');
     
-        const updatedStart = selectedField === 'start' ? { date: formattedDate, time: formattedTime } : { ...activityData.start };
-        const updatedEnd = selectedField === 'end' ? { date: formattedDate, time: formattedTime } : { ...activityData.end };
+        const updatedStart = selectedField === 'start' ? { date: date, time: formattedTime } : { ...activityData.start };
+        const updatedEnd = selectedField === 'end' ? { date: date, time: formattedTime } : { ...activityData.end };
     
         setActivityData(prevData => ({
             ...prevData,
@@ -169,11 +169,11 @@ const AddActivity = ({ navigation, route }) => {
                 ...activityData,
                 image: selectedImageUri,
                 start: {
-                    date: new Date(activityData.start.date),
+                    date: activityData.start.date,
                     time: activityData.start.time
                 },
                 end: {
-                    date: new Date(activityData.end.date),
+                    date: activityData.start.date,
                     time: activityData.end.time
                 }
             };
@@ -333,7 +333,7 @@ const AddActivity = ({ navigation, route }) => {
                                     <View style={{flexDirection: 'row', marginBottom: 10, gap: 10}}>
                                         <Image source={require('../../../assets/icons/date-black.png')} style={{width: 20, height: 22}} />
                                         <Text style={globalStyles.bodyText}>
-                                            {activityData.start.date}
+                                            {format(activityData.start.date, 'dd-MM-yyyy')}
                                         </Text>
                                     </View>
 
