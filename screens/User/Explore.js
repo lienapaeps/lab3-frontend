@@ -82,8 +82,8 @@ const Explore = ({ navigation }) => {
         setSelectedCategory(category);
     };
 
-    const handleActivityCardPress = (activityId, farmName) => {
-        navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmName: farmName}});
+    const handleActivityCardPress = (activityId, farmId) => {
+        navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmId: farmId}});
     }
 
     if (loading) {
@@ -157,7 +157,7 @@ const Explore = ({ navigation }) => {
                             showsHorizontalScrollIndicator={true}
                             keyExtractor={(item) => item._id}
                             renderItem={({ item }) => (
-                                <ActivityCard activityData={item} onPress={() => handleActivityCardPress(item._id, item.farmName)} />
+                                <ActivityCard activityData={item} onPress={() => handleActivityCardPress(item._id, item.farm)} />
                             )}
                             contentContainerStyle={{ gap: 15 }}
                         />
@@ -177,7 +177,7 @@ const Explore = ({ navigation }) => {
                             showsHorizontalScrollIndicator={false}
                             keyExtractor={(item) => item._id}
                             renderItem={({ item }) => (
-                                <ActivityCard key={item._id} activityData={item} onPress={() => handleActivityCardPress(item._id, item.farmName)}/>
+                                <ActivityCard key={item._id} activityData={item} onPress={() => handleActivityCardPress(item._id, item.farm)}/>
                             )}
                             contentContainerStyle={{ gap: 15 }}
                         />

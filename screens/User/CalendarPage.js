@@ -15,7 +15,6 @@ const CalendarPage = ({ navigation, route }) => {
   //slected day is set to current day
   const [selectedDay, setSelectedDay] = useState(new Date().getDate());
 
-
   const today = new Date();
 
   //function to get days in specific month
@@ -83,11 +82,9 @@ const CalendarPage = ({ navigation, route }) => {
   };
 
 
-  const handleAgendaCardPress = (activityId, farmName) => {
-    navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmName } });
-  };
-
-
+  const handleAgendaCardPress = (activityId, farmId) => {
+    navigation.navigate('AppStack', { screen: 'ActivityDetail', params: { id: activityId, farmId } });
+};
 
   const filterdActivities = activitiesData.filter(activity => {
     const activityDate = new Date(activity.start.date);
@@ -169,7 +166,7 @@ const CalendarPage = ({ navigation, route }) => {
                 showsVerticalScrollIndicator={false}
                 data={filterdActivities}
                 keyExtractor={(item) => item._id}
-                renderItem={({ item }) => <AgendaCard activity={item} showFarmDetails={true} onPress={handleAgendaCardPress} />}
+                renderItem={({ item }) => <AgendaCard activity={item} showFarmDetails={true} onPress={() => handleAgendaCardPress(item._id, item.farm)} />}
               />
             </View>
           ) : (
@@ -191,7 +188,7 @@ const CalendarPage = ({ navigation, route }) => {
                 showsVerticalScrollIndicator={false}
                 data={remainingActivities}
                 keyExtractor={(item) => item._id}
-                renderItem={({ item }) => <AgendaCard activity={item} showFarmDetails={true} onPress={handleAgendaCardPress} />}
+                renderItem={({ item }) => <AgendaCard activity={item} showFarmDetails={true} onPress={() => handleAgendaCardPress(item._id, item.farm)} />}
               />
             </View>
           )}

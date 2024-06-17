@@ -43,7 +43,7 @@ const AgendaCard = ({ activity, onPress, showFarmDetails }) => {
     }, [activity.farm, showFarmDetails]);
 
     const handlePress = () => {
-        onPress(activity._id, farmName);
+        onPress(activity._id);
     }
 
     return (
