@@ -60,8 +60,14 @@ const ChatUser = () => {
                         client.devToken(userId)
                     );
 
+                    // if user id already exists in 'members', don't add current userId
+                    const users = ["6660586cb7823317ac6fe141", "666058eab7823317ac6fe16b" ,"666058bab7823317ac6fe163", "66605285b7823317ac6fe010", "666056d8b7823317ac6fe05d"];
+                    if (!users.includes(userId)) {
+                        users.push(userId);
+                    }
+
                     const newChannel = client.channel("messaging", {
-                        members: ["6660586cb7823317ac6fe141", "666058eab7823317ac6fe16b" ,"666058bab7823317ac6fe163", "66605285b7823317ac6fe010", "666056d8b7823317ac6fe05d"], // Adjust members as needed
+                        members: users,
                     });
 
                     await newChannel.watch();
