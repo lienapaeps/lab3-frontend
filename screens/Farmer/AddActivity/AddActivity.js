@@ -202,7 +202,6 @@ const AddActivity = ({ navigation, route }) => {
             console.error('Error submitting form:', error);
             setErrorMessage('Er is iets misgegaan. Probeer het opnieuw.');
         } finally {
-            setIsProcessing(false);
         }
     };
 
