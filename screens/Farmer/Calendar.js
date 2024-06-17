@@ -72,6 +72,10 @@ const CalendarFarmer = ({ navigation }) => {
     }
   };
 
+    const handleAgendaCardPress = (activityId, farmId) => {
+        navigation.navigate('AppStackFarmer', { screen: 'ActivityDetail', params: { id: activityId, farmId } });
+    };
+
   console.log(activityData);
 
   //check if there are activities and render dot if there is an activity on that day in that month
@@ -221,7 +225,7 @@ const CalendarFarmer = ({ navigation }) => {
                     renderItem={({ item }) => (
                         <View>
                             <Text style={{ ...globalStyles.bodyTextSemiBold, marginBottom: 10 }}>{formatDate(item.start.date)}</Text>
-                            <AgendaCard activity={item} />
+                            <AgendaCard activity={item} onPress={() => handleAgendaCardPress(item._id, item.farm)}/>
                         </View>
                     )}
                     ListEmptyComponent={

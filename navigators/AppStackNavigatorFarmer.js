@@ -11,6 +11,7 @@ import UpdatePackage from '../screens/Farmer/UpdatePackage/UpdatePackage';
 import EditPackages from '../screens/Farmer/EditPackages/EditPackages';
 import AddActivity from '../screens/Farmer/AddActivity/AddActivity';
 import AddNewPackage from '../screens/Farmer/AddNewPackage/AddNewPackage';
+import ActivityDetail from '../screens/Farmer/ActivityDetail';
 
 import NavigationOptions from '../components/NavigationOptions';
 
@@ -36,6 +37,11 @@ const AppStackNavigatorFarmer = () => {
           })}
         />
         <Stack.Screen name="AddNewPackage" component={AddNewPackage} options={NavigationOptions}/>
+        <Stack.Screen name="ActivityDetail" component={ActivityDetail}
+          options={() => ({
+            headerShown: false,
+          })}
+        />
     </Stack.Navigator>
   );
 };
