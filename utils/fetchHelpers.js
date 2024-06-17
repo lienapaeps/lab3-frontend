@@ -11,6 +11,16 @@ export const getUserIdAndToken = async () => {
     return { token, userId };
 };
 
+export const fetchAllUsers = async () => {
+    const response = await fetch(`https://lab3-backend-w1yl.onrender.com/users/`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return await response.json();
+};
+
 //fetch user data by id
 export const fetchUserDataById = async (userId) => {
     const response = await fetch(`https://lab3-backend-w1yl.onrender.com/users/${userId}`, {
