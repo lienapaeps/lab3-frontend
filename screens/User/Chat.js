@@ -61,7 +61,7 @@ const ChatUser = () => {
                     );
 
                     // if user id already exists in 'members', don't add current userId
-                    const users = ["6660586cb7823317ac6fe141", "666058eab7823317ac6fe16b" ,"666058bab7823317ac6fe163", "66605285b7823317ac6fe010", "666056d8b7823317ac6fe05d", "66701dd899bc327fec95775a", "66701eb099bc327fec957762", "6670259c99bc327fec957cc9", "66701dd899bc327fec95775a"];
+                    const users = ["6660586cb7823317ac6fe141", "666058eab7823317ac6fe16b" ,"666058bab7823317ac6fe163", "66605285b7823317ac6fe010", "666056d8b7823317ac6fe05d", "66701dd899bc327fec95775a", "66701eb099bc327fec957762", "6670259c99bc327fec957cc9"];
                     if (!users.includes(userId)) {
                         users.push(userId);
                     }
