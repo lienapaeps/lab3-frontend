@@ -62,6 +62,10 @@ const ActivityDetail = ({ navigation, route }) => {
         fetchData();
     }, [id]);
 
+    const handleEditActivity = () => {
+        console.log("Edit activity");
+    }
+
     if (loading) {
         return (
             <View style={globalStyles.loadingContainer}>
@@ -132,6 +136,13 @@ const ActivityDetail = ({ navigation, route }) => {
                                         ) : (
                                             <Text style={globalStyles.bodyText}>Er zijn nog geen mensen ingeschreven voor deze activiteit.</Text>
                                         )}
+                                        </View>
+                                        <View style={styles.btnContainer}>
+                                            <Button
+                                                filled={true}
+                                                title={"Activiteit bewerken"}
+                                                onPress={handleEditActivity}
+                                            />                                      
                                         </View>
                                     </View>
                                 </View>
